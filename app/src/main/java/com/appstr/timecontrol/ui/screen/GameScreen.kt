@@ -32,14 +32,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.appstr.timecontrol.R
-import com.appstr.timecontrol.ui.theme.black
+import com.appstr.timecontrol.hour
 import com.appstr.timecontrol.ui.theme.blueGrey
+import com.appstr.timecontrol.ui.theme.blueGrey50
 import com.appstr.timecontrol.ui.theme.green
+import com.appstr.timecontrol.ui.theme.grey
 import com.appstr.timecontrol.ui.theme.lightBlue
-import com.appstr.timecontrol.ui.theme.lightGreen
 import com.appstr.timecontrol.ui.theme.lightGreen900
 import com.appstr.timecontrol.ui.theme.teal
 import com.appstr.timecontrol.ui.theme.white
+import com.appstr.timecontrol.util.formatTimeToText
 import com.appstr.timecontrol.viewmodel.GameViewModel
 
 
@@ -60,12 +62,12 @@ fun GameScreen(
         val topPlayerHeight = ((maxHeight - centerButtonsHeight) / 2)
         val botPlayerHeight = topPlayerHeight
 
-        var player1TimeLeft = "0:00:00"
-        val player1TextColor = gameViewModel.player1TextColor.collectAsState(black)
-        val player1BackgroundColor = gameViewModel.player1BackgroundColor.collectAsState(white)
-        var player2TimeLeft = "0:00:00"
-        val player2TextColor = gameViewModel.player2TextColor.collectAsState(black)
-        val player2BackgroundColor = gameViewModel.player2BackgroundColor.collectAsState(white)
+        val player1TimeLeft = gameViewModel.player1TimeLeft.collectAsState(hour)
+        val player1TextColor = gameViewModel.player1TextColor.collectAsState(white)
+        val player1BackgroundColor = gameViewModel.player1BackgroundColor.collectAsState(grey)
+        val player2TimeLeft = gameViewModel.player2TimeLeft.collectAsState(hour)
+        val player2TextColor = gameViewModel.player2TextColor.collectAsState(white)
+        val player2BackgroundColor = gameViewModel.player2BackgroundColor.collectAsState(grey)
 
         Column() {
             Box(
@@ -81,7 +83,7 @@ fun GameScreen(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = player1TimeLeft,
+                    text = player1TimeLeft.value.formatTimeToText(),
                     fontSize = 80.sp,
                     color = player1TextColor.value,
                     modifier = Modifier.rotate(180f)
@@ -101,7 +103,7 @@ fun GameScreen(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = player2TimeLeft,
+                    text = player2TimeLeft.value.formatTimeToText(),
                     fontSize = 80.sp,
                     color = player2TextColor.value
                 )
@@ -160,7 +162,7 @@ fun ButtonsRow(
         modifier = Modifier
             .width(screenWidth)
             .height(centerButtonsRowHeight)
-            .background(white),
+            .background(blueGrey50),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {

@@ -37,5 +37,6 @@ val brown = Color(0xFF795548)
 val grey = Color(0xFF9E9E9E)
 
 val blueGrey = Color(0xFF607D8B)
+val blueGrey50 = Color(0xFFECEFF1)
 val blueGrey300 = Color(0xFF90A4AE)
 
