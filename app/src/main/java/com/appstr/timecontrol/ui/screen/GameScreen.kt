@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,7 +30,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.appstr.timecontrol.R
+import com.appstr.timecontrol.ui.theme.black
 import com.appstr.timecontrol.ui.theme.blueGrey
 import com.appstr.timecontrol.ui.theme.green
 import com.appstr.timecontrol.ui.theme.lightBlue
@@ -37,14 +40,17 @@ import com.appstr.timecontrol.ui.theme.lightGreen
 import com.appstr.timecontrol.ui.theme.lightGreen900
 import com.appstr.timecontrol.ui.theme.teal
 import com.appstr.timecontrol.ui.theme.white
+import com.appstr.timecontrol.viewmodel.GameViewModel
 
 
 @Composable
 fun GameScreen(
-
+    gameViewModel: GameViewModel = viewModel()
 ){
+
     val context = LocalContext.current
     (context as? Activity)?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+
 
     BoxWithConstraints(
 
@@ -55,18 +61,18 @@ fun GameScreen(
         val botPlayerHeight = topPlayerHeight
 
         var player1TimeLeft = "0:00:00"
-        var player1TextColor = white
+        val player1TextColor = gameViewModel.player1TextColor.collectAsState(black)
+        val player1BackgroundColor = gameViewModel.player1BackgroundColor.collectAsState(white)
         var player2TimeLeft = "0:00:00"
-        var player2TextColor = white
+        val player2TextColor = gameViewModel.player2TextColor.collectAsState(black)
+        val player2BackgroundColor = gameViewModel.player2BackgroundColor.collectAsState(white)
 
-        Column(
-
-        ) {
+        Column() {
             Box(
                 modifier = Modifier
                     .width(screenWidth)
                     .height(topPlayerHeight)
-                    .background(lightGreen)
+                    .background(player1BackgroundColor.value)
                     .clickable(
                         interactionSource = remember { MutableInteractionSource() },
                         indication = rememberRipple(color = teal),
@@ -77,7 +83,8 @@ fun GameScreen(
                 Text(
                     text = player1TimeLeft,
                     fontSize = 80.sp,
-                    color = player1TextColor
+                    color = player1TextColor.value,
+                    modifier = Modifier.rotate(180f)
                 )
             }
             ButtonsRow(screenWidth = screenWidth, centerButtonsRowHeight = centerButtonsHeight)
@@ -85,7 +92,7 @@ fun GameScreen(
                 modifier = Modifier
                     .width(screenWidth)
                     .height(botPlayerHeight)
-                    .background(lightGreen)
+                    .background(player2BackgroundColor.value)
                     .clickable(
                         interactionSource = remember { MutableInteractionSource() },
                         indication = rememberRipple(color = teal),
@@ -96,7 +103,7 @@ fun GameScreen(
                 Text(
                     text = player2TimeLeft,
                     fontSize = 80.sp,
-                    color = player2TextColor
+                    color = player2TextColor.value
                 )
             }
         }
