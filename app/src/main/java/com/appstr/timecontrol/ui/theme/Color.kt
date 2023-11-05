@@ -17,6 +17,14 @@ val white = Color(0xFFFFFFFF)
 val black = Color(0xFF000000)
 
 val red = Color(0xFFF44336)
+val red50 = Color(0xFFFFEBEE)
+val red100 = Color(0xFFFFCDD2)
+val red200 = Color(0xFFEF9A9A)
+val red300 = Color(0xFFE57373)
+val red400 = Color(0xFFEF5350)
+val red500 = Color(0xFFF44336)
+
+
 val pink = Color(0xFFE91E63)
 val purple = Color(0xFF9C27B0)
 val deepPurple = Color(0xFF673AB7)
