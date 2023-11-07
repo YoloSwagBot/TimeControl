@@ -16,7 +16,12 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -43,7 +48,11 @@ import com.appstr.timecontrol.ui.theme.grey
 import com.appstr.timecontrol.ui.theme.lightBlue
 import com.appstr.timecontrol.ui.theme.lightGreen
 import com.appstr.timecontrol.ui.theme.lightGreen900
+import com.appstr.timecontrol.ui.theme.red100
+import com.appstr.timecontrol.ui.theme.red200
+import com.appstr.timecontrol.ui.theme.red500
 import com.appstr.timecontrol.ui.theme.teal
+import com.appstr.timecontrol.ui.theme.transparent
 import com.appstr.timecontrol.ui.theme.white
 import com.appstr.timecontrol.util.formatTimeToText
 import com.appstr.timecontrol.viewmodel.GameViewModel
@@ -60,13 +69,6 @@ fun GameScreen(
 
     val gameState = gameViewModel.gameState.collectAsState()
 
-    // decrement time
-    LaunchedEffect(Unit){
-        while(!gameState.value.isPaused){
-            gameViewModel.decrementTimeByTurn(gameState.value.turn)
-            delay(1000)
-        }
-    }
 
     BoxWithConstraints(
 
@@ -80,6 +82,21 @@ fun GameScreen(
             ButtonsRow(gameState = gameState.value, screenWidth = screenWidth, centerButtonsRowHeight = centerButtonsHeight)
             Player1Area(gameState = gameState.value, screenWidth = screenWidth, botPlayerHeight = playerAreaHeight)
         }
+        BottomRow(
+            modifier = Modifier
+                .width(maxWidth)
+                .height(64.dp)
+                .rotate(180f)
+                .offset(y = (16).dp),
+            player = 2
+        )
+        BottomRow(
+            modifier = Modifier
+                .width(maxWidth)
+                .height(64.dp)
+                .offset(y = maxHeight - 48.dp),
+            player = 1
+        )
 
     }
 }
@@ -136,7 +153,9 @@ fun ButtonsRow(
                         radius = 32.dp
                     ),
                     onClick = {
-                        gameViewModel.pausePlayClicked()
+                        if (!gameState.isGameOver) {
+                            gameViewModel.pausePlayClicked()
+                        }
                     }
                 )
         )
@@ -168,6 +187,16 @@ fun Player2Area(
     gameViewModel: GameViewModel = viewModel()
 ){
 
+    // decrement time
+    if (!gameState.isGameOver && !gameState.isPaused){
+        LaunchedEffect(Unit){
+            while(true){
+                delay(1000)
+                gameViewModel.decrementTimeByTurn()
+            }
+        }
+    }
+
     Box(
         modifier = Modifier
             .width(screenWidth)
@@ -183,7 +212,9 @@ fun Player2Area(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = rememberRipple(color = teal),
                 onClick = {
-                    gameViewModel.onPlayer2Click()
+                    if (!gameState.isGameOver) {
+                        gameViewModel.onPlayer2Click()
+                    }
                 }
             ),
         contentAlignment = Alignment.Center
@@ -196,25 +227,6 @@ fun Player2Area(
                 else -> black
             },
             modifier = Modifier.rotate(180f)
-        )
-        // player 2 time set icon
-        Image(
-            painter = painterResource(id = R.drawable.ic_change_time),
-            contentDescription = "edit player's time",
-            modifier = Modifier
-                .size(24.dp)
-                .offset(x = (screenWidth / 2) - 24.dp, y = -(topPlayerAreaHeight / 2) + 24.dp)
-                .rotate(180f)
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = rememberRipple(
-                        color = lightGreen900,
-                        bounded = false,
-                        radius = 32.dp
-                    ),
-                    onClick = { /* wooo*/ }
-                ),
-            colorFilter = ColorFilter.tint(color = lightGreen900)
         )
     }
 }
@@ -235,6 +247,8 @@ fun Player1Area(
             .background(
                 when {
                     gameState.isPaused -> white
+                    gameState.turn == 1 && gameState.player1CurrentTime < gameState.player1StartTime * .1 -> red200
+                    gameState.turn == 1 && gameState.player1CurrentTime < gameState.player1StartTime * .05 -> red500
                     gameState.turn == 1 -> lightGreen
                     else -> white
                 }
@@ -243,7 +257,9 @@ fun Player1Area(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = rememberRipple(color = teal),
                 onClick = {
-                    gameViewModel.onPlayer1Click()
+                    if (!gameState.isGameOver) {
+                        gameViewModel.onPlayer1Click()
+                    }
                 }
             ),
         contentAlignment = Alignment.Center
@@ -256,13 +272,52 @@ fun Player1Area(
                 else -> black
             }
         )
+    }
+}
+
+@Composable
+fun BottomRow(
+    modifier: Modifier,
+    player: Int
+){
+    BoxWithConstraints(
+        modifier = modifier,
+    ) {
+        // Call mate button
+        ElevatedButton(
+            modifier = Modifier.padding(start = 4.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = green),
+            onClick = {
+
+            }
+        ) {
+            Text(text = "Call Mate")
+        }
+        // Forfeit button
+        Text(
+            modifier = Modifier
+                .wrapContentSize()
+                .offset(x = (maxWidth/2)-28.dp, y = 4.dp)
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = rememberRipple(
+                        color = red500,
+                        radius = 64.dp
+                    ),
+                    onClick = {
+
+                    }
+                )
+                .padding(8.dp),
+            text = "Forfeit"
+        )
         // player 1 time set icon
         Image(
             painter = painterResource(id = R.drawable.ic_change_time),
             contentDescription = "edit player's time",
             modifier = Modifier
                 .size(24.dp)
-                .offset(x = (botPlayerHeight / 2) - 8.dp, y = (botPlayerHeight / 2) - 24.dp)
+                .offset(x = maxWidth - 32.dp, y = 15.dp)
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = rememberRipple(
@@ -278,4 +333,3 @@ fun Player1Area(
         )
     }
 }
-

@@ -1,14 +1,17 @@
 package com.appstr.timecontrol.ui.model
 
 import com.appstr.timecontrol.minute
+import com.appstr.timecontrol.second
 
 
 data class GameState (
 
-    val timeControl: TimeControl = TimeControl(10*minute, 0),
+    val timeControl: TimeControl = TimeControl(10*second, 0),
 
     var turn: Int = 1, // 1 or 2
     var isPaused: Boolean = true,
+    var isGameOver: Boolean = false,
+    var gameEndReason: GameEndReason? = null,
 
     val player1StartTime: Int = timeControl.startValue,
     val player2StartTime: Int = timeControl.startValue,
@@ -21,3 +24,9 @@ data class GameState (
 
 )
 
+sealed class GameEndReason(reason: String){
+    object CHECK_MATE: GameEndReason("Checkmate")
+    object RAN_OUT_OF_TIME: GameEndReason("Ran out of time")
+    object FORFEIT: GameEndReason("Forfeit")
+    object UNKNOWN: GameEndReason("Unknown")
+}
