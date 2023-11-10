@@ -1,15 +1,11 @@
-package com.appstr.timecontrol.viewmodel
+package com.appstr.timecontrol.ui.game.viewmodel
 
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
-import com.appstr.timecontrol.minute
-import com.appstr.timecontrol.second
-import com.appstr.timecontrol.ui.model.GameState
-import com.appstr.timecontrol.ui.theme.black
-import com.appstr.timecontrol.ui.theme.white
+import com.appstr.timecontrol.util.second
+import com.appstr.timecontrol.ui.game.model.GameState
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 

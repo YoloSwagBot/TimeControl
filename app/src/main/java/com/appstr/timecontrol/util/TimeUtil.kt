@@ -1,10 +1,5 @@
 package com.appstr.timecontrol.util
 
-import com.appstr.timecontrol.hour
-import com.appstr.timecontrol.minute
-import com.appstr.timecontrol.second
-import java.text.SimpleDateFormat
-import java.util.Date
 import java.util.concurrent.TimeUnit
 
 
@@ -14,12 +9,12 @@ fun Int.formatTimeToText(): String {
 
     return when {
 
-        this > hour-1 -> String.format("%2d:%02d:%02d",
+        this > hour -1 -> String.format("%2d:%02d:%02d",
             TimeUnit.MILLISECONDS.toHours(time),
             TimeUnit.MILLISECONDS.toMinutes(time) % TimeUnit.HOURS.toMinutes(1),
             TimeUnit.MILLISECONDS.toSeconds(time) % TimeUnit.MINUTES.toSeconds(1))
 
-        this > minute-1 -> String.format("%2d:%02d",
+        this > minute -1 -> String.format("%2d:%02d",
             TimeUnit.MILLISECONDS.toMinutes(time) % TimeUnit.HOURS.toMinutes(1),
             TimeUnit.MILLISECONDS.toSeconds(time) % TimeUnit.MINUTES.toSeconds(1))
 

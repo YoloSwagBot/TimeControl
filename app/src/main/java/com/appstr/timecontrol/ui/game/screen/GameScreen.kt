@@ -1,4 +1,4 @@
-package com.appstr.timecontrol.ui.screen
+package com.appstr.timecontrol.ui.game.screen
 
 import android.app.Activity
 import android.content.pm.ActivityInfo
@@ -18,8 +18,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.ripple.rememberRipple
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Text
@@ -38,24 +36,20 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.appstr.timecontrol.R
-import com.appstr.timecontrol.hour
-import com.appstr.timecontrol.ui.model.GameState
+import com.appstr.timecontrol.ui.game.model.GameState
 import com.appstr.timecontrol.ui.theme.black
 import com.appstr.timecontrol.ui.theme.blueGrey
 import com.appstr.timecontrol.ui.theme.blueGrey50
 import com.appstr.timecontrol.ui.theme.green
-import com.appstr.timecontrol.ui.theme.grey
 import com.appstr.timecontrol.ui.theme.lightBlue
 import com.appstr.timecontrol.ui.theme.lightGreen
 import com.appstr.timecontrol.ui.theme.lightGreen900
-import com.appstr.timecontrol.ui.theme.red100
 import com.appstr.timecontrol.ui.theme.red200
 import com.appstr.timecontrol.ui.theme.red500
 import com.appstr.timecontrol.ui.theme.teal
-import com.appstr.timecontrol.ui.theme.transparent
 import com.appstr.timecontrol.ui.theme.white
 import com.appstr.timecontrol.util.formatTimeToText
-import com.appstr.timecontrol.viewmodel.GameViewModel
+import com.appstr.timecontrol.ui.game.viewmodel.GameViewModel
 import kotlinx.coroutines.delay
 
 
@@ -309,7 +303,7 @@ fun BottomRow(
                     }
                 )
                 .padding(8.dp),
-            text = "Forfeit"
+            text = "Resign"
         )
         // player 1 time set icon
         Image(

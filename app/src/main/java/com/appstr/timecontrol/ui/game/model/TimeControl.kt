@@ -1,4 +1,4 @@
-package com.appstr.timecontrol.ui.model
+package com.appstr.timecontrol.ui.game.model
 
 data class TimeControl(
     val startValue: Int,

@@ -1,7 +1,7 @@
 package com.appstr.timecontrol
 
 import androidx.compose.ui.test.junit4.createComposeRule
-import com.appstr.timecontrol.ui.screen.GameScreen
+import com.appstr.timecontrol.ui.game.screen.GameScreen
 import org.junit.Rule
 import org.junit.Test
 
