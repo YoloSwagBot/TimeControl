@@ -24,9 +24,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
@@ -36,7 +38,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.appstr.timecontrol.R
+import com.appstr.timecontrol.ui.game.dialog.DialogCheckCancelCurrentGame
 import com.appstr.timecontrol.ui.game.model.GameState
+import com.appstr.timecontrol.ui.game.model.Player
 import com.appstr.timecontrol.ui.theme.black
 import com.appstr.timecontrol.ui.theme.blueGrey
 import com.appstr.timecontrol.ui.theme.blueGrey50
@@ -55,13 +59,13 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun GameScreen(
-    gameViewModel: GameViewModel = viewModel()
+    gameVM: GameViewModel = viewModel()
 ){
 
     val context = LocalContext.current
     (context as? Activity)?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
-    val gameState = gameViewModel.gameState.collectAsState()
+    val gameState = gameVM.gameState.collectAsState()
 
 
     BoxWithConstraints(
@@ -82,17 +86,23 @@ fun GameScreen(
                 .height(64.dp)
                 .rotate(180f)
                 .offset(y = (16).dp),
-            player = 2
+            player = Player.TWO
         )
         BottomRow(
             modifier = Modifier
                 .width(maxWidth)
                 .height(64.dp)
                 .offset(y = maxHeight - 48.dp),
-            player = 1
+            player = Player.ONE
         )
 
     }
+
+    val dialogCancelGame by gameVM.dialogStateCancelGameShowing.collectAsState()
+    if (dialogCancelGame){
+        DialogCheckCancelCurrentGame()
+    }
+
 }
 
 @Composable
@@ -100,7 +110,7 @@ fun ButtonsRow(
     gameState: GameState,
     screenWidth: Dp,
     centerButtonsRowHeight: Dp,
-    gameViewModel: GameViewModel = viewModel()
+    gameVM: GameViewModel = viewModel()
 ){
     val centerIconHeights = 56.dp
 
@@ -119,15 +129,17 @@ fun ButtonsRow(
             modifier = Modifier
                 .size(48.dp)
                 .padding(start = 16.dp)
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = rememberRipple(
-                        color = blueGrey,
-                        bounded = false,
-                        radius = 32.dp
-                    ),
-                    onClick = { /* wooo*/ }
-                )
+                .alpha(0f)
+//                .clickable(
+//                    interactionSource = remember { MutableInteractionSource() },
+//                    indication = rememberRipple(
+//                        color = blueGrey,
+//                        bounded = false,
+//                        radius = 32.dp
+//                    ),
+//                    onClick = { /* wooo*/ }
+//                )
+
         )
         Image(
             painter = painterResource(id = when(gameState.isPaused){
@@ -148,13 +160,13 @@ fun ButtonsRow(
                     ),
                     onClick = {
                         if (!gameState.isGameOver) {
-                            gameViewModel.pausePlayClicked()
+                            gameVM.pausePlayClicked()
                         }
                     }
                 )
         )
         Image(
-            painter = painterResource(id = R.drawable.ic_reset_time),
+            painter = painterResource(id = R.drawable.ic_time_control_setup),
             contentDescription = "play",
             colorFilter = ColorFilter.tint(lightBlue),
             modifier = Modifier
@@ -167,7 +179,9 @@ fun ButtonsRow(
                         bounded = false,
                         radius = 32.dp
                     ),
-                    onClick = { /* wooo*/ }
+                    onClick = {
+                        gameVM.showDialogCancelGame()
+                    }
                 )
         )
     }
@@ -197,8 +211,10 @@ fun Player2Area(
             .height(topPlayerAreaHeight)
             .background(
                 when {
+                    gameState.turn == Player.TWO && gameState.player1CurrentTime < gameState.player1StartTime * .1 -> red200
+                    gameState.turn == Player.TWO && gameState.player1CurrentTime < gameState.player1StartTime * .05 -> red500
                     gameState.isPaused -> white
-                    gameState.turn == 2 -> lightGreen
+                    gameState.turn == Player.TWO -> lightGreen
                     else -> white
                 }
             )
@@ -233,17 +249,16 @@ fun Player1Area(
     gameViewModel: GameViewModel = viewModel()
 ){
 
-
     Box(
         modifier = Modifier
             .width(screenWidth)
             .height(botPlayerHeight)
             .background(
                 when {
+                    gameState.turn == Player.ONE && gameState.player1CurrentTime < gameState.player1StartTime * .1 -> red200
+                    gameState.turn == Player.ONE && gameState.player1CurrentTime < gameState.player1StartTime * .05 -> red500
                     gameState.isPaused -> white
-                    gameState.turn == 1 && gameState.player1CurrentTime < gameState.player1StartTime * .1 -> red200
-                    gameState.turn == 1 && gameState.player1CurrentTime < gameState.player1StartTime * .05 -> red500
-                    gameState.turn == 1 -> lightGreen
+                    gameState.turn == Player.ONE -> lightGreen
                     else -> white
                 }
             )
@@ -272,7 +287,7 @@ fun Player1Area(
 @Composable
 fun BottomRow(
     modifier: Modifier,
-    player: Int
+    player: Player
 ){
     BoxWithConstraints(
         modifier = modifier,
@@ -291,7 +306,7 @@ fun BottomRow(
         Text(
             modifier = Modifier
                 .wrapContentSize()
-                .offset(x = (maxWidth/2)-28.dp, y = 4.dp)
+                .offset(x = (maxWidth / 2) - 28.dp, y = 4.dp)
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = rememberRipple(

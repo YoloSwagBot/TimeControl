@@ -7,7 +7,7 @@ data class GameState (
 
     val timeControl: TimeControl = TimeControl(10* second, 0),
 
-    var turn: Int = 1, // 1 or 2
+    var turn: Player = Player.ONE,
     var isPaused: Boolean = true,
     var isGameOver: Boolean = false,
     var gameEndReason: GameEndReason? = null,
@@ -28,4 +28,9 @@ sealed class GameEndReason(reason: String){
     object RAN_OUT_OF_TIME: GameEndReason("Ran out of time")
     object FORFEIT: GameEndReason("Resign")
     object UNKNOWN: GameEndReason("Unknown")
+}
+
+sealed class Player {
+    object ONE: Player()
+    object TWO: Player()
 }
