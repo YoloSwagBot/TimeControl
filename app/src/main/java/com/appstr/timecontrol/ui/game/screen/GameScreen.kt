@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.appstr.timecontrol.R
 import com.appstr.timecontrol.ui.game.dialog.DialogCheckCancelCurrentGame
+import com.appstr.timecontrol.ui.game.dialog.DialogSetPlayerTime
 import com.appstr.timecontrol.ui.game.model.GameState
 import com.appstr.timecontrol.ui.game.model.Player
 import com.appstr.timecontrol.ui.theme.black
@@ -98,10 +99,13 @@ fun GameScreen(
 
     }
 
-    val dialogCancelGame by gameVM.dialogStateCancelGameShowing.collectAsState()
+    val dialogCancelGame by gameVM.dialogCancelGameShowing.collectAsState()
     if (dialogCancelGame){
         DialogCheckCancelCurrentGame()
     }
+
+    val dialogSetPlayerTime by gameVM.dialogSetPlayersTimeShowing.collectAsState()
+    dialogSetPlayerTime?.let { DialogSetPlayerTime(gameState = gameState.value, player = it) }
 
 }
 
@@ -287,7 +291,8 @@ fun Player1Area(
 @Composable
 fun BottomRow(
     modifier: Modifier,
-    player: Player
+    player: Player,
+    gameVM: GameViewModel = viewModel()
 ){
     BoxWithConstraints(
         modifier = modifier,
@@ -335,7 +340,7 @@ fun BottomRow(
                         radius = 32.dp
                     ),
                     onClick = {
-
+                        gameVM.showDialogSetPlayersTime(player)
                     }
                 ),
             colorFilter = ColorFilter.tint(color = lightGreen900)

@@ -1,11 +1,12 @@
 package com.appstr.timecontrol.ui.game.viewmodel
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import com.appstr.timecontrol.util.second
 import com.appstr.timecontrol.ui.game.model.GameState
 import com.appstr.timecontrol.ui.game.model.Player
+import com.appstr.timecontrol.util.hour
+import com.appstr.timecontrol.util.minute
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -17,9 +18,15 @@ class GameViewModel(appli: Application) : AndroidViewModel(appli) {
     private val _gameState = MutableStateFlow(GameState())
     val gameState = _gameState.asStateFlow()
 
-    // Dialog actions(history screen), cancel/dismiss
-    private val _dialogStateCancelGameShowing = MutableStateFlow(false)
-    val dialogStateCancelGameShowing = _dialogStateCancelGameShowing.asStateFlow()
+    // Dialog cancel current game
+    private val _dialogCancelGameShowing = MutableStateFlow(false)
+    val dialogCancelGameShowing = _dialogCancelGameShowing.asStateFlow()
+
+    // Dialog set player's time
+    private val _dialogSetPlayersTimeShowing = MutableStateFlow<Player?>(null)
+    val dialogSetPlayersTimeShowing = _dialogSetPlayersTimeShowing.asStateFlow()
+
+
 
     fun decrementTimeByTurn(){
         _gameState.apply {
@@ -78,16 +85,43 @@ class GameViewModel(appli: Application) : AndroidViewModel(appli) {
         }
     }
 
-    // Dialog Actions
+    // Dialog Cancel Game
     fun showDialogCancelGame(){
         _gameState.update { it.copy(isPaused = true) }
-        _dialogStateCancelGameShowing.update { true }
+        _dialogCancelGameShowing.update { true }
     }
     fun onDialogActionConfirmCancelGame(){
 
+
     }
     fun onDialogActionDismissCancelGame(){
-        _dialogStateCancelGameShowing.update { false }
+        _dialogCancelGameShowing.update { false }
     }
+
+    // Dialog Edit Time Game
+    fun showDialogSetPlayersTime(player: Player){
+        _gameState.update { it.copy(isPaused = true) }
+        _dialogSetPlayersTimeShowing.update { player }
+    }
+    fun onDialogActionConfirmSetPlayersTime(
+        player: Player,
+        hours: Int,
+        minutes: Int,
+        seconds: Int
+    ){
+        _gameState.update {
+            when (player){
+                Player.ONE -> it.copy(player1CurrentTime = (hours * hour) + (minutes * minute) + (seconds * second))
+                Player.TWO -> it.copy(player2CurrentTime = (hours * hour) + (minutes * minute) + (seconds * second))
+            }
+        }
+        // check formatting then set and close
+        _dialogSetPlayersTimeShowing.update { null }
+    }
+    fun onDialogActionDismissSetPlayersTime(){
+        _dialogSetPlayersTimeShowing.update { null }
+    }
+
+
 }
 
