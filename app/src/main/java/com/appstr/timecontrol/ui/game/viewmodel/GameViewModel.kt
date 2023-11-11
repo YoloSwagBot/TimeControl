@@ -2,12 +2,12 @@ package com.appstr.timecontrol.ui.game.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import com.appstr.timecontrol.util.second
 import com.appstr.timecontrol.ui.game.model.GameState
 import com.appstr.timecontrol.ui.game.model.Player
 import com.appstr.timecontrol.ui.game.model.TimeControl
 import com.appstr.timecontrol.util.hour
 import com.appstr.timecontrol.util.minute
+import com.appstr.timecontrol.util.second
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update

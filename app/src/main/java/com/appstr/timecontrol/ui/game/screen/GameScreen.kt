@@ -47,7 +47,6 @@ import com.appstr.timecontrol.ui.theme.black
 import com.appstr.timecontrol.ui.theme.blueGrey
 import com.appstr.timecontrol.ui.theme.blueGrey50
 import com.appstr.timecontrol.ui.theme.green
-import com.appstr.timecontrol.ui.theme.lightBlue
 import com.appstr.timecontrol.ui.theme.lightGreen
 import com.appstr.timecontrol.ui.theme.lightGreen900
 import com.appstr.timecontrol.ui.theme.red200
@@ -177,14 +176,14 @@ fun ButtonsRow(
         Image(
             painter = painterResource(id = R.drawable.ic_time_control_setup),
             contentDescription = "play",
-            colorFilter = ColorFilter.tint(lightBlue),
+            colorFilter = ColorFilter.tint(lightGreen900),
             modifier = Modifier
                 .size(48.dp)
                 .padding(end = 16.dp)
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = rememberRipple(
-                        color = lightBlue,
+                        color = lightGreen,
                         bounded = false,
                         radius = 32.dp
                     ),
@@ -302,7 +301,7 @@ fun BottomRow(
     BoxWithConstraints(
         modifier = modifier,
     ) {
-        // Call mate button
+        // End Game button
         ElevatedButton(
             modifier = Modifier.padding(start = 4.dp),
             colors = ButtonDefaults.buttonColors(containerColor = green),
@@ -310,7 +309,7 @@ fun BottomRow(
 
             }
         ) {
-            Text(text = "Call Mate")
+            Text(text = "End Game")
         }
         // Forfeit button
         Text(
@@ -328,7 +327,8 @@ fun BottomRow(
                     }
                 )
                 .padding(8.dp),
-            text = "Resign"
+            text = "Resign",
+            color = red500
         )
         // player 1 time set icon
         Image(

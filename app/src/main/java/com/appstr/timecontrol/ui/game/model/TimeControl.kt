@@ -45,6 +45,6 @@ fun TimeControl.toText(): String {
 private fun Int.toIncrementString(): String =
     when (this){
         0 -> ""
-        else -> "| ${this/second} sec"
+        else -> "| $this sec"
     }
 
