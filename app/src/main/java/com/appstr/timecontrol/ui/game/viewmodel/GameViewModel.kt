@@ -20,7 +20,7 @@ class GameViewModel(appli: Application) : AndroidViewModel(appli) {
     val gameState = _gameState.asStateFlow()
 
     // Dialog cancel current game
-    private val _dialogCancelGameShowing = MutableStateFlow(false)
+    private val _dialogCancelGameShowing = MutableStateFlow<TimeControl?>(null)
     val dialogCancelGameShowing = _dialogCancelGameShowing.asStateFlow()
 
     // Dialog set player's time
@@ -91,16 +91,23 @@ class GameViewModel(appli: Application) : AndroidViewModel(appli) {
     }
 
     // Dialog Cancel Game
-    fun showDialogCancelGame(){
+    fun showDialogCancelGame(
+        timeControl: TimeControl
+    ){
         _gameState.update { it.copy(isPaused = true) }
-        _dialogCancelGameShowing.update { true }
+        _dialogCancelGameShowing.update { timeControl }
     }
     fun onDialogActionConfirmCancelGame(){
-
-
+        dialogCancelGameShowing.value?.let { tc ->
+            _gameState.update {
+                GameState(timeControl = tc)
+            }
+        }
+        _dialogCancelGameShowing.update { null }
+        _screenSetupTimeShowing.update { false }
     }
     fun onDialogActionDismissCancelGame(){
-        _dialogCancelGameShowing.update { false }
+        _dialogCancelGameShowing.update { null }
     }
 
     // Dialog Edit Time Game

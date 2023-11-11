@@ -67,7 +67,6 @@ fun GameScreen(
 
     val gameState = gameVM.gameState.collectAsState()
 
-
     BoxWithConstraints() {
         val screenWidth = maxWidth
         val centerButtonsHeight = 64.dp
@@ -256,7 +255,6 @@ fun Player1Area(
     botPlayerHeight: Dp,
     gameViewModel: GameViewModel = viewModel()
 ){
-
     Box(
         modifier = Modifier
             .width(screenWidth)
@@ -303,8 +301,14 @@ fun BottomRow(
     ) {
         // End Game button
         ElevatedButton(
-            modifier = Modifier.padding(start = 4.dp),
+            modifier = Modifier
+                .wrapContentSize()
+                .padding(start = 4.dp),
             colors = ButtonDefaults.buttonColors(containerColor = green),
+            elevation = ButtonDefaults.elevatedButtonElevation(
+                defaultElevation = 8.dp,
+                pressedElevation = 16.dp
+            ),
             onClick = {
 
             }

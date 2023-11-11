@@ -29,6 +29,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -41,6 +42,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.appstr.timecontrol.ui.game.dialog.DialogCheckCancelCurrentGame
 import com.appstr.timecontrol.ui.game.model.TimeControl
 import com.appstr.timecontrol.ui.game.model.toText
 import com.appstr.timecontrol.ui.game.viewmodel.GameViewModel
@@ -65,9 +67,55 @@ fun SetupTimeScreen(
             .background(color = white)
             .clickable(enabled = false) {}
     ) {
-        ListOfTimeControls()
+        // List
+        var checkedPosition by rememberSaveable { mutableIntStateOf(defaultSelectedItem) }
+
+        LazyColumn(
+            contentPadding = PaddingValues(top = 56.dp, bottom = 80.dp)
+        ){
+            itemsIndexed(defaultTimeControls){ p, item ->
+                TimeControlListItem(
+                    item,
+                    p == defaultTimeControls.lastIndex,
+                    p == checkedPosition,
+                    onClick = {
+                        checkedPosition = p
+                    }
+                )
+            }
+        }
+
         Toolbar()
-        BottomButton(Modifier.align(Alignment.BottomCenter))
+
+        ElevatedButton(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .offset(y = (-8).dp)
+                .clip(shape = RoundedCornerShape(16.dp))
+                .padding(12.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = green),
+            elevation = ButtonDefaults.elevatedButtonElevation(
+                defaultElevation = 8.dp,
+                pressedElevation = 16.dp
+            ),
+            onClick = {
+                gameVM.showDialogCancelGame(
+                    defaultTimeControls[checkedPosition]
+                )
+            }
+        ){
+            Text(
+                modifier = Modifier.padding(start = 64.dp, end = 64.dp),
+                text = "Setup Game",
+                fontSize = 22.sp,
+                color = white
+            )
+        }
+
+        val dialogCancelGameShowing by gameVM.dialogCancelGameShowing.collectAsState()
+        if (dialogCancelGameShowing != null){
+            DialogCheckCancelCurrentGame()
+        }
     }
     BackHandler {
         gameVM.closeSetupTimeScreen()
@@ -80,7 +128,6 @@ fun SetupTimeScreen(
 private fun Toolbar(
     gameVM: GameViewModel = viewModel()
 ){
-
     BoxWithConstraints(
         modifier = Modifier
             .fillMaxWidth()
@@ -154,29 +201,6 @@ private fun Toolbar(
     }
 }
 
-// List of TimeControls to select from, including custom times
-@Composable
-private fun ListOfTimeControls(
-    gameVM: GameViewModel = viewModel()
-){
-    var checkedPosition by rememberSaveable { mutableIntStateOf(defaultSelectedItem) }
-
-    LazyColumn(
-        contentPadding = PaddingValues(top = 56.dp, bottom = 80.dp)
-    ){
-        itemsIndexed(defaultTimeControls){ p, item ->
-            TimeControlListItem(
-                item,
-                p == defaultTimeControls.lastIndex,
-                p == checkedPosition,
-                onClick = {
-                    checkedPosition = p
-                }
-            )
-        }
-    }
-
-}
 
 @Composable
 private fun TimeControlListItem(
@@ -225,32 +249,5 @@ private fun TimeControlListItem(
         if (!isLast){
             Divider(thickness = 1.dp, color = lightGreen900)
         }
-    }
-}
-
-@Composable
-private fun BottomButton(
-    modifier: Modifier
-){
-    ElevatedButton(
-        modifier = modifier
-            .offset(y = (-8).dp)
-            .clip(shape = RoundedCornerShape(16.dp))
-            .padding(12.dp),
-        colors = ButtonDefaults.buttonColors(containerColor = green),
-        elevation = ButtonDefaults.elevatedButtonElevation(
-            defaultElevation = 8.dp,
-            pressedElevation = 16.dp
-        ),
-        onClick = {
-
-        }
-    ){
-        Text(
-            modifier = Modifier.padding(start = 64.dp, end = 64.dp),
-            text = "Setup Game",
-            fontSize = 22.sp,
-            color = white
-        )
     }
 }

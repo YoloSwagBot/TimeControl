@@ -1,14 +1,9 @@
 package com.appstr.timecontrol.ui.game.dialog
 
-import android.graphics.fonts.FontStyle
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredWidth
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -21,7 +16,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -39,7 +33,6 @@ import com.appstr.timecontrol.ui.game.model.Player
 import com.appstr.timecontrol.ui.game.viewmodel.GameViewModel
 import com.appstr.timecontrol.ui.theme.red
 import com.appstr.timecontrol.ui.theme.white
-import com.appstr.timecontrol.util.formatTimeToText
 import com.appstr.timecontrol.util.hoursFrom
 import com.appstr.timecontrol.util.isValidHours
 import com.appstr.timecontrol.util.isValidMinutes
@@ -203,7 +196,6 @@ fun DialogSetPlayerTime(
 
 @Composable
 fun DialogCheckCancelCurrentGame(
-
     gameVM: GameViewModel = viewModel()
 ){
     AlertDialog(
