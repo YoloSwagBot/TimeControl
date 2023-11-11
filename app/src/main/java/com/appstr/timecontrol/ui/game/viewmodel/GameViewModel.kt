@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import com.appstr.timecontrol.util.second
 import com.appstr.timecontrol.ui.game.model.GameState
 import com.appstr.timecontrol.ui.game.model.Player
+import com.appstr.timecontrol.ui.game.model.TimeControl
 import com.appstr.timecontrol.util.hour
 import com.appstr.timecontrol.util.minute
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,6 +26,10 @@ class GameViewModel(appli: Application) : AndroidViewModel(appli) {
     // Dialog set player's time
     private val _dialogSetPlayersTimeShowing = MutableStateFlow<Player?>(null)
     val dialogSetPlayersTimeShowing = _dialogSetPlayersTimeShowing.asStateFlow()
+
+    // Screen, SetupTime
+    private val _screenSetupTimeShowing = MutableStateFlow(false)
+    val screenSetupTimeShowing = _screenSetupTimeShowing.asStateFlow()
 
 
 
@@ -120,6 +125,27 @@ class GameViewModel(appli: Application) : AndroidViewModel(appli) {
     }
     fun onDialogActionDismissSetPlayersTime(){
         _dialogSetPlayersTimeShowing.update { null }
+    }
+
+    // Pause (ie: back button to close app)
+    fun pauseGame(){
+        _gameState.update { it.copy(isPaused = true) }
+    }
+
+    // Close SetupTime screen
+    fun showSetupTimeScreen(){
+        _screenSetupTimeShowing.update { true }
+    }
+
+    fun closeSetupTimeScreen(){
+        _screenSetupTimeShowing.update { false }
+    }
+
+    // Setup a new game with a TimeControl
+    fun setupNewGame(timeControl: TimeControl){
+
+
+        _screenSetupTimeShowing.update { false }
     }
 
 

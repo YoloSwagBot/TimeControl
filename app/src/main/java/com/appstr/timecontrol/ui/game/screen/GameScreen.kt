@@ -2,6 +2,7 @@ package com.appstr.timecontrol.ui.game.screen
 
 import android.app.Activity
 import android.content.pm.ActivityInfo
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -38,10 +39,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.appstr.timecontrol.R
-import com.appstr.timecontrol.ui.game.dialog.DialogCheckCancelCurrentGame
 import com.appstr.timecontrol.ui.game.dialog.DialogSetPlayerTime
 import com.appstr.timecontrol.ui.game.model.GameState
 import com.appstr.timecontrol.ui.game.model.Player
+import com.appstr.timecontrol.ui.game.viewmodel.GameViewModel
 import com.appstr.timecontrol.ui.theme.black
 import com.appstr.timecontrol.ui.theme.blueGrey
 import com.appstr.timecontrol.ui.theme.blueGrey50
@@ -54,7 +55,6 @@ import com.appstr.timecontrol.ui.theme.red500
 import com.appstr.timecontrol.ui.theme.teal
 import com.appstr.timecontrol.ui.theme.white
 import com.appstr.timecontrol.util.formatTimeToText
-import com.appstr.timecontrol.ui.game.viewmodel.GameViewModel
 import kotlinx.coroutines.delay
 
 
@@ -69,9 +69,7 @@ fun GameScreen(
     val gameState = gameVM.gameState.collectAsState()
 
 
-    BoxWithConstraints(
-
-    ) {
+    BoxWithConstraints() {
         val screenWidth = maxWidth
         val centerButtonsHeight = 64.dp
         val playerAreaHeight = ((maxHeight - centerButtonsHeight) / 2)
@@ -99,14 +97,21 @@ fun GameScreen(
 
     }
 
-    val dialogCancelGame by gameVM.dialogCancelGameShowing.collectAsState()
-    if (dialogCancelGame){
-        DialogCheckCancelCurrentGame()
-    }
 
     val dialogSetPlayerTime by gameVM.dialogSetPlayersTimeShowing.collectAsState()
-    dialogSetPlayerTime?.let { DialogSetPlayerTime(gameState = gameState.value, player = it) }
+    dialogSetPlayerTime?.let {
+        DialogSetPlayerTime(gameState = gameState.value, player = it)
+    }
 
+    val showSetupTimeScreen by gameVM.screenSetupTimeShowing.collectAsState()
+    if (showSetupTimeScreen){
+        SetupTimeScreen()
+    }
+
+
+    BackHandler(false) {
+        gameVM.pauseGame()
+    }
 }
 
 @Composable
@@ -184,7 +189,7 @@ fun ButtonsRow(
                         radius = 32.dp
                     ),
                     onClick = {
-                        gameVM.showDialogCancelGame()
+                        gameVM.showSetupTimeScreen()
                     }
                 )
         )
