@@ -57,7 +57,6 @@ import com.appstr.timecontrol.util.defaultTimeControls
 
 @Composable
 fun SetupTimeScreen(
-
     gameVM: GameViewModel = viewModel()
 ){
 

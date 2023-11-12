@@ -1,9 +1,14 @@
 package com.appstr.timecontrol.ui.game.model
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.appstr.timecontrol.util.second
 
 
+@Entity(tableName = "table_games")
 data class GameState (
+
+    @PrimaryKey val id: Int = 1,
 
     val timeControl: TimeControl = TimeControl(10* second, 0),
 
@@ -23,14 +28,16 @@ data class GameState (
 
 )
 
+@Entity
 sealed class GameEndReason(reason: String){
-    object CHECK_MATE: GameEndReason("Checkmate")
-    object RAN_OUT_OF_TIME: GameEndReason("Ran out of time")
-    object FORFEIT: GameEndReason("Resign")
-    object UNKNOWN: GameEndReason("Unknown")
+    data object CHECK_MATE: GameEndReason("Checkmate")
+    data object RAN_OUT_OF_TIME: GameEndReason("Ran out of time")
+    data object FORFEIT: GameEndReason("Resign")
+    data object UNKNOWN: GameEndReason("Unknown")
 }
 
+@Entity
 sealed class Player {
-    object ONE: Player()
-    object TWO: Player()
+    data object ONE: Player()
+    data object TWO: Player()
 }

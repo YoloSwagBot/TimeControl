@@ -62,10 +62,11 @@ fun GameScreen(
     gameVM: GameViewModel = viewModel()
 ){
 
+    // TODO -- fix orientation to support landscape
     val context = LocalContext.current
     (context as? Activity)?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
-    val gameState = gameVM.gameState.collectAsState()
+    val gameState = gameVM.gameState.collectAsState(null)
 
     BoxWithConstraints() {
         val screenWidth = maxWidth
@@ -78,6 +79,7 @@ fun GameScreen(
             Player1Area(gameState = gameState.value, screenWidth = screenWidth, botPlayerHeight = playerAreaHeight)
         }
         BottomRow(
+            gameState = gameState.value,
             modifier = Modifier
                 .width(maxWidth)
                 .height(64.dp)
@@ -86,6 +88,7 @@ fun GameScreen(
             player = Player.TWO
         )
         BottomRow(
+            gameState = gameState.value,
             modifier = Modifier
                 .width(maxWidth)
                 .height(64.dp)
@@ -98,23 +101,24 @@ fun GameScreen(
 
     val dialogSetPlayerTime by gameVM.dialogSetPlayersTimeShowing.collectAsState()
     dialogSetPlayerTime?.let {
-        DialogSetPlayerTime(gameState = gameState.value, player = it)
+        gameState.value?.let { DialogSetPlayerTime(gameState = it, player = it.turn) }
     }
 
     val showSetupTimeScreen by gameVM.screenSetupTimeShowing.collectAsState()
     if (showSetupTimeScreen){
         SetupTimeScreen()
+
     }
 
 
     BackHandler(false) {
-        gameVM.pauseGame()
+        gameState.value?.let { gameVM.pauseGame() }
     }
 }
 
 @Composable
 fun ButtonsRow(
-    gameState: GameState,
+    gameState: GameState?,
     screenWidth: Dp,
     centerButtonsRowHeight: Dp,
     gameVM: GameViewModel = viewModel()
@@ -144,34 +148,36 @@ fun ButtonsRow(
 //                        bounded = false,
 //                        radius = 32.dp
 //                    ),
-//                    onClick = { /* wooo*/ }
+//                    onClick = {  }
 //                )
 
         )
-        Image(
-            painter = painterResource(id = when(gameState.isPaused){
-                true -> R.drawable.ic_play
-                false -> R.drawable.ic_pause
-            }),
-            contentDescription = "play",
-            colorFilter = ColorFilter.tint(green),
-            modifier = Modifier
-                .size(centerIconHeights)
-                .padding(4.dp)
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = rememberRipple(
-                        color = green,
-                        bounded = false,
-                        radius = 32.dp
-                    ),
-                    onClick = {
-                        if (!gameState.isGameOver) {
-                            gameVM.pausePlayClicked()
+        gameState?.let{
+            Image(
+                painter = painterResource(id = when(it.isPaused){
+                    true -> R.drawable.ic_play
+                    false -> R.drawable.ic_pause
+                }),
+                contentDescription = "play",
+                colorFilter = ColorFilter.tint(green),
+                modifier = Modifier
+                    .size(centerIconHeights)
+                    .padding(4.dp)
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = rememberRipple(
+                            color = green,
+                            bounded = false,
+                            radius = 32.dp
+                        ),
+                        onClick = {
+                            if (!it.isGameOver) {
+                                gameVM.pausePlayClicked()
+                            }
                         }
-                    }
-                )
-        )
+                    )
+            )
+        }
         Image(
             painter = painterResource(id = R.drawable.ic_time_control_setup),
             contentDescription = "play",
@@ -196,18 +202,20 @@ fun ButtonsRow(
 
 @Composable
 fun Player2Area(
-    gameState: GameState,
+    gameState: GameState?,
     screenWidth: Dp,
     topPlayerAreaHeight: Dp,
     gameViewModel: GameViewModel = viewModel()
 ){
 
     // decrement time
-    if (!gameState.isGameOver && !gameState.isPaused){
-        LaunchedEffect(Unit){
-            while(true){
-                delay(1000)
-                gameViewModel.decrementTimeByTurn()
+    gameState?.let {
+        if (!it.isGameOver && !it.isPaused){
+            LaunchedEffect(Unit){
+                while(true){
+                    delay(1000)
+                    gameViewModel.decrementTimeByTurn()
+                }
             }
         }
     }
@@ -218,18 +226,19 @@ fun Player2Area(
             .height(topPlayerAreaHeight)
             .background(
                 when {
-                    gameState.turn == Player.TWO && gameState.player1CurrentTime < gameState.player1StartTime * .1 -> red200
-                    gameState.turn == Player.TWO && gameState.player1CurrentTime < gameState.player1StartTime * .05 -> red500
-                    gameState.isPaused -> white
-                    gameState.turn == Player.TWO -> lightGreen
+                    gameState?.turn == Player.TWO && gameState.player1CurrentTime < gameState.player1StartTime * .1 -> red200
+                    gameState?.turn == Player.TWO && gameState.player1CurrentTime < gameState.player1StartTime * .05 -> red500
+                    gameState?.isPaused == true-> white
+                    gameState?.turn == Player.TWO -> lightGreen
                     else -> white
                 }
             )
             .clickable(
+                enabled = gameState?.isPaused == false,
                 interactionSource = remember { MutableInteractionSource() },
                 indication = rememberRipple(color = teal),
                 onClick = {
-                    if (!gameState.isGameOver) {
+                    if (gameState?.isGameOver == false) {
                         gameViewModel.onPlayer2Click()
                     }
                 }
@@ -237,12 +246,9 @@ fun Player2Area(
         contentAlignment = Alignment.Center
     ) {
         Text(
-            text = gameState.player2CurrentTime.formatTimeToText(),
+            text = gameState?.player2CurrentTime?.formatTimeToText() ?: "?",
             fontSize = 80.sp,
-            color = when {
-                gameState.isPaused -> black
-                else -> black
-            },
+            color = black,
             modifier = Modifier.rotate(180f)
         )
     }
@@ -250,7 +256,7 @@ fun Player2Area(
 
 @Composable
 fun Player1Area(
-    gameState: GameState,
+    gameState: GameState?,
     screenWidth: Dp,
     botPlayerHeight: Dp,
     gameViewModel: GameViewModel = viewModel()
@@ -261,18 +267,19 @@ fun Player1Area(
             .height(botPlayerHeight)
             .background(
                 when {
-                    gameState.turn == Player.ONE && gameState.player1CurrentTime < gameState.player1StartTime * .1 -> red200
-                    gameState.turn == Player.ONE && gameState.player1CurrentTime < gameState.player1StartTime * .05 -> red500
-                    gameState.isPaused -> white
-                    gameState.turn == Player.ONE -> lightGreen
+                    gameState?.turn == Player.ONE && gameState.player1CurrentTime < gameState.player1StartTime * .1 -> red200
+                    gameState?.turn == Player.ONE && gameState.player1CurrentTime < gameState.player1StartTime * .05 -> red500
+                    gameState?.isPaused == true -> white
+                    gameState?.turn == Player.ONE -> lightGreen
                     else -> white
                 }
             )
             .clickable(
+                enabled = gameState?.isPaused == false,
                 interactionSource = remember { MutableInteractionSource() },
                 indication = rememberRipple(color = teal),
                 onClick = {
-                    if (!gameState.isGameOver) {
+                    if (gameState?.isGameOver == false) {
                         gameViewModel.onPlayer1Click()
                     }
                 }
@@ -280,18 +287,16 @@ fun Player1Area(
         contentAlignment = Alignment.Center
     ) {
         Text(
-            text = gameState.player1CurrentTime.formatTimeToText(),
+            text = gameState?.player1CurrentTime?.formatTimeToText() ?: "?",
             fontSize = 80.sp,
-            color = when {
-                gameState.isPaused -> black
-                else -> black
-            }
+            color = black
         )
     }
 }
 
 @Composable
 fun BottomRow(
+    gameState: GameState?,
     modifier: Modifier,
     player: Player,
     gameVM: GameViewModel = viewModel()
@@ -349,7 +354,7 @@ fun BottomRow(
                         radius = 32.dp
                     ),
                     onClick = {
-                        gameVM.showDialogSetPlayersTime(player)
+                        gameState?.let { gameVM.showDialogSetPlayersTime(player) }
                     }
                 ),
             colorFilter = ColorFilter.tint(color = lightGreen900)
