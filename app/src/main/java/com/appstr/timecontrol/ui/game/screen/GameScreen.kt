@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -46,11 +45,11 @@ import com.appstr.timecontrol.ui.game.viewmodel.GameViewModel
 import com.appstr.timecontrol.ui.theme.black
 import com.appstr.timecontrol.ui.theme.blueGrey
 import com.appstr.timecontrol.ui.theme.blueGrey50
+import com.appstr.timecontrol.ui.theme.brown
 import com.appstr.timecontrol.ui.theme.green
 import com.appstr.timecontrol.ui.theme.lightGreen
 import com.appstr.timecontrol.ui.theme.lightGreen400
 import com.appstr.timecontrol.ui.theme.lightGreen900
-import com.appstr.timecontrol.ui.theme.pink
 import com.appstr.timecontrol.ui.theme.red200
 import com.appstr.timecontrol.ui.theme.red500
 import com.appstr.timecontrol.ui.theme.teal
@@ -249,7 +248,10 @@ fun Player2Area(
                 text = (gameState?.player2MoveCount ?: 0).toString(),
                 fontSize = 16.sp,
                 color = black,
-                modifier = Modifier.rotate(180f).align(Alignment.BottomStart).padding(8.dp)
+                modifier = Modifier
+                    .rotate(180f)
+                    .align(Alignment.BottomStart)
+                    .padding(8.dp)
             )
         }
         Text(
@@ -299,7 +301,9 @@ fun Player1Area(
                 text = (gameState?.player1MoveCount ?: 0).toString(),
                 fontSize = 16.sp,
                 color = black,
-                modifier = Modifier.align(Alignment.TopStart).padding(8.dp)
+                modifier = Modifier
+                    .align(Alignment.TopStart)
+                    .padding(8.dp)
             )
         }
         Text(
@@ -339,25 +343,44 @@ fun BottomRow(
     BoxWithConstraints(
         modifier = modifier,
     ) {
-        // Forfeit button
-        Text(
+        // End-Game button
+        Image(
             modifier = Modifier
-                .wrapContentSize()
-                .offset(x = (maxWidth / 2) - 28.dp, y = 4.dp)
+                .offset(x = 8.dp, y = 16.dp)
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = rememberRipple(
-                        color = pink,
-                        radius = 64.dp
+                        color = brown,
+                        bounded = false,
+                        radius = 32.dp
                     ),
                     onClick = {
 
                     }
-                )
-                .padding(8.dp),
-            text = "Resign",
-            color = pink
+                ),
+            painter = painterResource(id = R.drawable.ic_door),
+            contentDescription = "End Game",
+            colorFilter = ColorFilter.tint(color = brown)
         )
+        // Resign button
+//        Text(
+//            modifier = Modifier
+//                .wrapContentSize()
+//                .offset(x = (maxWidth / 2) - 28.dp, y = 4.dp)
+//                .clickable(
+//                    interactionSource = remember { MutableInteractionSource() },
+//                    indication = rememberRipple(
+//                        color = pink,
+//                        radius = 64.dp
+//                    ),
+//                    onClick = {
+//
+//                    }
+//                )
+//                .padding(8.dp),
+//            text = "Resign",
+//            color = pink
+//        )
         // player 1 time set icon
         Image(
             painter = painterResource(id = R.drawable.ic_change_time),

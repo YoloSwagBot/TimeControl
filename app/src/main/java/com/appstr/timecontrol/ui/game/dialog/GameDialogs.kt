@@ -227,5 +227,18 @@ fun DialogCheckCancelCurrentGame(
     )
 }
 
+@Composable
+fun DialogEndGame(
+    player: Player,
+    gameState: GameState,
+    gameVM: GameViewModel = viewModel()
+){
 
+    Dialog(
+        onDismissRequest = { gameVM.onDialogEndGameActionCancel() }
+    ) {
+
+    }
+
+}
 

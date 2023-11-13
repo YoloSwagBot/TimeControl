@@ -38,6 +38,10 @@ class GameViewModel(appli: Application) : AndroidViewModel(appli), DefaultLifecy
     private val _dialogSetPlayersTimeShowing = MutableStateFlow<Player?>(null)
     val dialogSetPlayersTimeShowing = _dialogSetPlayersTimeShowing.asStateFlow()
 
+    // Dialog End Game
+    private val _dialogEndGameShowing = MutableStateFlow<Player?>(null)
+    val dialogEndGameShowing = _dialogEndGameShowing.asStateFlow()
+
     // Screen, SetupTime
     private val _screenSetupTimeShowing = MutableStateFlow(false)
     val screenSetupTimeShowing = _screenSetupTimeShowing.asStateFlow()
@@ -137,7 +141,6 @@ class GameViewModel(appli: Application) : AndroidViewModel(appli), DefaultLifecy
 
     // Dialog Edit Time Game
     fun showDialogSetPlayersTime(player: Player){
-        // update GameState in repo
         _gameState.update { it?.copy(isPaused = true) }
 
         _dialogSetPlayersTimeShowing.update { player }
@@ -165,6 +168,23 @@ class GameViewModel(appli: Application) : AndroidViewModel(appli), DefaultLifecy
     }
     fun onDialogActionDismissSetPlayersTime(){
         _dialogSetPlayersTimeShowing.update { null }
+    }
+
+    fun showDialogEndGame(player: Player){
+        _gameState.update { it?.copy(isPaused = true) }
+
+        _dialogEndGameShowing.update { player }
+    }
+    fun onDialogEndGameActionConfirm(
+        player: Player,
+        gameEndReason: GameEndReason
+    ){
+        _gameState.update { it?.copy(gameEndReason = gameEndReason) }
+
+        _dialogEndGameShowing.update { null }
+    }
+    fun onDialogEndGameActionCancel(){
+        _dialogEndGameShowing.update { null }
     }
 
     // Pause (ie: back button to close app)
