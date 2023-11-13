@@ -19,8 +19,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.ripple.rememberRipple
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -42,13 +40,16 @@ import com.appstr.timecontrol.R
 import com.appstr.timecontrol.ui.game.dialog.DialogSetPlayerTime
 import com.appstr.timecontrol.ui.game.model.GameState
 import com.appstr.timecontrol.ui.game.model.Player
+import com.appstr.timecontrol.ui.game.model.isNotOver
 import com.appstr.timecontrol.ui.game.viewmodel.GameViewModel
 import com.appstr.timecontrol.ui.theme.black
 import com.appstr.timecontrol.ui.theme.blueGrey
 import com.appstr.timecontrol.ui.theme.blueGrey50
 import com.appstr.timecontrol.ui.theme.green
 import com.appstr.timecontrol.ui.theme.lightGreen
+import com.appstr.timecontrol.ui.theme.lightGreen400
 import com.appstr.timecontrol.ui.theme.lightGreen900
+import com.appstr.timecontrol.ui.theme.pink
 import com.appstr.timecontrol.ui.theme.red200
 import com.appstr.timecontrol.ui.theme.red500
 import com.appstr.timecontrol.ui.theme.teal
@@ -68,6 +69,18 @@ fun GameScreen(
 
     val gameState = gameVM.gameState.collectAsState(null)
 
+    // decrement time
+    gameState.value?.let { game ->
+        if (game.isNotOver() && !game.isPaused){
+            LaunchedEffect(Unit){
+                while(true){
+                    delay(1000)
+                    gameVM.decrementTimeByTurn()
+                }
+            }
+        }
+    }
+
     BoxWithConstraints() {
         val screenWidth = maxWidth
         val centerButtonsHeight = 64.dp
@@ -78,21 +91,17 @@ fun GameScreen(
             ButtonsRow(gameState = gameState.value, screenWidth = screenWidth, centerButtonsRowHeight = centerButtonsHeight)
             Player1Area(gameState = gameState.value, screenWidth = screenWidth, botPlayerHeight = playerAreaHeight)
         }
+
         BottomRow(
             gameState = gameState.value,
-            modifier = Modifier
-                .width(maxWidth)
-                .height(64.dp)
-                .rotate(180f)
-                .offset(y = (16).dp),
+            maxWidth = maxWidth,
+            maxHeight = maxHeight,
             player = Player.TWO
         )
         BottomRow(
             gameState = gameState.value,
-            modifier = Modifier
-                .width(maxWidth)
-                .height(64.dp)
-                .offset(y = maxHeight - 48.dp),
+            maxWidth = maxWidth,
+            maxHeight = maxHeight,
             player = Player.ONE
         )
 
@@ -100,8 +109,10 @@ fun GameScreen(
 
 
     val dialogSetPlayerTime by gameVM.dialogSetPlayersTimeShowing.collectAsState()
-    dialogSetPlayerTime?.let {
-        gameState.value?.let { DialogSetPlayerTime(gameState = it, player = it.turn) }
+    dialogSetPlayerTime?.let { pl ->
+        gameState.value?.let {
+            DialogSetPlayerTime(gameState = it, player = pl)
+        }
     }
 
     val showSetupTimeScreen by gameVM.screenSetupTimeShowing.collectAsState()
@@ -171,7 +182,7 @@ fun ButtonsRow(
                             radius = 32.dp
                         ),
                         onClick = {
-                            if (!it.isGameOver) {
+                            if (it.isNotOver()) {
                                 gameVM.pausePlayClicked()
                             }
                         }
@@ -208,18 +219,6 @@ fun Player2Area(
     gameViewModel: GameViewModel = viewModel()
 ){
 
-    // decrement time
-    gameState?.let {
-        if (!it.isGameOver && !it.isPaused){
-            LaunchedEffect(Unit){
-                while(true){
-                    delay(1000)
-                    gameViewModel.decrementTimeByTurn()
-                }
-            }
-        }
-    }
-
     Box(
         modifier = Modifier
             .width(screenWidth)
@@ -229,7 +228,7 @@ fun Player2Area(
                     gameState?.turn == Player.TWO && gameState.player1CurrentTime < gameState.player1StartTime * .1 -> red200
                     gameState?.turn == Player.TWO && gameState.player1CurrentTime < gameState.player1StartTime * .05 -> red500
                     gameState?.isPaused == true-> white
-                    gameState?.turn == Player.TWO -> lightGreen
+                    gameState?.turn == Player.TWO -> lightGreen400
                     else -> white
                 }
             )
@@ -238,7 +237,7 @@ fun Player2Area(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = rememberRipple(color = teal),
                 onClick = {
-                    if (gameState?.isGameOver == false) {
+                    if (gameState.isNotOver()) {
                         gameViewModel.onPlayer2Click()
                     }
                 }
@@ -270,7 +269,7 @@ fun Player1Area(
                     gameState?.turn == Player.ONE && gameState.player1CurrentTime < gameState.player1StartTime * .1 -> red200
                     gameState?.turn == Player.ONE && gameState.player1CurrentTime < gameState.player1StartTime * .05 -> red500
                     gameState?.isPaused == true -> white
-                    gameState?.turn == Player.ONE -> lightGreen
+                    gameState?.turn == Player.ONE -> lightGreen400
                     else -> white
                 }
             )
@@ -279,7 +278,7 @@ fun Player1Area(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = rememberRipple(color = teal),
                 onClick = {
-                    if (gameState?.isGameOver == false) {
+                    if (gameState.isNotOver()) {
                         gameViewModel.onPlayer1Click()
                     }
                 }
@@ -297,29 +296,31 @@ fun Player1Area(
 @Composable
 fun BottomRow(
     gameState: GameState?,
-    modifier: Modifier,
+    maxWidth: Dp,
+    maxHeight: Dp,
     player: Player,
     gameVM: GameViewModel = viewModel()
 ){
+
+    val modifier = when (player){
+        Player.ONE -> {
+            Modifier
+                .width(maxWidth)
+                .height(if(gameState?.player1CurrentTime?.formatTimeToText() == null) 0.dp else 64.dp)
+                .offset(y = maxHeight - 48.dp)
+        }
+        Player.TWO -> {
+            Modifier
+                .width(maxWidth)
+                .height(if(gameState?.player1CurrentTime?.formatTimeToText() == null) 0.dp else 64.dp)
+                .rotate(180f)
+                .offset(y = (16).dp)
+        }
+    }
+
     BoxWithConstraints(
         modifier = modifier,
     ) {
-        // End Game button
-        ElevatedButton(
-            modifier = Modifier
-                .wrapContentSize()
-                .padding(start = 4.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = green),
-            elevation = ButtonDefaults.elevatedButtonElevation(
-                defaultElevation = 8.dp,
-                pressedElevation = 16.dp
-            ),
-            onClick = {
-
-            }
-        ) {
-            Text(text = "End Game")
-        }
         // Forfeit button
         Text(
             modifier = Modifier
@@ -328,7 +329,7 @@ fun BottomRow(
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = rememberRipple(
-                        color = red500,
+                        color = pink,
                         radius = 64.dp
                     ),
                     onClick = {
@@ -337,7 +338,7 @@ fun BottomRow(
                 )
                 .padding(8.dp),
             text = "Resign",
-            color = red500
+            color = pink
         )
         // player 1 time set icon
         Image(

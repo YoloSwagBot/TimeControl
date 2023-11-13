@@ -53,3 +53,6 @@ fun String.isValidSeconds(): Boolean = when {
     (this.toIntOrNull() ?: 0) > 59 -> false
     else -> true
 }
+
+fun timeISValid(hrs: String, mins: String, secs: String): Boolean
+    = (hrs.toIntOrNull() ?: 0) > 0 || (mins.toIntOrNull() ?: 0) > 0 || (secs.toIntOrNull() ?: 0) > 0

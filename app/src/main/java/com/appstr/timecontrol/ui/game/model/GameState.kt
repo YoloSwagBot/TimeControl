@@ -14,7 +14,6 @@ data class GameState (
 
     var turn: Player = Player.ONE,
     var isPaused: Boolean = true,
-    var isGameOver: Boolean = false,
     var gameEndReason: GameEndReason? = null,
 
     val player1StartTime: Int = timeControl.startValue,
@@ -31,8 +30,9 @@ data class GameState (
 @Entity
 sealed class GameEndReason(reason: String){
     data object CHECK_MATE: GameEndReason("Checkmate")
+    data object STALEMATE: GameEndReason("Stalemate")
     data object RAN_OUT_OF_TIME: GameEndReason("Ran out of time")
-    data object FORFEIT: GameEndReason("Resign")
+    data object RESIGN: GameEndReason("Resign")
     data object UNKNOWN: GameEndReason("Unknown")
 }
 
@@ -41,3 +41,8 @@ sealed class Player {
     data object ONE: Player()
     data object TWO: Player()
 }
+
+fun GameState?.isOver(): Boolean = this?.let { it.gameEndReason != null } ?: false
+fun GameState?.isNotOver(): Boolean = this?.let { it.gameEndReason == null } ?: true
+
+fun GameState?.areBothTimesAboveZero(): Boolean = this?.let { it.player1CurrentTime > 0 && it.player2CurrentTime > 0 } ?: false

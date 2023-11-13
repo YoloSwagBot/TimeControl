@@ -39,6 +39,7 @@ import com.appstr.timecontrol.util.isValidMinutes
 import com.appstr.timecontrol.util.isValidSeconds
 import com.appstr.timecontrol.util.minutesFrom
 import com.appstr.timecontrol.util.secondsFrom
+import com.appstr.timecontrol.util.timeISValid
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -175,9 +176,9 @@ fun DialogSetPlayerTime(
                 TextButton(
                     onClick = {
                         when {
-                            !hours.isValidHours()
-                                || !minutes.isValidMinutes()
-                                || !seconds.isValidSeconds() -> errorMessage = "INVALID FORMAT"
+                            (!hours.isValidHours() || !minutes.isValidMinutes() || !seconds.isValidSeconds())
+                                    || !timeISValid(hours, minutes, seconds)
+                                -> errorMessage = "INVALID FORMAT"
                             else -> gameVM.onDialogActionConfirmSetPlayersTime(
                                 player,
                                 hours.toIntOrNull() ?: 0,
