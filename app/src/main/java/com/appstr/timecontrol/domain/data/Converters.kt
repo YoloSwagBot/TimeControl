@@ -27,9 +27,23 @@ object Converters {
 
 
     @TypeConverter
-    fun gameEndReasonToString(gameEndReason: GameEndReason): String = Gson().toJson(gameEndReason)
+    fun gameEndReasonToString(gameEndReason: GameEndReason): String = when (gameEndReason) {
+        GameEndReason.CHECK_MATE -> "CHECK_MATE"
+        GameEndReason.RAN_OUT_OF_TIME -> "RAN_OUT_OF_TIME"
+        GameEndReason.RESIGN -> "RESIGN"
+        GameEndReason.STALEMATE -> "STALEMATE"
+        GameEndReason.DRAW -> "DRAW"
+        GameEndReason.UNKNOWN -> "UNKNOWN"
+    }
     @TypeConverter
-    fun stringToGameEndReason(gameEndReason: String): GameEndReason = Gson().fromJson(gameEndReason, GameEndReason::class.java)
+    fun stringToGameEndReason(gameEndReason: String): GameEndReason = when (gameEndReason){
+        "CHECK_MATE" -> GameEndReason.CHECK_MATE
+        "RAN_OUT_OF_TIME" -> GameEndReason.RAN_OUT_OF_TIME
+        "RESIGN" -> GameEndReason.RESIGN
+        "STALEMATE" -> GameEndReason.STALEMATE
+        "DRAW" -> GameEndReason.DRAW
+        else -> GameEndReason.UNKNOWN
+    }
 
 
 

@@ -26,16 +26,15 @@ data class GameState (
 
 )
 
-@Entity
-sealed class GameEndReason(reason: String){
-    data object CHECK_MATE: GameEndReason("Checkmate")
-    data object STALEMATE: GameEndReason("Stalemate")
-    data object RAN_OUT_OF_TIME: GameEndReason("Ran out of time")
-    data object RESIGN: GameEndReason("Resign")
-    data object UNKNOWN: GameEndReason("Unknown")
+sealed class GameEndReason {
+    data object CHECK_MATE: GameEndReason()
+    data object STALEMATE: GameEndReason()
+    data object RAN_OUT_OF_TIME: GameEndReason()
+    data object RESIGN: GameEndReason()
+    data object DRAW: GameEndReason()
+    data object UNKNOWN: GameEndReason()
 }
 
-@Entity
 sealed class Player {
     data object ONE: Player()
     data object TWO: Player()
