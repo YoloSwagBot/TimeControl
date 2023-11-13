@@ -40,6 +40,7 @@ import com.appstr.timecontrol.R
 import com.appstr.timecontrol.ui.game.dialog.DialogSetPlayerTime
 import com.appstr.timecontrol.ui.game.model.GameState
 import com.appstr.timecontrol.ui.game.model.Player
+import com.appstr.timecontrol.ui.game.model.canStart
 import com.appstr.timecontrol.ui.game.model.isNotOver
 import com.appstr.timecontrol.ui.game.viewmodel.GameViewModel
 import com.appstr.timecontrol.ui.theme.black
@@ -227,7 +228,7 @@ fun Player2Area(
                 when {
                     gameState?.turn == Player.TWO && gameState.player1CurrentTime < gameState.player1StartTime * .1 -> red200
                     gameState?.turn == Player.TWO && gameState.player1CurrentTime < gameState.player1StartTime * .05 -> red500
-                    gameState?.isPaused == true-> white
+                    gameState?.isPaused == true -> white
                     gameState?.turn == Player.TWO -> lightGreen400
                     else -> white
                 }
@@ -241,14 +242,23 @@ fun Player2Area(
                         gameViewModel.onPlayer2Click()
                     }
                 }
-            ),
-        contentAlignment = Alignment.Center
+            )
     ) {
+        if (gameState.canStart()){
+            Text(
+                text = (gameState?.player2MoveCount ?: 0).toString(),
+                fontSize = 16.sp,
+                color = black,
+                modifier = Modifier.rotate(180f).align(Alignment.BottomStart).padding(8.dp)
+            )
+        }
         Text(
             text = gameState?.player2CurrentTime?.formatTimeToText() ?: "?",
             fontSize = 80.sp,
             color = black,
-            modifier = Modifier.rotate(180f)
+            modifier = Modifier
+                .rotate(180f)
+                .align(Alignment.Center)
         )
     }
 }
@@ -282,13 +292,21 @@ fun Player1Area(
                         gameViewModel.onPlayer1Click()
                     }
                 }
-            ),
-        contentAlignment = Alignment.Center
+            )
     ) {
+        if (gameState.canStart()){
+            Text(
+                text = (gameState?.player1MoveCount ?: 0).toString(),
+                fontSize = 16.sp,
+                color = black,
+                modifier = Modifier.align(Alignment.TopStart).padding(8.dp)
+            )
+        }
         Text(
             text = gameState?.player1CurrentTime?.formatTimeToText() ?: "?",
             fontSize = 80.sp,
-            color = black
+            color = black,
+            modifier = Modifier.align(Alignment.Center)
         )
     }
 }
@@ -306,13 +324,13 @@ fun BottomRow(
         Player.ONE -> {
             Modifier
                 .width(maxWidth)
-                .height(if(gameState?.player1CurrentTime?.formatTimeToText() == null) 0.dp else 64.dp)
+                .height(if (gameState?.player1CurrentTime?.formatTimeToText() == null) 0.dp else 64.dp)
                 .offset(y = maxHeight - 48.dp)
         }
         Player.TWO -> {
             Modifier
                 .width(maxWidth)
-                .height(if(gameState?.player1CurrentTime?.formatTimeToText() == null) 0.dp else 64.dp)
+                .height(if (gameState?.player1CurrentTime?.formatTimeToText() == null) 0.dp else 64.dp)
                 .rotate(180f)
                 .offset(y = (16).dp)
         }

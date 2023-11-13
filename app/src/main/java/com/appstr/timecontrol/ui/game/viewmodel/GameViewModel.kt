@@ -89,7 +89,12 @@ class GameViewModel(appli: Application) : AndroidViewModel(appli), DefaultLifecy
 
         gameState.value?.let { gs ->
             if (!gs.isPaused && gs.turn == Player.ONE) {
-                _gameState.update { gs.copy(turn = Player.TWO) }
+                _gameState.update {
+                    gs.copy(
+                        turn = Player.TWO,
+                        player1MoveCount = gs.player1MoveCount+1
+                    )
+                }
             }
         }
 
@@ -99,7 +104,12 @@ class GameViewModel(appli: Application) : AndroidViewModel(appli), DefaultLifecy
 
         gameState.value?.let { gs ->
             if (!gs.isPaused && gs.turn == Player.TWO){
-                _gameState.update { gs.copy(turn = Player.ONE) }
+                _gameState.update {
+                    gs.copy(
+                        turn = Player.ONE,
+                        player2MoveCount = gs.player2MoveCount+1
+                    )
+                }
             }
         }
 
