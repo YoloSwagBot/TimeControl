@@ -18,7 +18,7 @@ fun Int.formatTimeToText(): String {
             TimeUnit.MILLISECONDS.toMinutes(time) % TimeUnit.HOURS.toMinutes(1),
             TimeUnit.MILLISECONDS.toSeconds(time) % TimeUnit.MINUTES.toSeconds(1))
 
-        else -> String.format("%2d",
+        else -> String.format("0:%02d",
             TimeUnit.MILLISECONDS.toSeconds(time) % TimeUnit.MINUTES.toSeconds(1))
 
     }
