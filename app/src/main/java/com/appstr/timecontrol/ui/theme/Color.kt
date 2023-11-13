@@ -48,6 +48,7 @@ val orange = Color(0xFFFF9800)
 val deepOrange = Color(0xFFFF5722)
 val deepOrange500 = Color(0xFFFF5722)
 val brown = Color(0xFF795548)
+val brown300 = Color(0xFFA1887F)
 val grey = Color(0xFF9E9E9E)
 
 val blueGrey = Color(0xFF607D8B)

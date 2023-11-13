@@ -57,7 +57,7 @@ class GameViewModel(appli: Application) : AndroidViewModel(appli), DefaultLifecy
                         gs.copy(
                             player1CurrentTime = (gs.player1CurrentTime - second).coerceAtLeast(0),
                             gameEndReason = if (gs.gameEndReason == null && gs.player1CurrentTime <= 1) {
-                                GameEndReason.RAN_OUT_OF_TIME
+                                GameEndReason.RanOutOfTime.RanOutOfTime_PLAYER_2_WINS
                             }else{
                                 gs.gameEndReason
                             },
@@ -68,7 +68,7 @@ class GameViewModel(appli: Application) : AndroidViewModel(appli), DefaultLifecy
                         gs.copy(
                             player2CurrentTime = (gs.player2CurrentTime - second).coerceAtLeast(0),
                             gameEndReason =  if (gs.gameEndReason == null && gs.player2CurrentTime <= 1) {
-                                GameEndReason.RAN_OUT_OF_TIME
+                                GameEndReason.RanOutOfTime.RanOutOfTime_PLAYER_1_WINS
                             }else{
                                 gs.gameEndReason
                             },
@@ -118,6 +118,24 @@ class GameViewModel(appli: Application) : AndroidViewModel(appli), DefaultLifecy
         }
 
     }
+
+    // Pause (ie: back button to close app)
+    fun pauseGame(){
+        _gameState.update { it?.copy(isPaused = true) }
+    }
+
+    // ====================================================================================
+
+    // Close SetupTime screen
+    fun showSetupTimeScreen(){
+        _screenSetupTimeShowing.update { true }
+    }
+
+    fun closeSetupTimeScreen(){
+        _screenSetupTimeShowing.update { false }
+    }
+
+    // ==================================================================================== Dialogs
 
     // Dialog Cancel Game
     fun showDialogCancelGame(
@@ -185,20 +203,6 @@ class GameViewModel(appli: Application) : AndroidViewModel(appli), DefaultLifecy
     }
     fun onDialogEndGameActionCancel(){
         _dialogEndGameShowing.update { null }
-    }
-
-    // Pause (ie: back button to close app)
-    fun pauseGame(){
-        _gameState.update { it?.copy(isPaused = true) }
-    }
-
-    // Close SetupTime screen
-    fun showSetupTimeScreen(){
-        _screenSetupTimeShowing.update { true }
-    }
-
-    fun closeSetupTimeScreen(){
-        _screenSetupTimeShowing.update { false }
     }
 
 

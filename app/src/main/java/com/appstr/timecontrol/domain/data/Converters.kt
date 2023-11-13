@@ -28,20 +28,32 @@ object Converters {
 
     @TypeConverter
     fun gameEndReasonToString(gameEndReason: GameEndReason): String = when (gameEndReason) {
-        GameEndReason.CHECK_MATE -> "CHECK_MATE"
-        GameEndReason.RAN_OUT_OF_TIME -> "RAN_OUT_OF_TIME"
-        GameEndReason.RESIGN -> "RESIGN"
-        GameEndReason.STALEMATE -> "STALEMATE"
-        GameEndReason.DRAW -> "DRAW"
-        GameEndReason.UNKNOWN -> "UNKNOWN"
+        GameEndReason.Checkmate.Checkmate_PLAYER_1_WINS -> "Checkmate: Player 1 wins."
+        GameEndReason.Checkmate.Checkmate_PLAYER_2_WINS -> "Checkmate: Player 2 wins."
+        GameEndReason.RanOutOfTime.RanOutOfTime_PLAYER_1_WINS -> "Player 2 ran out of time. Player 1 wins."
+        GameEndReason.RanOutOfTime.RanOutOfTime_PLAYER_2_WINS -> "Player 1 ran out of time. Player 2 wins."
+        GameEndReason.Resignation.Resignation_PLAYER_1_WINS -> "Player 2 resigned. Player 1 wins."
+        GameEndReason.Resignation.Resignation_PLAYER_2_WINS -> "Player 1 resigned. Player 2 wins."
+        GameEndReason.Draw.Draw_INITIATED_BY_PLAYER_1 -> "Draw. Player 1 offered. Player 2 accepted."
+        GameEndReason.Draw.Draw_INITIATED_BY_PLAYER_2 -> "Draw. Player 2 offered. Player 1 accepted."
+        GameEndReason.Draw.Draw_REPETITION_BY_PLAYER_1 -> "Player 1 forced Draw by repetition."
+        GameEndReason.Draw.Draw_REPETITION_BY_PLAYER_2 -> "Player 2 forced Draw by repetition."
+        GameEndReason.STALEMATE -> "Stalemate"
+        GameEndReason.UNKNOWN -> "Unknown"
     }
     @TypeConverter
     fun stringToGameEndReason(gameEndReason: String): GameEndReason = when (gameEndReason){
-        "CHECK_MATE" -> GameEndReason.CHECK_MATE
-        "RAN_OUT_OF_TIME" -> GameEndReason.RAN_OUT_OF_TIME
-        "RESIGN" -> GameEndReason.RESIGN
-        "STALEMATE" -> GameEndReason.STALEMATE
-        "DRAW" -> GameEndReason.DRAW
+        "Checkmate: Player 1 wins." -> GameEndReason.Checkmate.Checkmate_PLAYER_1_WINS
+        "Checkmate: Player 2 wins." -> GameEndReason.Checkmate.Checkmate_PLAYER_2_WINS
+        "Player 2 ran out of time. Player 1 wins." -> GameEndReason.RanOutOfTime.RanOutOfTime_PLAYER_1_WINS
+        "Player 1 ran out of time. Player 2 wins." -> GameEndReason.RanOutOfTime.RanOutOfTime_PLAYER_2_WINS
+        "Player 2 resigned. Player 1 wins." -> GameEndReason.Resignation.Resignation_PLAYER_1_WINS
+        "Player 1 resigned. Player 2 wins." -> GameEndReason.Resignation.Resignation_PLAYER_2_WINS
+        "Draw. Player 1 offered. Player 2 accepted." -> GameEndReason.Draw.Draw_INITIATED_BY_PLAYER_1
+        "Draw. Player 2 offered. Player 1 accepted." -> GameEndReason.Draw.Draw_INITIATED_BY_PLAYER_2
+        "Player 1 forced Draw by repetition." -> GameEndReason.Draw.Draw_REPETITION_BY_PLAYER_1
+        "Player 2 forced Draw by repetition." -> GameEndReason.Draw.Draw_REPETITION_BY_PLAYER_2
+        "Stalemate" -> GameEndReason.STALEMATE
         else -> GameEndReason.UNKNOWN
     }
 

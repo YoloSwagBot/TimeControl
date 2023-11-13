@@ -36,16 +36,23 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.appstr.timecontrol.R
+import com.appstr.timecontrol.ui.game.dialog.DialogEndGame
 import com.appstr.timecontrol.ui.game.dialog.DialogSetPlayerTime
 import com.appstr.timecontrol.ui.game.model.GameState
 import com.appstr.timecontrol.ui.game.model.Player
 import com.appstr.timecontrol.ui.game.model.canStart
+import com.appstr.timecontrol.ui.game.model.doesntExist
+import com.appstr.timecontrol.ui.game.model.exists
+import com.appstr.timecontrol.ui.game.model.formatTimeToText
 import com.appstr.timecontrol.ui.game.model.isNotOver
+import com.appstr.timecontrol.ui.game.model.isOver
+import com.appstr.timecontrol.ui.game.model.toExplanation
 import com.appstr.timecontrol.ui.game.viewmodel.GameViewModel
 import com.appstr.timecontrol.ui.theme.black
 import com.appstr.timecontrol.ui.theme.blueGrey
 import com.appstr.timecontrol.ui.theme.blueGrey50
 import com.appstr.timecontrol.ui.theme.brown
+import com.appstr.timecontrol.ui.theme.brown300
 import com.appstr.timecontrol.ui.theme.green
 import com.appstr.timecontrol.ui.theme.lightGreen
 import com.appstr.timecontrol.ui.theme.lightGreen400
@@ -54,7 +61,6 @@ import com.appstr.timecontrol.ui.theme.red200
 import com.appstr.timecontrol.ui.theme.red500
 import com.appstr.timecontrol.ui.theme.teal
 import com.appstr.timecontrol.ui.theme.white
-import com.appstr.timecontrol.util.formatTimeToText
 import kotlinx.coroutines.delay
 
 
@@ -110,17 +116,22 @@ fun GameScreen(
 
     val dialogSetPlayerTime by gameVM.dialogSetPlayersTimeShowing.collectAsState()
     dialogSetPlayerTime?.let { pl ->
-        gameState.value?.let {
-            DialogSetPlayerTime(gameState = it, player = pl)
+        gameState.value?.let { gs ->
+            DialogSetPlayerTime(gameState = gs, player = pl)
+        }
+    }
+
+    val dialogEndGame by gameVM.dialogEndGameShowing.collectAsState()
+    dialogEndGame?.let { pl ->
+        gameState.value?.let { gs ->
+            DialogEndGame(gameState = gs, player = pl)
         }
     }
 
     val showSetupTimeScreen by gameVM.screenSetupTimeShowing.collectAsState()
     if (showSetupTimeScreen){
         SetupTimeScreen()
-
     }
-
 
     BackHandler(false) {
         gameState.value?.let { gameVM.pauseGame() }
@@ -163,9 +174,10 @@ fun ButtonsRow(
 //                )
 
         )
-        gameState?.let{
+        // pause/play button
+        if (gameState.canStart() && gameState.isNotOver()){
             Image(
-                painter = painterResource(id = when(it.isPaused){
+                painter = painterResource(id = when(gameState?.isPaused == true){
                     true -> R.drawable.ic_play
                     false -> R.drawable.ic_pause
                 }),
@@ -182,7 +194,7 @@ fun ButtonsRow(
                             radius = 32.dp
                         ),
                         onClick = {
-                            if (it.isNotOver()) {
+                            if (gameState.isNotOver()) {
                                 gameVM.pausePlayClicked()
                             }
                         }
@@ -218,13 +230,13 @@ fun Player2Area(
     topPlayerAreaHeight: Dp,
     gameViewModel: GameViewModel = viewModel()
 ){
-
     Box(
         modifier = Modifier
             .width(screenWidth)
             .height(topPlayerAreaHeight)
             .background(
                 when {
+                    gameState?.isOver() ?: false -> brown300
                     gameState?.turn == Player.TWO && gameState.player1CurrentTime < gameState.player1StartTime * .1 -> red200
                     gameState?.turn == Player.TWO && gameState.player1CurrentTime < gameState.player1StartTime * .05 -> red500
                     gameState?.isPaused == true -> white
@@ -243,7 +255,8 @@ fun Player2Area(
                 }
             )
     ) {
-        if (gameState.canStart()){
+        // move count Label
+        if (gameState.exists()){
             Text(
                 text = (gameState?.player2MoveCount ?: 0).toString(),
                 fontSize = 16.sp,
@@ -254,14 +267,27 @@ fun Player2Area(
                     .padding(8.dp)
             )
         }
+        // player's time - label
         Text(
-            text = gameState?.player2CurrentTime?.formatTimeToText() ?: "?",
+            text = gameState?.player2CurrentTime.formatTimeToText(),
             fontSize = 80.sp,
             color = black,
             modifier = Modifier
                 .rotate(180f)
                 .align(Alignment.Center)
         )
+        // game is over - label
+        if (gameState.isOver()){
+            Text(
+                text = gameState?.gameEndReason?.toExplanation() ?: "Game Over: null",
+                fontSize = 16.sp,
+                color = black,
+                modifier = Modifier
+                    .rotate(180f)
+                    .align(Alignment.BottomCenter)
+                    .padding(8.dp)
+            )
+        }
     }
 }
 
@@ -278,6 +304,7 @@ fun Player1Area(
             .height(botPlayerHeight)
             .background(
                 when {
+                    gameState?.isOver() ?: false -> brown300
                     gameState?.turn == Player.ONE && gameState.player1CurrentTime < gameState.player1StartTime * .1 -> red200
                     gameState?.turn == Player.ONE && gameState.player1CurrentTime < gameState.player1StartTime * .05 -> red500
                     gameState?.isPaused == true -> white
@@ -296,7 +323,7 @@ fun Player1Area(
                 }
             )
     ) {
-        if (gameState.canStart()){
+        if (gameState.exists()){
             Text(
                 text = (gameState?.player1MoveCount ?: 0).toString(),
                 fontSize = 16.sp,
@@ -307,11 +334,22 @@ fun Player1Area(
             )
         }
         Text(
-            text = gameState?.player1CurrentTime?.formatTimeToText() ?: "?",
+            text = gameState?.player1CurrentTime.formatTimeToText(),
             fontSize = 80.sp,
             color = black,
             modifier = Modifier.align(Alignment.Center)
         )
+        // game is over - label
+        if (gameState.isOver()){
+            Text(
+                text = gameState?.gameEndReason?.toExplanation() ?: "Game Over: null",
+                fontSize = 16.sp,
+                color = black,
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .padding(8.dp)
+            )
+        }
     }
 }
 
@@ -328,13 +366,13 @@ fun BottomRow(
         Player.ONE -> {
             Modifier
                 .width(maxWidth)
-                .height(if (gameState?.player1CurrentTime?.formatTimeToText() == null) 0.dp else 64.dp)
+                .height(if (gameState.doesntExist() || gameState.isOver()) 0.dp else 64.dp)
                 .offset(y = maxHeight - 48.dp)
         }
         Player.TWO -> {
             Modifier
                 .width(maxWidth)
-                .height(if (gameState?.player1CurrentTime?.formatTimeToText() == null) 0.dp else 64.dp)
+                .height(if (gameState.doesntExist() || gameState.isOver()) 0.dp else 64.dp)
                 .rotate(180f)
                 .offset(y = (16).dp)
         }
@@ -355,32 +393,13 @@ fun BottomRow(
                         radius = 32.dp
                     ),
                     onClick = {
-
+                        gameVM.showDialogEndGame(player)
                     }
                 ),
             painter = painterResource(id = R.drawable.ic_door),
             contentDescription = "End Game",
             colorFilter = ColorFilter.tint(color = brown)
         )
-        // Resign button
-//        Text(
-//            modifier = Modifier
-//                .wrapContentSize()
-//                .offset(x = (maxWidth / 2) - 28.dp, y = 4.dp)
-//                .clickable(
-//                    interactionSource = remember { MutableInteractionSource() },
-//                    indication = rememberRipple(
-//                        color = pink,
-//                        radius = 64.dp
-//                    ),
-//                    onClick = {
-//
-//                    }
-//                )
-//                .padding(8.dp),
-//            text = "Resign",
-//            color = pink
-//        )
         // player 1 time set icon
         Image(
             painter = painterResource(id = R.drawable.ic_change_time),
