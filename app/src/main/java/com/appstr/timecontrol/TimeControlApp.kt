@@ -3,7 +3,10 @@ package com.appstr.timecontrol
 import android.app.Application
 import com.appstr.timecontrol.domain.data.GameDatabase
 import com.appstr.timecontrol.domain.data.repo.GameRepo
+import dagger.hilt.android.HiltAndroidApp
 
+
+@HiltAndroidApp
 class TimeControlApp : Application() {
 
     // Database/Repo

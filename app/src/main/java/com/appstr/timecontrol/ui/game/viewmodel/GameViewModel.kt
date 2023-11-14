@@ -15,12 +15,14 @@ import com.appstr.timecontrol.ui.game.model.areBothTimesAboveZero
 import com.appstr.timecontrol.util.hour
 import com.appstr.timecontrol.util.minute
 import com.appstr.timecontrol.util.second
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 
+@HiltViewModel
 class GameViewModel(appli: Application) : AndroidViewModel(appli), DefaultLifecycleObserver {
 
     // Repo of Game object(s)
