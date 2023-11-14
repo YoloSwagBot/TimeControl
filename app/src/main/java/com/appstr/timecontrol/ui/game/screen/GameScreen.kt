@@ -46,7 +46,6 @@ import com.appstr.timecontrol.ui.game.model.exists
 import com.appstr.timecontrol.ui.game.model.formatTimeToText
 import com.appstr.timecontrol.ui.game.model.isNotOver
 import com.appstr.timecontrol.ui.game.model.isOver
-import com.appstr.timecontrol.ui.game.model.toExplanation
 import com.appstr.timecontrol.ui.game.viewmodel.GameViewModel
 import com.appstr.timecontrol.ui.theme.black
 import com.appstr.timecontrol.ui.theme.blueGrey
@@ -277,17 +276,17 @@ fun Player2Area(
                 .align(Alignment.Center)
         )
         // game is over - label
-        if (gameState.isOver()){
-            Text(
-                text = gameState?.gameEndReason?.toExplanation() ?: "Game Over: null",
-                fontSize = 16.sp,
-                color = black,
-                modifier = Modifier
-                    .rotate(180f)
-                    .align(Alignment.BottomCenter)
-                    .padding(start = 64.dp, top = 8.dp, end = 64.dp)
-            )
-        }
+//        if (gameState.isOver()){
+//            Text(
+//                text = gameState?.gameEndReason?.toExplanation() ?: "Game Over: null",
+//                fontSize = 16.sp,
+//                color = black,
+//                modifier = Modifier
+//                    .rotate(180f)
+//                    .align(Alignment.BottomCenter)
+//                    .padding(start = 64.dp, top = 8.dp, end = 64.dp)
+//            )
+//        }
     }
 }
 
@@ -340,16 +339,16 @@ fun Player1Area(
             modifier = Modifier.align(Alignment.Center)
         )
         // game is over - label
-        if (gameState.isOver()){
-            Text(
-                text = gameState?.gameEndReason?.toExplanation() ?: "Game Over: null",
-                fontSize = 16.sp,
-                color = black,
-                modifier = Modifier
-                    .align(Alignment.TopCenter)
-                    .padding(start = 64.dp, top = 8.dp, end = 64.dp)
-            )
-        }
+//        if (gameState.isOver()){
+//            Text(
+//                text = gameState?.gameEndReason?.toExplanation() ?: "Game Over: null",
+//                fontSize = 16.sp,
+//                color = black,
+//                modifier = Modifier
+//                    .align(Alignment.TopCenter)
+//                    .padding(start = 64.dp, top = 8.dp, end = 64.dp)
+//            )
+//        }
     }
 }
 
