@@ -285,7 +285,7 @@ fun Player2Area(
                 modifier = Modifier
                     .rotate(180f)
                     .align(Alignment.BottomCenter)
-                    .padding(8.dp)
+                    .padding(start = 64.dp, top = 8.dp, end = 64.dp)
             )
         }
     }
@@ -347,7 +347,7 @@ fun Player1Area(
                 color = black,
                 modifier = Modifier
                     .align(Alignment.TopCenter)
-                    .padding(8.dp)
+                    .padding(start = 64.dp, top = 8.dp, end = 64.dp)
             )
         }
     }
@@ -384,6 +384,7 @@ fun BottomRow(
         // End-Game button
         Image(
             modifier = Modifier
+                .size(0.dp)
                 .offset(x = 8.dp, y = 16.dp)
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },

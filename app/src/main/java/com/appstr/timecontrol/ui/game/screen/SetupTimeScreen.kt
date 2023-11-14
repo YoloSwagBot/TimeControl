@@ -2,7 +2,6 @@ package com.appstr.timecontrol.ui.game.screen
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -19,7 +18,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.ButtonDefaults
@@ -44,6 +42,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.appstr.timecontrol.ui.game.dialog.DialogCheckCancelCurrentGame
 import com.appstr.timecontrol.ui.game.model.TimeControl
+import com.appstr.timecontrol.ui.game.model.exists
 import com.appstr.timecontrol.ui.game.model.toText
 import com.appstr.timecontrol.ui.game.viewmodel.GameViewModel
 import com.appstr.timecontrol.ui.theme.black
@@ -98,9 +97,13 @@ fun SetupTimeScreen(
                 pressedElevation = 16.dp
             ),
             onClick = {
-                gameVM.showDialogCancelGame(
-                    defaultTimeControls[checkedPosition]
-                )
+                if (gameVM.gameState.value.exists()) {
+                    gameVM.showDialogCancelGame(
+                        defaultTimeControls[checkedPosition]
+                    )
+                }else{
+                    gameVM.setNewGame(defaultTimeControls[checkedPosition])
+                }
             }
         ){
             Text(
@@ -161,42 +164,42 @@ private fun Toolbar(
             fontSize = 20.sp,
             color = white
         )
-        Row(
-            modifier = Modifier
-                .height(40.dp)
-                .align(Alignment.CenterEnd)
-                .offset(x = (-8).dp)
-                .border(
-                    width = 1.dp,
-                    color = white,
-                    shape = RoundedCornerShape(20.dp)
-                )
-                .clip(RoundedCornerShape(20.dp))
-                .clickable(
-                    enabled = true,
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = rememberRipple(
-                        color = white,
-                        bounded = true,
-                    ),
-                    onClick = {
-
-                    }
-                ),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(
-                modifier = Modifier.padding(start = 8.dp),
-                imageVector = Icons.Filled.Add,
-                contentDescription = "Add",
-                tint = white
-            )
-            Text(
-                modifier = Modifier.padding(start = 4.dp, end = 12.dp),
-                text = "Custom",
-                color = white
-            )
-        }
+//        Row(
+//            modifier = Modifier
+//                .height(40.dp)
+//                .align(Alignment.CenterEnd)
+//                .offset(x = (-8).dp)
+//                .border(
+//                    width = 1.dp,
+//                    color = white,
+//                    shape = RoundedCornerShape(20.dp)
+//                )
+//                .clip(RoundedCornerShape(20.dp))
+//                .clickable(
+//                    enabled = true,
+//                    interactionSource = remember { MutableInteractionSource() },
+//                    indication = rememberRipple(
+//                        color = white,
+//                        bounded = true,
+//                    ),
+//                    onClick = {
+//
+//                    }
+//                ),
+//            verticalAlignment = Alignment.CenterVertically
+//        ) {
+//            Icon(
+//                modifier = Modifier.padding(start = 8.dp),
+//                imageVector = Icons.Filled.Add,
+//                contentDescription = "Add",
+//                tint = white
+//            )
+//            Text(
+//                modifier = Modifier.padding(start = 4.dp, end = 12.dp),
+//                text = "Custom",
+//                color = white
+//            )
+//        }
     }
 }
 

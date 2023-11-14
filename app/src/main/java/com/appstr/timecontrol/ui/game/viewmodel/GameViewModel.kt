@@ -126,6 +126,14 @@ class GameViewModel(appli: Application) : AndroidViewModel(appli), DefaultLifecy
 
     // ====================================================================================
 
+    fun setNewGame(timeControl: TimeControl){
+        _gameState.update { GameState(timeControl = timeControl) }
+
+        _screenSetupTimeShowing.update { false }
+    }
+
+    // ====================================================================================
+
     // Close SetupTime screen
     fun showSetupTimeScreen(){
         _screenSetupTimeShowing.update { true }
@@ -147,7 +155,7 @@ class GameViewModel(appli: Application) : AndroidViewModel(appli), DefaultLifecy
     }
     fun onDialogActionConfirmCancelGame(){
         dialogCancelGameShowing.value?.let { tc ->
-            _gameState.update { GameState(timeControl = tc) }
+            setNewGame(tc)
         }
 
         _dialogCancelGameShowing.update { null }
