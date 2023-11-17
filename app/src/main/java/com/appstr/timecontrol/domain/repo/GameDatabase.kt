@@ -1,4 +1,4 @@
-package com.appstr.timecontrol.domain.data
+package com.appstr.timecontrol.domain.repo
 
 import android.content.Context
 import androidx.room.Database
@@ -18,7 +18,7 @@ abstract class GameDatabase(): RoomDatabase() {
 
     companion object {
 
-        private const val DATABASE_NAME = "game_database"
+        const val DATABASE_NAME = "game_database"
 
 
         @Volatile
@@ -30,7 +30,8 @@ abstract class GameDatabase(): RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     appliContext,
                     GameDatabase::class.java,
-                    DATABASE_NAME)
+                    DATABASE_NAME
+                )
                         .build()
 
                 INSTANCE = instance

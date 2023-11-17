@@ -36,7 +36,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.appstr.timecontrol.R
-import com.appstr.timecontrol.ui.game.dialog.DialogEndGame
 import com.appstr.timecontrol.ui.game.dialog.DialogSetPlayerTime
 import com.appstr.timecontrol.ui.game.model.GameState
 import com.appstr.timecontrol.ui.game.model.Player
@@ -50,7 +49,6 @@ import com.appstr.timecontrol.ui.game.viewmodel.GameViewModel
 import com.appstr.timecontrol.ui.theme.black
 import com.appstr.timecontrol.ui.theme.blueGrey
 import com.appstr.timecontrol.ui.theme.blueGrey50
-import com.appstr.timecontrol.ui.theme.brown
 import com.appstr.timecontrol.ui.theme.brown300
 import com.appstr.timecontrol.ui.theme.green
 import com.appstr.timecontrol.ui.theme.lightGreen
@@ -120,12 +118,12 @@ fun GameScreen(
         }
     }
 
-    val dialogEndGame by gameVM.dialogEndGameShowing.collectAsState()
-    dialogEndGame?.let { pl ->
-        gameState.value?.let { gs ->
-            DialogEndGame(gameState = gs, player = pl)
-        }
-    }
+//    val dialogEndGame by gameVM.dialogEndGameShowing.collectAsState()
+//    dialogEndGame?.let { pl ->
+//        gameState.value?.let { gs ->
+//            DialogEndGame(gameState = gs, player = pl)
+//        }
+//    }
 
     val showSetupTimeScreen by gameVM.screenSetupTimeShowing.collectAsState()
     if (showSetupTimeScreen){
@@ -338,17 +336,6 @@ fun Player1Area(
             color = black,
             modifier = Modifier.align(Alignment.Center)
         )
-        // game is over - label
-//        if (gameState.isOver()){
-//            Text(
-//                text = gameState?.gameEndReason?.toExplanation() ?: "Game Over: null",
-//                fontSize = 16.sp,
-//                color = black,
-//                modifier = Modifier
-//                    .align(Alignment.TopCenter)
-//                    .padding(start = 64.dp, top = 8.dp, end = 64.dp)
-//            )
-//        }
     }
 }
 
@@ -380,26 +367,6 @@ fun BottomRow(
     BoxWithConstraints(
         modifier = modifier,
     ) {
-        // End-Game button
-        Image(
-            modifier = Modifier
-                .size(0.dp)
-                .offset(x = 8.dp, y = 16.dp)
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = rememberRipple(
-                        color = brown,
-                        bounded = false,
-                        radius = 32.dp
-                    ),
-                    onClick = {
-                        gameVM.showDialogEndGame(player)
-                    }
-                ),
-            painter = painterResource(id = R.drawable.ic_door),
-            contentDescription = "End Game",
-            colorFilter = ColorFilter.tint(color = brown)
-        )
         // player 1 time set icon
         Image(
             painter = painterResource(id = R.drawable.ic_change_time),

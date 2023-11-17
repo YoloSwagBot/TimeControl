@@ -1,4 +1,4 @@
-package com.appstr.timecontrol.domain.data
+package com.appstr.timecontrol.domain.repo
 
 import androidx.room.Dao
 import androidx.room.Insert

@@ -1,39 +1,24 @@
 package com.appstr.timecontrol.ui.game.dialog
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.CenterEnd
-import androidx.compose.ui.Alignment.Companion.CenterHorizontally
-import androidx.compose.ui.Alignment.Companion.CenterStart
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
@@ -43,14 +28,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.appstr.timecontrol.ui.game.model.GameEndReason
 import com.appstr.timecontrol.ui.game.model.GameState
 import com.appstr.timecontrol.ui.game.model.Player
-import com.appstr.timecontrol.ui.game.model.allEndGameReasons
-import com.appstr.timecontrol.ui.game.model.toLabel
 import com.appstr.timecontrol.ui.game.viewmodel.GameViewModel
-import com.appstr.timecontrol.ui.theme.black
-import com.appstr.timecontrol.ui.theme.brown
 import com.appstr.timecontrol.ui.theme.red
 import com.appstr.timecontrol.ui.theme.white
 import com.appstr.timecontrol.util.hoursFrom
@@ -245,131 +225,4 @@ fun DialogCheckCancelCurrentGame(
             }
         }
     )
-}
-
-@Composable
-fun DialogEndGame(
-    gameState: GameState,
-    player: Player,
-    gameVM: GameViewModel = viewModel()
-){
-
-    Dialog(
-        onDismissRequest = { gameVM.onDialogEndGameActionCancel() }
-    ) {
-        Column(
-            modifier = Modifier
-                .wrapContentSize()
-                .padding(16.dp)
-                .clip(shape = RoundedCornerShape(16.dp))
-                .background(white)
-                .rotate(
-                    when (player) {
-                        Player.ONE -> 0f
-                        Player.TWO -> 180f
-                    }
-                )
-        ) {
-            // title
-            Text(
-                modifier = Modifier
-                    .padding(8.dp)
-                    .align(CenterHorizontally),
-                text = "End Game",
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold
-            )
-            // list of items to select
-            var checkedPosition by rememberSaveable { mutableIntStateOf(-1) }
-            LazyColumn(){
-                itemsIndexed(allEndGameReasons){ p, item ->
-                    DialogEndGameItem(
-                        item,
-                        p == allEndGameReasons.lastIndex,
-                        p == checkedPosition,
-                        onClick = {
-                            checkedPosition = p
-                        }
-                    )
-                }
-            }
-            // cancel/continue buttons
-            Row(
-                modifier = Modifier
-                    .padding(end = 8.dp)
-                    .align(alignment = Alignment.End),
-            ) {
-                TextButton(
-                    onClick = { gameVM.onDialogEndGameActionCancel() }
-                ) {
-                    Text(text = "Cancel")
-                }
-                TextButton(
-                    enabled = checkedPosition >= 0,
-                    onClick = {
-                        gameVM.onDialogEndGameActionConfirm(
-                            player,
-                            allEndGameReasons[checkedPosition]
-                        )
-                    }
-                ) {
-                    Text(
-                        text = "Confirm"
-                    )
-                }
-            }
-        }
-    }
-
-}
-
-@Composable
-fun DialogEndGameItem(
-    gameEndReason: GameEndReason,
-    isLast: Boolean,
-    selected: Boolean,
-    onClick: () -> Unit
-){
-
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .wrapContentHeight()
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight()
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = rememberRipple(
-                        color = brown,
-                        bounded = true
-                    ),
-                    onClick = {
-                        onClick.invoke()
-                    }
-                )
-        ) {
-            Text(
-                modifier = Modifier
-                    .padding(start = 16.dp, end = 64.dp)
-                    .align(CenterStart),
-                text = gameEndReason.toLabel(),
-                fontSize = 16.sp,
-                color = black
-            )
-            RadioButton(
-                modifier = Modifier
-                    .align(CenterEnd),
-                selected = selected,
-                onClick = {
-                    onClick.invoke()
-                }
-            )
-        }
-        if (!isLast){
-            Divider(thickness = 1.dp, color = brown)
-        }
-    }
 }

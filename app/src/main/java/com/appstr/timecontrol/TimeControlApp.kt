@@ -1,8 +1,8 @@
 package com.appstr.timecontrol
 
 import android.app.Application
-import com.appstr.timecontrol.domain.data.GameDatabase
-import com.appstr.timecontrol.domain.data.repo.GameRepo
+import com.appstr.timecontrol.domain.repo.GameDatabase
+import com.appstr.timecontrol.domain.repo.GameRepo
 import dagger.hilt.android.HiltAndroidApp
 
 

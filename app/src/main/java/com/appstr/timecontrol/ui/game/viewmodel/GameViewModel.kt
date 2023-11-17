@@ -6,12 +6,10 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.viewModelScope
 import com.appstr.timecontrol.TimeControlApp
-import com.appstr.timecontrol.domain.data.repo.GameRepo
-import com.appstr.timecontrol.ui.game.model.GameEndReason
+import com.appstr.timecontrol.domain.repo.GameRepo
 import com.appstr.timecontrol.ui.game.model.GameState
 import com.appstr.timecontrol.ui.game.model.Player
 import com.appstr.timecontrol.ui.game.model.TimeControl
-import com.appstr.timecontrol.ui.game.model.areBothTimesAboveZero
 import com.appstr.timecontrol.util.hour
 import com.appstr.timecontrol.util.minute
 import com.appstr.timecontrol.util.second
@@ -20,10 +18,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 
 @HiltViewModel
-class GameViewModel(appli: Application) : AndroidViewModel(appli), DefaultLifecycleObserver {
+class GameViewModel @Inject constructor(appli: Application) : AndroidViewModel(appli), DefaultLifecycleObserver {
 
     // Repo of Game object(s)
     val repo: GameRepo = (appli as TimeControlApp).gameRepo
@@ -58,22 +57,12 @@ class GameViewModel(appli: Application) : AndroidViewModel(appli), DefaultLifecy
                     Player.ONE -> {
                         gs.copy(
                             player1CurrentTime = (gs.player1CurrentTime - second).coerceAtLeast(0),
-                            gameEndReason = if (gs.gameEndReason == null && gs.player1CurrentTime <= 1) {
-                                GameEndReason.RanOutOfTime.RanOutOfTime_PLAYER_2_WINS
-                            }else{
-                                gs.gameEndReason
-                            },
                             isPaused = gs.player1CurrentTime <= 1
                         )
                     }
                     Player.TWO -> {
                         gs.copy(
                             player2CurrentTime = (gs.player2CurrentTime - second).coerceAtLeast(0),
-                            gameEndReason =  if (gs.gameEndReason == null && gs.player2CurrentTime <= 1) {
-                                GameEndReason.RanOutOfTime.RanOutOfTime_PLAYER_1_WINS
-                            }else{
-                                gs.gameEndReason
-                            },
                             isPaused = gs.player2CurrentTime <= 1
                         )
                     }
@@ -182,12 +171,10 @@ class GameViewModel(appli: Application) : AndroidViewModel(appli), DefaultLifecy
         _gameState.update { gs ->
             when (player){
                 Player.ONE -> gs?.copy(
-                    player1CurrentTime = (hours * hour) + (minutes * minute) + (seconds * second),
-                    gameEndReason = if (gs.areBothTimesAboveZero()) null else gs.gameEndReason
+                    player1CurrentTime = (hours * hour) + (minutes * minute) + (seconds * second)
                 )
                 Player.TWO -> gs?.copy(
-                    player2CurrentTime = (hours * hour) + (minutes * minute) + (seconds * second),
-                    gameEndReason = if (gs.areBothTimesAboveZero()) null else gs.gameEndReason
+                    player2CurrentTime = (hours * hour) + (minutes * minute) + (seconds * second)
                 )
             }
         }
@@ -196,23 +183,6 @@ class GameViewModel(appli: Application) : AndroidViewModel(appli), DefaultLifecy
     }
     fun onDialogActionDismissSetPlayersTime(){
         _dialogSetPlayersTimeShowing.update { null }
-    }
-
-    fun showDialogEndGame(player: Player){
-        _gameState.update { it?.copy(isPaused = true) }
-
-        _dialogEndGameShowing.update { player }
-    }
-    fun onDialogEndGameActionConfirm(
-        player: Player,
-        gameEndReason: GameEndReason
-    ){
-        _gameState.update { it?.copy(gameEndReason = gameEndReason) }
-
-        _dialogEndGameShowing.update { null }
-    }
-    fun onDialogEndGameActionCancel(){
-        _dialogEndGameShowing.update { null }
     }
 
 

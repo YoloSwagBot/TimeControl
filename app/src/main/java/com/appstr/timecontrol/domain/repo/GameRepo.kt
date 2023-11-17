@@ -1,7 +1,6 @@
-package com.appstr.timecontrol.domain.data.repo
+package com.appstr.timecontrol.domain.repo
 
 import androidx.annotation.WorkerThread
-import com.appstr.timecontrol.domain.data.GameDao
 import com.appstr.timecontrol.ui.game.model.GameState
 
 class GameRepo(private val gameDao: GameDao) {
