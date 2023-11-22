@@ -13,19 +13,19 @@ data class GameState @Inject constructor (
 
     @PrimaryKey val id: Int = 1,
 
-    @Inject val timeControl: TimeControl? = null,
+    val timeControl: TimeControl? = null,
 
-    @Inject var turn: Player = Player.ONE,
-    @Inject var isPaused: Boolean = true,
+    var turn: Player = Player.ONE,
+    var isPaused: Boolean = true,
 
-    @Inject val player1StartTime: Int = timeControl?.startValue ?: -1,
-    @Inject val player2StartTime: Int = timeControl?.startValue ?: -1,
+    val player1StartTime: Int = timeControl?.startValue ?: -1,
+    val player2StartTime: Int = timeControl?.startValue ?: -1,
 
-    @Inject var player1CurrentTime: Int = timeControl?.startValue ?: -1,
-    @Inject var player2CurrentTime: Int = timeControl?.startValue ?: -1,
+    var player1CurrentTime: Int = timeControl?.startValue ?: -1,
+    var player2CurrentTime: Int = timeControl?.startValue ?: -1,
 
-    @Inject var player1MoveCount: Int = 0,
-    @Inject var player2MoveCount: Int = 0
+    var player1MoveCount: Int = 0,
+    var player2MoveCount: Int = 0
 
 )
 

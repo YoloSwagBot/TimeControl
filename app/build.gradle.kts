@@ -34,11 +34,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_19
-        targetCompatibility = JavaVersion.VERSION_19
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "19"
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
@@ -67,8 +67,8 @@ dependencies {
     implementation("com.google.code.gson:gson:2.10.1")
 
     // Hilt
-    implementation("com.google.dagger:hilt-android:2.44")
-    ksp("com.google.dagger:hilt-android-compiler:2.44")
+    implementation("com.google.dagger:hilt-android:2.48.1")
+    ksp("com.google.dagger:hilt-android-compiler:2.48.1")
 
     // Kotlin core
     implementation("androidx.core:core-ktx:1.12.0")
