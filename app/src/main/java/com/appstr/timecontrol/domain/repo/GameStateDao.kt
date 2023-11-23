@@ -8,7 +8,7 @@ import com.appstr.timecontrol.ui.game.model.GameState
 
 
 @Dao
-interface GameDao {
+interface GameStateDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun putGameState(gameState: GameState)

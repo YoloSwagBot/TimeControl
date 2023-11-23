@@ -6,7 +6,7 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.viewModelScope
 import com.appstr.timecontrol.TimeControlApp
-import com.appstr.timecontrol.domain.repo.GameRepo
+import com.appstr.timecontrol.domain.repo.GameStateRepository
 import com.appstr.timecontrol.ui.game.model.GameState
 import com.appstr.timecontrol.ui.game.model.Player
 import com.appstr.timecontrol.ui.game.model.TimeControl
@@ -22,10 +22,14 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class GameViewModel @Inject constructor(appli: Application) : AndroidViewModel(appli), DefaultLifecycleObserver {
+class GameViewModel @Inject constructor(
+    appli: Application
+) : AndroidViewModel(appli), DefaultLifecycleObserver {
 
     // Repo of Game object(s)
-    val repo: GameRepo = (appli as TimeControlApp).gameRepo
+    val repo: GameStateRepository = (appli as TimeControlApp).gameRepo
+
+
 
     // Game State object
     private val _gameState = MutableStateFlow<GameState?>(null) // initial value is read from db
@@ -38,10 +42,6 @@ class GameViewModel @Inject constructor(appli: Application) : AndroidViewModel(a
     // Dialog set player's time
     private val _dialogSetPlayersTimeShowing = MutableStateFlow<Player?>(null)
     val dialogSetPlayersTimeShowing = _dialogSetPlayersTimeShowing.asStateFlow()
-
-    // Dialog End Game
-    private val _dialogEndGameShowing = MutableStateFlow<Player?>(null)
-    val dialogEndGameShowing = _dialogEndGameShowing.asStateFlow()
 
     // Screen, SetupTime
     private val _screenSetupTimeShowing = MutableStateFlow(false)
