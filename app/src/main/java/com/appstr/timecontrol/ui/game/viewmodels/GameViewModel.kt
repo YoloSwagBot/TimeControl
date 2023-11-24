@@ -9,6 +9,8 @@ import com.appstr.timecontrol.data.repositories.GameStateRepository
 import com.appstr.timecontrol.domain.models.GameState
 import com.appstr.timecontrol.domain.models.Player
 import com.appstr.timecontrol.domain.models.TimeControl
+import com.appstr.timecontrol.domain.usecases.RetrieveGameStateUseCase
+import com.appstr.timecontrol.domain.usecases.SaveGameStateUseCase
 import com.appstr.timecontrol.domain.usecases.SetNewGameUseCase
 import com.appstr.timecontrol.domain.usecases.dialogs.cancelgame.OnConfirmDialogCancelGameUseCase
 import com.appstr.timecontrol.domain.usecases.dialogs.cancelgame.OnDismissDialogCancelGameUseCase
@@ -26,8 +28,6 @@ import com.appstr.timecontrol.domain.usecases.setuptimescreen.ShowSetupTimeScree
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
@@ -52,7 +52,10 @@ class GameViewModel @Inject constructor(
 
     val showDialogCancelGameUseCase: ShowDialogCancelGameUseCase,
     val onDismissDialogCancelGameUseCase: OnDismissDialogCancelGameUseCase,
-    val onConfirmDialogCancelGameUseCase: OnConfirmDialogCancelGameUseCase
+    val onConfirmDialogCancelGameUseCase: OnConfirmDialogCancelGameUseCase,
+
+    val retrieveGameStateUseCase: RetrieveGameStateUseCase,
+    val saveGameStateUseCase: SaveGameStateUseCase
 
 ) : AndroidViewModel(appli), DefaultLifecycleObserver {
 
@@ -135,19 +138,13 @@ class GameViewModel @Inject constructor(
     override fun onResume(owner: LifecycleOwner) {
         super.onResume(owner)
 
-        viewModelScope.launch {
-            _gameState.update { repo.getGameState() }
-        }
+        retrieveGameStateUseCase(repo, viewModelScope, _gameState)
     }
 
     override fun onPause(owner: LifecycleOwner) {
         super.onPause(owner)
 
-        gameState.value?.let {
-            viewModelScope.launch {
-                repo.updateGameState(it)
-            }
-        }
+        saveGameStateUseCase(repo, viewModelScope, gameState.value)
     }
 
 
