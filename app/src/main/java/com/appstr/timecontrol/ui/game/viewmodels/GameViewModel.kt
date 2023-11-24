@@ -9,9 +9,20 @@ import com.appstr.timecontrol.data.repositories.GameStateRepository
 import com.appstr.timecontrol.domain.models.GameState
 import com.appstr.timecontrol.domain.models.Player
 import com.appstr.timecontrol.domain.models.TimeControl
-import com.appstr.timecontrol.util.hour
-import com.appstr.timecontrol.util.minute
-import com.appstr.timecontrol.util.second
+import com.appstr.timecontrol.domain.usecases.SetNewGameUseCase
+import com.appstr.timecontrol.domain.usecases.dialogs.cancelgame.OnConfirmDialogCancelGameUseCase
+import com.appstr.timecontrol.domain.usecases.dialogs.cancelgame.OnDismissDialogCancelGameUseCase
+import com.appstr.timecontrol.domain.usecases.dialogs.cancelgame.ShowDialogCancelGameUseCase
+import com.appstr.timecontrol.domain.usecases.dialogs.setplayerstime.OnConfirmDialogSetPlayersTimeUseCase
+import com.appstr.timecontrol.domain.usecases.dialogs.setplayerstime.OnDismissDialogSetPlayersTimeUseCase
+import com.appstr.timecontrol.domain.usecases.dialogs.setplayerstime.ShowDialogSetPlayersTimeUseCase
+import com.appstr.timecontrol.domain.usecases.gamescreen.DecrementTimeUseCase
+import com.appstr.timecontrol.domain.usecases.gamescreen.OnClickPausePlayUseCase
+import com.appstr.timecontrol.domain.usecases.gamescreen.OnClickPlayer1AreaUseCase
+import com.appstr.timecontrol.domain.usecases.gamescreen.OnClickPlayer2AreaUseCase
+import com.appstr.timecontrol.domain.usecases.gamescreen.PauseGameUseCase
+import com.appstr.timecontrol.domain.usecases.setuptimescreen.CloseSetupTimeScreenUseCase
+import com.appstr.timecontrol.domain.usecases.setuptimescreen.ShowSetupTimeScreenUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -23,7 +34,26 @@ import javax.inject.Inject
 @HiltViewModel
 class GameViewModel @Inject constructor(
     appli: Application,
-    val repo: GameStateRepository
+    val repo: GameStateRepository,
+
+    val decrementTimeUseCase: DecrementTimeUseCase,
+    val onClickPausePlayUseCase: OnClickPausePlayUseCase,
+    val onClickPlayer1AreaUseCase: OnClickPlayer1AreaUseCase,
+    val onClickPlayer2AreaUseCase: OnClickPlayer2AreaUseCase,
+    val pauseGameUseCase: PauseGameUseCase,
+
+    val setNewGameUseCase: SetNewGameUseCase,
+    val showSetupTimeScreenUseCase: ShowSetupTimeScreenUseCase,
+    val closeSetupTimeScreenUseCase: CloseSetupTimeScreenUseCase,
+
+    val showDialogSetPlayersTimeUseCase: ShowDialogSetPlayersTimeUseCase,
+    val onConfirmDialogSetPlayersTimeUseCase: OnConfirmDialogSetPlayersTimeUseCase,
+    val onDismissDialogSetPlayersTimeUseCase: OnDismissDialogSetPlayersTimeUseCase,
+
+    val showDialogCancelGameUseCase: ShowDialogCancelGameUseCase,
+    val onDismissDialogCancelGameUseCase: OnDismissDialogCancelGameUseCase,
+    val onConfirmDialogCancelGameUseCase: OnConfirmDialogCancelGameUseCase
+
 ) : AndroidViewModel(appli), DefaultLifecycleObserver {
 
     // Game State object
@@ -44,90 +74,30 @@ class GameViewModel @Inject constructor(
 
 
 
-    fun decrementTimeByTurn(){
+    fun decrementTimeByTurn() = decrementTimeUseCase(_gameState, gameState.value)
 
-        gameState.value?.let { gs ->
-            _gameState.update {
-                when (gs.turn){
-                    Player.ONE -> {
-                        gs.copy(
-                            player1CurrentTime = (gs.player1CurrentTime - second).coerceAtLeast(0),
-                            isPaused = gs.player1CurrentTime <= 1
-                        )
-                    }
-                    Player.TWO -> {
-                        gs.copy(
-                            player2CurrentTime = (gs.player2CurrentTime - second).coerceAtLeast(0),
-                            isPaused = gs.player2CurrentTime <= 1
-                        )
-                    }
-                }
-            }
-        }
+    fun pausePlayClicked() = onClickPausePlayUseCase(_gameState, gameState.value)
 
-    }
+    fun onPlayer1Click() = onClickPlayer1AreaUseCase(_gameState, gameState.value)
 
-    fun pausePlayClicked(){
-
-        gameState.value?.let { gs ->
-            _gameState.update { gs.copy(isPaused =  !gs.isPaused) }
-        }
-
-    }
-
-    fun onPlayer1Click(){
-
-        gameState.value?.let { gs ->
-            if (!gs.isPaused && gs.turn == Player.ONE) {
-                _gameState.update {
-                    gs.copy(
-                        turn = Player.TWO,
-                        player1MoveCount = gs.player1MoveCount+1
-                    )
-                }
-            }
-        }
-
-    }
-
-    fun onPlayer2Click(){
-
-        gameState.value?.let { gs ->
-            if (!gs.isPaused && gs.turn == Player.TWO){
-                _gameState.update {
-                    gs.copy(
-                        turn = Player.ONE,
-                        player2MoveCount = gs.player2MoveCount+1
-                    )
-                }
-            }
-        }
-
-    }
+    fun onPlayer2Click() = onClickPlayer2AreaUseCase(_gameState, gameState.value)
 
     // Pause (ie: back button to close app)
-    fun pauseGame(){
-        _gameState.update { it?.copy(isPaused = true) }
-    }
+    fun pauseGame() = pauseGameUseCase(_gameState)
 
     // ====================================================================================
 
     fun setNewGame(timeControl: TimeControl){
-        _gameState.update { GameState(timeControl = timeControl) }
-
-        _screenSetupTimeShowing.update { false }
+        setNewGameUseCase(timeControl, _gameState)
+        closeSetupTimeScreenUseCase(_screenSetupTimeShowing)
     }
 
     // ====================================================================================
 
     // Close SetupTime screen
-    fun showSetupTimeScreen(){
-        _screenSetupTimeShowing.update { true }
-    }
+    fun showSetupTimeScreen() = showSetupTimeScreenUseCase(_screenSetupTimeShowing)
 
-    fun closeSetupTimeScreen(){
-        _screenSetupTimeShowing.update { false }
-    }
+    fun closeSetupTimeScreen() = closeSetupTimeScreenUseCase(_screenSetupTimeShowing)
 
     // ==================================================================================== Dialogs
 
@@ -135,50 +105,28 @@ class GameViewModel @Inject constructor(
     fun showDialogCancelGame(
         timeControl: TimeControl,
     ){
-        _gameState.update { it?.copy(isPaused = true) }
-
-        _dialogCancelGameShowing.update { timeControl }
+        showDialogCancelGameUseCase(timeControl, _gameState, _dialogCancelGameShowing)
     }
-    fun onDialogActionConfirmCancelGame(){
-        dialogCancelGameShowing.value?.let { tc ->
-            setNewGame(tc)
-        }
-
-        _dialogCancelGameShowing.update { null }
-        _screenSetupTimeShowing.update { false }
+    fun onConfirmDialogCancelGame(){
+        onConfirmDialogCancelGameUseCase(
+            _dialogCancelGameShowing.value,
+            setNewGameUseCase,
+            _gameState,
+            _dialogCancelGameShowing,
+            _screenSetupTimeShowing
+        )
     }
-    fun onDialogActionDismissCancelGame(){
-        _dialogCancelGameShowing.update { null }
-    }
+    fun onDismissDialogCancelGame() = onDismissDialogCancelGameUseCase(_dialogCancelGameShowing)
 
     // Dialog Edit Time Game
-    fun showDialogSetPlayersTime(player: Player){
-        _gameState.update { it?.copy(isPaused = true) }
-
-        _dialogSetPlayersTimeShowing.update { player }
-    }
-    fun onDialogActionConfirmSetPlayersTime(
+    fun showDialogSetPlayersTime(player: Player) = showDialogSetPlayersTimeUseCase(player, _gameState, _dialogSetPlayersTimeShowing)
+    fun onDialogActionDismissSetPlayersTime() = onDismissDialogSetPlayersTimeUseCase(_dialogSetPlayersTimeShowing)
+    fun onConfirmDialogSetPlayersTime(
         player: Player,
         hours: Int,
         minutes: Int,
         seconds: Int
-    ){
-        _gameState.update { gs ->
-            when (player){
-                Player.ONE -> gs?.copy(
-                    player1CurrentTime = (hours * hour) + (minutes * minute) + (seconds * second)
-                )
-                Player.TWO -> gs?.copy(
-                    player2CurrentTime = (hours * hour) + (minutes * minute) + (seconds * second)
-                )
-            }
-        }
-
-        _dialogSetPlayersTimeShowing.update { null }
-    }
-    fun onDialogActionDismissSetPlayersTime(){
-        _dialogSetPlayersTimeShowing.update { null }
-    }
+    ) = onConfirmDialogSetPlayersTimeUseCase(player, hours, minutes, seconds, _gameState, _dialogSetPlayersTimeShowing)
 
 
     // ====================================================================================

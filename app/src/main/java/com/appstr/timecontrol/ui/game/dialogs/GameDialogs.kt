@@ -179,7 +179,7 @@ fun DialogSetPlayerTime(
                             (!hours.isValidHours() || !minutes.isValidMinutes() || !seconds.isValidSeconds())
                                     || !timeISValid(hours, minutes, seconds)
                                 -> errorMessage = "INVALID FORMAT"
-                            else -> gameVM.onDialogActionConfirmSetPlayersTime(
+                            else -> gameVM.onConfirmDialogSetPlayersTime(
                                 player,
                                 hours.toIntOrNull() ?: 0,
                                 minutes.toIntOrNull() ?: 0,
@@ -206,19 +206,19 @@ fun DialogCheckCancelCurrentGame(
         dismissButton = {
             TextButton(
                 onClick = {
-                    gameVM.onDialogActionDismissCancelGame()
+                    gameVM.onDismissDialogCancelGame()
                 }
             ) {
                 Text(text = "Cancel")
             }
         },
         onDismissRequest = {
-            gameVM.onDialogActionDismissCancelGame()
+            gameVM.onDismissDialogCancelGame()
         },
         confirmButton = {
             TextButton(
                 onClick = {
-                    gameVM.onDialogActionConfirmCancelGame()
+                    gameVM.onConfirmDialogCancelGame()
                 }
             ) {
                 Text("Confirm")
