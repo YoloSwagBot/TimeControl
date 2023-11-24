@@ -36,7 +36,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.appstr.timecontrol.R
-import com.appstr.timecontrol.ui.game.dialogs.DialogSetPlayerTime
 import com.appstr.timecontrol.domain.models.GameState
 import com.appstr.timecontrol.domain.models.Player
 import com.appstr.timecontrol.domain.models.canStart
@@ -45,6 +44,7 @@ import com.appstr.timecontrol.domain.models.exists
 import com.appstr.timecontrol.domain.models.formatTimeToText
 import com.appstr.timecontrol.domain.models.isNotOver
 import com.appstr.timecontrol.domain.models.isOver
+import com.appstr.timecontrol.ui.game.dialogs.DialogSetPlayerTime
 import com.appstr.timecontrol.ui.game.viewmodels.GameViewModel
 import com.appstr.timecontrol.ui.theme.black
 import com.appstr.timecontrol.ui.theme.blueGrey
@@ -234,8 +234,8 @@ fun Player2Area(
             .background(
                 when {
                     gameState?.isOver() ?: false -> brown300
-                    gameState?.turn == Player.TWO && gameState.player1CurrentTime < gameState.player1StartTime * .1 -> red200
-                    gameState?.turn == Player.TWO && gameState.player1CurrentTime < gameState.player1StartTime * .05 -> red500
+                    gameState?.turn == Player.TWO && gameState.player2CurrentTime < gameState.player2StartTime * .1 -> red200
+                    gameState?.turn == Player.TWO && gameState.player2CurrentTime < gameState.player2StartTime * .05 -> red500
                     gameState?.isPaused == true -> white
                     gameState?.turn == Player.TWO -> lightGreen400
                     else -> white
