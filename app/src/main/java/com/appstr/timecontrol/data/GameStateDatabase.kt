@@ -1,9 +1,11 @@
-package com.appstr.timecontrol.domain.repo
+package com.appstr.timecontrol.data
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.appstr.timecontrol.ui.game.model.GameState
+import com.appstr.timecontrol.data.converters.Converters
+import com.appstr.timecontrol.data.daos.GameStateDao
+import com.appstr.timecontrol.domain.models.GameState
 import javax.inject.Singleton
 
 
@@ -12,10 +14,10 @@ import javax.inject.Singleton
 @Singleton
 abstract class GameStateDatabase: RoomDatabase() {
 
-    abstract fun gameDao(): GameStateDao
-
     companion object {
         const val DATABASE_NAME = "game_database"
     }
+
+    abstract fun gameDao(): GameStateDao
 
 }

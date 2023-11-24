@@ -1,4 +1,4 @@
-package com.appstr.timecontrol.ui.game.model
+package com.appstr.timecontrol.domain.models
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

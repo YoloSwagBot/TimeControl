@@ -8,8 +8,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import com.appstr.timecontrol.ui.game.screen.GameScreen
-import com.appstr.timecontrol.ui.game.viewmodel.GameViewModel
+import com.appstr.timecontrol.ui.game.screens.GameScreen
+import com.appstr.timecontrol.ui.game.viewmodels.GameViewModel
 import com.appstr.timecontrol.ui.theme.TimeControlTheme
 import dagger.hilt.android.AndroidEntryPoint
 

@@ -1,6 +1,8 @@
 package com.appstr.timecontrol
 
+import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.appstr.timecontrol.ui.MainActivity
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Rule
@@ -10,11 +12,13 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 @HiltAndroidTest
-class GameSetupTest {
+class GameStateTests {
 
     @get:Rule
     var hiltRule = HiltAndroidRule(this)
 
+    @get:Rule
+    val activityRule = ActivityScenarioRule(MainActivity::class.java)
 
     // ========================================================================================== GameState_tests
 

@@ -2,8 +2,8 @@ package com.appstr.timecontrol.di
 
 import android.content.Context
 import androidx.room.Room
-import com.appstr.timecontrol.domain.repo.GameStateDao
-import com.appstr.timecontrol.domain.repo.GameStateDatabase
+import com.appstr.timecontrol.data.daos.GameStateDao
+import com.appstr.timecontrol.data.GameStateDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

@@ -1,4 +1,4 @@
-package com.appstr.timecontrol.ui.game.screen
+package com.appstr.timecontrol.ui.game.screens
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
@@ -40,11 +40,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.appstr.timecontrol.ui.game.dialog.DialogCheckCancelCurrentGame
-import com.appstr.timecontrol.ui.game.model.TimeControl
-import com.appstr.timecontrol.ui.game.model.exists
-import com.appstr.timecontrol.ui.game.model.toText
-import com.appstr.timecontrol.ui.game.viewmodel.GameViewModel
+import com.appstr.timecontrol.ui.game.dialogs.DialogCheckCancelCurrentGame
+import com.appstr.timecontrol.domain.models.TimeControl
+import com.appstr.timecontrol.domain.models.exists
+import com.appstr.timecontrol.domain.models.toText
+import com.appstr.timecontrol.ui.game.viewmodels.GameViewModel
 import com.appstr.timecontrol.ui.theme.black
 import com.appstr.timecontrol.ui.theme.green
 import com.appstr.timecontrol.ui.theme.lightGreen

@@ -1,8 +1,8 @@
-package com.appstr.timecontrol.domain.repo
+package com.appstr.timecontrol.data.converters
 
 import androidx.room.TypeConverter
-import com.appstr.timecontrol.ui.game.model.Player
-import com.appstr.timecontrol.ui.game.model.TimeControl
+import com.appstr.timecontrol.domain.models.Player
+import com.appstr.timecontrol.domain.models.TimeControl
 import com.google.gson.Gson
 
 object Converters {

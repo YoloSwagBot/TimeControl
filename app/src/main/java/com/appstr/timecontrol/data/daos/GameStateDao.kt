@@ -1,10 +1,10 @@
-package com.appstr.timecontrol.domain.repo
+package com.appstr.timecontrol.data.daos
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.appstr.timecontrol.ui.game.model.GameState
+import com.appstr.timecontrol.domain.models.GameState
 
 
 @Dao

@@ -1,6 +1,6 @@
 package com.appstr.timecontrol.util
 
-import com.appstr.timecontrol.ui.game.model.TimeControl
+import com.appstr.timecontrol.domain.models.TimeControl
 
 
 const val second = 1000

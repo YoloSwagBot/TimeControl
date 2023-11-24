@@ -1,4 +1,4 @@
-package com.appstr.timecontrol.ui.game.screen
+package com.appstr.timecontrol.ui.game.screens
 
 import android.app.Activity
 import android.content.pm.ActivityInfo
@@ -36,16 +36,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.appstr.timecontrol.R
-import com.appstr.timecontrol.ui.game.dialog.DialogSetPlayerTime
-import com.appstr.timecontrol.ui.game.model.GameState
-import com.appstr.timecontrol.ui.game.model.Player
-import com.appstr.timecontrol.ui.game.model.canStart
-import com.appstr.timecontrol.ui.game.model.doesntExist
-import com.appstr.timecontrol.ui.game.model.exists
-import com.appstr.timecontrol.ui.game.model.formatTimeToText
-import com.appstr.timecontrol.ui.game.model.isNotOver
-import com.appstr.timecontrol.ui.game.model.isOver
-import com.appstr.timecontrol.ui.game.viewmodel.GameViewModel
+import com.appstr.timecontrol.ui.game.dialogs.DialogSetPlayerTime
+import com.appstr.timecontrol.domain.models.GameState
+import com.appstr.timecontrol.domain.models.Player
+import com.appstr.timecontrol.domain.models.canStart
+import com.appstr.timecontrol.domain.models.doesntExist
+import com.appstr.timecontrol.domain.models.exists
+import com.appstr.timecontrol.domain.models.formatTimeToText
+import com.appstr.timecontrol.domain.models.isNotOver
+import com.appstr.timecontrol.domain.models.isOver
+import com.appstr.timecontrol.ui.game.viewmodels.GameViewModel
 import com.appstr.timecontrol.ui.theme.black
 import com.appstr.timecontrol.ui.theme.blueGrey
 import com.appstr.timecontrol.ui.theme.blueGrey50

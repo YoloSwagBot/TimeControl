@@ -1,4 +1,4 @@
-package com.appstr.timecontrol.ui.game.model
+package com.appstr.timecontrol.domain.models
 
 import com.appstr.timecontrol.util.hour
 import com.appstr.timecontrol.util.minute
