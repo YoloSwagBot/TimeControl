@@ -4,10 +4,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
-class ShowSetupTimeScreenUseCase @Inject constructor() {
+class CloseScreenSetupTimeUseCase @Inject constructor() {
     operator fun invoke(
         _screenSetupTimeShowing: MutableStateFlow<Boolean>
     ){
-        _screenSetupTimeShowing.update { true }
+        _screenSetupTimeShowing.update { false }
     }
 }

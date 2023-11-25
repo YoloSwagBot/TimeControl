@@ -23,8 +23,8 @@ import com.appstr.timecontrol.domain.usecases.gamescreen.OnClickPausePlayUseCase
 import com.appstr.timecontrol.domain.usecases.gamescreen.OnClickPlayer1AreaUseCase
 import com.appstr.timecontrol.domain.usecases.gamescreen.OnClickPlayer2AreaUseCase
 import com.appstr.timecontrol.domain.usecases.gamescreen.PauseGameUseCase
-import com.appstr.timecontrol.domain.usecases.setuptimescreen.CloseSetupTimeScreenUseCase
-import com.appstr.timecontrol.domain.usecases.setuptimescreen.ShowSetupTimeScreenUseCase
+import com.appstr.timecontrol.domain.usecases.setuptimescreen.CloseScreenSetupTimeUseCase
+import com.appstr.timecontrol.domain.usecases.setuptimescreen.ShowScreenSetupTimeUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -43,8 +43,8 @@ class GameViewModel @Inject constructor(
     val pauseGameUseCase: PauseGameUseCase,
 
     val setNewGameUseCase: SetNewGameUseCase,
-    val showSetupTimeScreenUseCase: ShowSetupTimeScreenUseCase,
-    val closeSetupTimeScreenUseCase: CloseSetupTimeScreenUseCase,
+    val showScreenSetupTimeUseCase: ShowScreenSetupTimeUseCase,
+    val closeScreenSetupTimeUseCase: CloseScreenSetupTimeUseCase,
 
     val showDialogSetPlayersTimeUseCase: ShowDialogSetPlayersTimeUseCase,
     val onConfirmDialogSetPlayersTimeUseCase: OnConfirmDialogSetPlayersTimeUseCase,
@@ -92,15 +92,15 @@ class GameViewModel @Inject constructor(
 
     fun setNewGame(timeControl: TimeControl){
         setNewGameUseCase(timeControl, _gameState)
-        closeSetupTimeScreenUseCase(_screenSetupTimeShowing)
+        closeScreenSetupTimeUseCase(_screenSetupTimeShowing)
     }
 
     // ====================================================================================
 
     // Close SetupTime screen
-    fun showSetupTimeScreen() = showSetupTimeScreenUseCase(_screenSetupTimeShowing)
+    fun showSetupTimeScreen() = showScreenSetupTimeUseCase(_screenSetupTimeShowing)
 
-    fun closeSetupTimeScreen() = closeSetupTimeScreenUseCase(_screenSetupTimeShowing)
+    fun closeSetupTimeScreen() = closeScreenSetupTimeUseCase(_screenSetupTimeShowing)
 
     // ==================================================================================== Dialogs
 
