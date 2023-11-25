@@ -95,6 +95,9 @@ dependencies {
     androidTestImplementation("androidx.test:runner:1.5.2")
     androidTestImplementation("androidx.test:rules:1.5.0")
 
+    // Truth(assertion library)
+    testImplementation("com.google.truth:truth:1.1.4")
+    androidTestImplementation("com.google.truth:truth:1.1.4")
 
 //    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 //    androidTestImplementation(platform("androidx.compose:compose-bom:2023.03.00"))

@@ -56,14 +56,14 @@ fun Int?.formatTimeToText(): String {
         this > hour -1 -> String.format("%2d:%02d:%02d",
             TimeUnit.MILLISECONDS.toHours(time),
             TimeUnit.MILLISECONDS.toMinutes(time) % TimeUnit.HOURS.toMinutes(1),
-            TimeUnit.MILLISECONDS.toSeconds(time) % TimeUnit.MINUTES.toSeconds(1))
+            TimeUnit.MILLISECONDS.toSeconds(time) % TimeUnit.MINUTES.toSeconds(1)).trim()
 
         this > minute -1 -> String.format("%2d:%02d",
             TimeUnit.MILLISECONDS.toMinutes(time) % TimeUnit.HOURS.toMinutes(1),
-            TimeUnit.MILLISECONDS.toSeconds(time) % TimeUnit.MINUTES.toSeconds(1))
+            TimeUnit.MILLISECONDS.toSeconds(time) % TimeUnit.MINUTES.toSeconds(1)).trim()
 
         else -> String.format("0:%02d",
-            TimeUnit.MILLISECONDS.toSeconds(time) % TimeUnit.MINUTES.toSeconds(1))
+            TimeUnit.MILLISECONDS.toSeconds(time) % TimeUnit.MINUTES.toSeconds(1)).trim()
 
     }
 

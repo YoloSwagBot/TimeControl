@@ -105,11 +105,7 @@ class GameViewModel @Inject constructor(
     // ==================================================================================== Dialogs
 
     // Dialog Cancel Game
-    fun showDialogCancelGame(
-        timeControl: TimeControl,
-    ){
-        showDialogCancelGameUseCase(timeControl, _gameState, _dialogCancelGameShowing)
-    }
+    fun showDialogCancelGame(timeControl: TimeControl) = showDialogCancelGameUseCase(timeControl, _gameState, _dialogCancelGameShowing)
     fun onConfirmDialogCancelGame(){
         onConfirmDialogCancelGameUseCase(
             _dialogCancelGameShowing.value,
