@@ -71,6 +71,7 @@ fun SetupTimeScreen(
         var checkedPosition by rememberSaveable { mutableIntStateOf(defaultSelectedItem) }
 
         LazyColumn(
+            modifier = Modifier.testTag("SetupTimeScreen list"),
             contentPadding = PaddingValues(top = 56.dp, bottom = 80.dp)
         ){
             itemsIndexed(defaultTimeControls){ p, item ->
@@ -221,6 +222,7 @@ private fun TimeControlListItem(
     ) {
         Row(
             modifier = Modifier
+                .testTag("SetupTimeScreen_ListItem")
                 .fillMaxWidth()
                 .height(rowHeight)
                 .clickable(
