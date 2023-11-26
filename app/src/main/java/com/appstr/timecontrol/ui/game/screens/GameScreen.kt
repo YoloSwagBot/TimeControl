@@ -261,6 +261,7 @@ fun Player2Area(
                 fontSize = 16.sp,
                 color = black,
                 modifier = Modifier
+                    .testTag("Player 2 move label")
                     .rotate(180f)
                     .align(Alignment.BottomStart)
                     .padding(8.dp)
@@ -272,6 +273,7 @@ fun Player2Area(
             fontSize = 80.sp,
             color = black,
             modifier = Modifier
+                .testTag("Player 2 time label")
                 .rotate(180f)
                 .align(Alignment.Center)
         )
@@ -328,6 +330,7 @@ fun Player1Area(
                 fontSize = 16.sp,
                 color = black,
                 modifier = Modifier
+                    .testTag("Player 1 move label")
                     .align(Alignment.TopStart)
                     .padding(8.dp)
             )
@@ -336,7 +339,9 @@ fun Player1Area(
             text = gameState?.player1CurrentTime.formatTimeToText(),
             fontSize = 80.sp,
             color = black,
-            modifier = Modifier.align(Alignment.Center)
+            modifier = Modifier
+                .testTag("Player 1 time label")
+                .align(Alignment.Center)
         )
     }
 }
