@@ -1,4 +1,4 @@
-package com.appstr.timecontrol
+package com.appstr.timecontrol.hilt
 
 import com.appstr.timecontrol.data.repositories.GameStateRepository
 import com.appstr.timecontrol.domain.models.GameState

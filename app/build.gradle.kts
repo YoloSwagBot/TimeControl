@@ -18,7 +18,7 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "com.appstr.timecontrol.CustomTestRunner"
+        testInstrumentationRunner = "com.appstr.timecontrol.ApplicationTestRunner"
 
         vectorDrawables {
             useSupportLibrary = true
