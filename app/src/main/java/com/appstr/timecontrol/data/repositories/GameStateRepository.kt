@@ -6,7 +6,7 @@ import com.appstr.timecontrol.domain.interfaces.GameStateRepoIF
 import com.appstr.timecontrol.domain.models.GameState
 import javax.inject.Inject
 
-class GameStateRepository @Inject constructor(private val gameStateDao: GameStateDao) : GameStateRepoIF {
+open class GameStateRepository @Inject constructor(private val gameStateDao: GameStateDao) : GameStateRepoIF {
 
     override suspend fun getGameState(): GameState? = gameStateDao.getGameState()
 

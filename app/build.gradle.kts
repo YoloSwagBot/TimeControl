@@ -18,7 +18,8 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.appstr.timecontrol.CustomTestRunner"
+
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -77,14 +78,21 @@ dependencies {
     implementation("com.google.code.gson:gson:2.10.1")
 
 
+
+
+
+    // test coroutines
+
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+
+
     // Hilt/Dagger
     implementation("com.google.dagger:hilt-android:2.48.1")
     ksp("com.google.dagger:hilt-android-compiler:2.48.1")
+    testImplementation("com.google.dagger:hilt-android-testing:2.48.1")
     androidTestImplementation("com.google.dagger:hilt-android-testing:2.48.1") // TestRunner
     kspAndroidTest("com.google.dagger:hilt-android-compiler:2.48.1")
-    // Testing-Compose
-    debugImplementation("androidx.compose.ui:ui-test-manifest:1.5.4")
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.5.4")
+
     // JUnit
     testImplementation("junit:junit:4.13.2")
 
@@ -99,8 +107,24 @@ dependencies {
     testImplementation("com.google.truth:truth:1.1.4")
     androidTestImplementation("com.google.truth:truth:1.1.4")
 
+    // Mockito
+    testImplementation("org.mockito:mockito-core:5.7.0")
+    androidTestImplementation("org.mockito:mockito-android:5.7.0")
+//    testImplementation("org.mockito:mockito-core:5.7.0")
+//    testImplementation("org.mockito:mockito-inline:5.7.0")
+//    testImplementation("org.mockito.kotlin:mockito-kotlin:3.2.0")
+//    androidTestImplementation("org.mockito:mockito-core:5.7.0")
+//    androidTestImplementation("org.mockito:mockito-inline:5.7.0")
+//    androidTestImplementation("org.mockito:mockito-android:5.7.0")
+//    androidTestImplementation("org.mockito.kotlin:mockito-kotlin:3.2.0")
+
 //    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 //    androidTestImplementation(platform("androidx.compose:compose-bom:2023.03.00"))
+
+
+    // Testing-Compose
+    debugImplementation("androidx.compose.ui:ui-test-manifest:1.5.4")
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.5.4")
 //    debugImplementation("androidx.compose.ui:ui-tooling")
 }
 
