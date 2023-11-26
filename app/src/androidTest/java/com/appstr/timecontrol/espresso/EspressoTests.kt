@@ -1,33 +1,32 @@
 package com.appstr.timecontrol.espresso
 
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.appstr.timecontrol.data.repositories.GameStateRepository
-import dagger.hilt.android.testing.HiltAndroidTest
-import junit.framework.TestCase.assertTrue
-import org.junit.Before
-import org.junit.Test
-import org.junit.runner.RunWith
-import javax.inject.Inject
 
 
-
-@HiltAndroidTest
-@RunWith(AndroidJUnit4::class)
+//@HiltAndroidTest
+//@RunWith(AndroidJUnit4::class)
 class EspressoTests {
-
-    @Inject
-    lateinit var gameStateRepo: GameStateRepository
-
-    @Before
-    fun setup(){
-
-    }
-
-    @Test
-    fun canWeReadDataFromDatabase(){
-
-//        gameStateRepo.getGameState()
-        assertTrue(true)
-    }
+//
+////    @get:Rule var hiltRule = HiltAndroidRule(this)
+//    @get:Rule val composeTestRule = createComposeRule()
+//
+//
+//    @Before
+//    fun setup(){
+////        hiltRule.inject()
+////        composeTestRule.setContent {
+////            GameScreen()
+////        }
+//    }
+//
+//    @Test
+//    fun doesEspressoSeeQuestionMarkText(){
+//        ActivityScenario.launch(MainActivity::class.java).use { scenario ->
+//            scenario.onActivity {
+//                composeTestRule.onNode(hasText("?")).assertExists()
+//                Espresso.onView(withText("?")).check(matches(isDisplayed()))
+//            }
+//        }
+//
+//    }
 
 }

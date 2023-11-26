@@ -18,7 +18,8 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "com.appstr.timecontrol.ApplicationTestRunner"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+//        testInstrumentationRunner = "com.appstr.timecontrol.ApplicationTestRunner"
 
         vectorDrawables {
             useSupportLibrary = true
@@ -94,6 +95,8 @@ dependencies {
     testImplementation("com.google.dagger:hilt-android-testing:2.48.1")
     androidTestImplementation("com.google.dagger:hilt-android-testing:2.48.1") // TestRunner
     kspAndroidTest("com.google.dagger:hilt-android-compiler:2.48.1")
+    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
+    androidTestImplementation("androidx.hilt:hilt-navigation-compose:1.1.0") // viewModel injection
 
     // JUnit
     testImplementation("junit:junit:4.13.2")
@@ -104,6 +107,7 @@ dependencies {
     androidTestImplementation("androidx.test:core-ktx:1.5.0")
     androidTestImplementation("androidx.test:runner:1.5.2")
     androidTestImplementation("androidx.test:rules:1.5.0")
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
 
     // Truth(assertion library)
     testImplementation("com.google.truth:truth:1.1.4")
@@ -118,6 +122,11 @@ dependencies {
 
     // Robolectric
     testImplementation("org.robolectric:robolectric:4.11.1")
+
+    // Espresso
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    androidTestImplementation("androidx.test:runner:1.5.2")
+    androidTestImplementation("androidx.test:rules:1.5.0")
 
 
     // Testing-Compose

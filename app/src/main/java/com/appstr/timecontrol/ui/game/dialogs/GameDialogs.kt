@@ -28,7 +28,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.appstr.timecontrol.domain.models.GameState
 import com.appstr.timecontrol.domain.models.Player
 import com.appstr.timecontrol.ui.game.viewmodels.GameViewModel
@@ -48,7 +48,7 @@ import com.appstr.timecontrol.util.timeISValid
 fun DialogSetPlayerTime(
     gameState: GameState,
     player: Player,
-    gameVM: GameViewModel = viewModel()
+    gameVM: GameViewModel = hiltViewModel()
 ){
 
     Dialog(
@@ -198,7 +198,7 @@ fun DialogSetPlayerTime(
 
 @Composable
 fun DialogCheckCancelCurrentGame(
-    gameVM: GameViewModel = viewModel()
+    gameVM: GameViewModel = hiltViewModel()
 ){
     AlertDialog(
         modifier = Modifier

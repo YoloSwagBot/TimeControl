@@ -40,6 +40,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.appstr.timecontrol.domain.models.TimeControl
 import com.appstr.timecontrol.domain.models.exists
@@ -57,7 +58,7 @@ import com.appstr.timecontrol.util.defaultTimeControls
 
 @Composable
 fun SetupTimeScreen(
-    gameVM: GameViewModel = viewModel()
+    gameVM: GameViewModel = hiltViewModel()
 ){
 
     BoxWithConstraints(

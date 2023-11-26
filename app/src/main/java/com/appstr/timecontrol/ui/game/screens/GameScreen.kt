@@ -35,6 +35,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.appstr.timecontrol.R
 import com.appstr.timecontrol.domain.models.GameState
@@ -64,7 +65,7 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun GameScreen(
-    gameVM: GameViewModel = viewModel()
+    gameVM: GameViewModel = hiltViewModel()
 ){
 
     // TODO -- fix orientation to support landscape
