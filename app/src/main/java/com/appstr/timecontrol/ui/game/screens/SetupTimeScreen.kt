@@ -36,14 +36,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.appstr.timecontrol.ui.game.dialogs.DialogCheckCancelCurrentGame
 import com.appstr.timecontrol.domain.models.TimeControl
 import com.appstr.timecontrol.domain.models.exists
 import com.appstr.timecontrol.domain.models.toText
+import com.appstr.timecontrol.ui.game.dialogs.DialogCheckCancelCurrentGame
 import com.appstr.timecontrol.ui.game.viewmodels.GameViewModel
 import com.appstr.timecontrol.ui.theme.black
 import com.appstr.timecontrol.ui.theme.green
@@ -61,6 +62,7 @@ fun SetupTimeScreen(
 
     BoxWithConstraints(
         modifier = Modifier
+            .testTag("SetupTimeScreen container")
             .fillMaxSize()
             .background(color = white)
             .clickable(enabled = false) {}

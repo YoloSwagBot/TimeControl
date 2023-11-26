@@ -30,6 +30,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -203,6 +204,7 @@ fun ButtonsRow(
             contentDescription = "play",
             colorFilter = ColorFilter.tint(lightGreen900),
             modifier = Modifier
+                .testTag("SetupTimeScreen icon")
                 .size(48.dp)
                 .padding(end = 16.dp)
                 .clickable(

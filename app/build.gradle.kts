@@ -53,6 +53,10 @@ android {
         }
     }
 
+
+    testOptions {
+        unitTests.isIncludeAndroidResources = true
+    }
 }
 dependencies {
     // Kotlin core
@@ -62,8 +66,8 @@ dependencies {
     // Lifecycle-ViewModel
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
     // Compose
+    implementation(platform("androidx.compose:compose-bom:2023.06.01"))
     implementation("androidx.activity:activity-compose:1.8.1")
-    implementation(platform("androidx.compose:compose-bom:2023.03.00"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
@@ -71,6 +75,7 @@ dependencies {
     // Room
     implementation("androidx.room:room-runtime:2.6.0")
     implementation("androidx.room:room-ktx:2.6.0")
+    implementation("androidx.test.ext:junit-ktx:1.1.5")
     ksp("androidx.room:room-compiler:2.6.0")
 
 
@@ -79,10 +84,7 @@ dependencies {
 
 
 
-
-
     // test coroutines
-
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
 
 
@@ -114,10 +116,14 @@ dependencies {
     testImplementation("org.mockito:mockito-core:5.7.0")
     androidTestImplementation("org.mockito:mockito-android:5.7.0")
 
+    // Robolectric
+    testImplementation("org.robolectric:robolectric:4.11.1")
+
 
     // Testing-Compose
-    debugImplementation("androidx.compose.ui:ui-test-manifest:1.5.4")
+    testImplementation("androidx.compose.ui:ui-test-junit4:1.5.4")
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.5.4")
-//    debugImplementation("androidx.compose.ui:ui-tooling")
+    debugImplementation("androidx.compose.ui:ui-test-manifest:1.5.4")
+
 }
 
