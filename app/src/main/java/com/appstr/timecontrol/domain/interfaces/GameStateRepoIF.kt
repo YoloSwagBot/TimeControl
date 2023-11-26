@@ -8,4 +8,6 @@ interface GameStateRepoIF {
 
     suspend fun updateGameState(gameState: GameState)
 
+    suspend fun deleteAllGames()
+
 }

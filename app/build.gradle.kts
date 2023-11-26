@@ -107,19 +107,12 @@ dependencies {
     testImplementation("com.google.truth:truth:1.1.4")
     androidTestImplementation("com.google.truth:truth:1.1.4")
 
+    // Mockk
+    testImplementation("io.mockk:mockk:1.12.4")
+
     // Mockito
     testImplementation("org.mockito:mockito-core:5.7.0")
     androidTestImplementation("org.mockito:mockito-android:5.7.0")
-//    testImplementation("org.mockito:mockito-core:5.7.0")
-//    testImplementation("org.mockito:mockito-inline:5.7.0")
-//    testImplementation("org.mockito.kotlin:mockito-kotlin:3.2.0")
-//    androidTestImplementation("org.mockito:mockito-core:5.7.0")
-//    androidTestImplementation("org.mockito:mockito-inline:5.7.0")
-//    androidTestImplementation("org.mockito:mockito-android:5.7.0")
-//    androidTestImplementation("org.mockito.kotlin:mockito-kotlin:3.2.0")
-
-//    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-//    androidTestImplementation(platform("androidx.compose:compose-bom:2023.03.00"))
 
 
     // Testing-Compose

@@ -43,7 +43,6 @@ class MockitoTests {
         runTest {
             val oneMinuteGameState = GameState(timeControl = defaultTimeControls[0])
             Mockito.`when`(repoDao.getGameState()).thenReturn(oneMinuteGameState)
-//            repo.updateGameState(GameState(timeControl = defaultTimeControls[0]))
             assertThat(repo.getGameState()).isEqualTo(GameState(timeControl = defaultTimeControls[0]))
         }
     }

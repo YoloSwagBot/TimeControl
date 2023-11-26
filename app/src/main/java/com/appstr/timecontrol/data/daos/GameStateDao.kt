@@ -16,6 +16,9 @@ interface GameStateDao {
     @Query("SELECT * FROM table_games WHERE id == 1")
     suspend fun getGameState(): GameState?
 
+    @Query("DELETE FROM table_games")
+    suspend fun deleteAllGames()
+
 
 }
 

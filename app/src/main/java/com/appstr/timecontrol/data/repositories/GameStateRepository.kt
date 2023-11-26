@@ -13,4 +13,6 @@ open class GameStateRepository @Inject constructor(private val gameStateDao: Gam
     @WorkerThread
     override suspend fun updateGameState(gameState: GameState) = gameStateDao.putGameState(gameState)
 
+    override suspend fun deleteAllGames() = gameStateDao.deleteAllGames()
+
 }
