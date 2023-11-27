@@ -52,6 +52,9 @@ import com.appstr.timecontrol.ui.theme.green
 import com.appstr.timecontrol.ui.theme.lightGreen
 import com.appstr.timecontrol.ui.theme.lightGreen900
 import com.appstr.timecontrol.ui.theme.white
+import com.appstr.timecontrol.util.SETUPTIMESCREEN_CONTAINER
+import com.appstr.timecontrol.util.SETUPTIMESCREEN_LIST
+import com.appstr.timecontrol.util.SETUPTIMESCREEN_LISTITEM
 import com.appstr.timecontrol.util.defaultSelectedItem
 import com.appstr.timecontrol.util.defaultTimeControls
 
@@ -63,7 +66,7 @@ fun SetupTimeScreen(
 
     BoxWithConstraints(
         modifier = Modifier
-            .testTag("SetupTimeScreen container")
+            .testTag(SETUPTIMESCREEN_CONTAINER)
             .fillMaxSize()
             .background(color = white)
             .clickable(enabled = false) {}
@@ -72,7 +75,7 @@ fun SetupTimeScreen(
         var checkedPosition by rememberSaveable { mutableIntStateOf(defaultSelectedItem) }
 
         LazyColumn(
-            modifier = Modifier.testTag("SetupTimeScreen list"),
+            modifier = Modifier.testTag(SETUPTIMESCREEN_LIST),
             contentPadding = PaddingValues(top = 56.dp, bottom = 80.dp)
         ){
             itemsIndexed(defaultTimeControls){ p, item ->
@@ -223,7 +226,7 @@ private fun TimeControlListItem(
     ) {
         Row(
             modifier = Modifier
-                .testTag("SetupTimeScreen_ListItem")
+                .testTag(SETUPTIMESCREEN_LISTITEM)
                 .fillMaxWidth()
                 .height(rowHeight)
                 .clickable(

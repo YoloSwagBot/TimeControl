@@ -60,6 +60,11 @@ import com.appstr.timecontrol.ui.theme.red200
 import com.appstr.timecontrol.ui.theme.red500
 import com.appstr.timecontrol.ui.theme.teal
 import com.appstr.timecontrol.ui.theme.white
+import com.appstr.timecontrol.util.GAMESCREEN_PLAYER1_MOVE_LABEL
+import com.appstr.timecontrol.util.GAMESCREEN_PLAYER1_TIME_LABEL
+import com.appstr.timecontrol.util.GAMESCREEN_PLAYER2_MOVE_LABEL
+import com.appstr.timecontrol.util.GAMESCREEN_PLAYER2_TIME_LABEL
+import com.appstr.timecontrol.util.GAMESCREEN_SETUPTIMESCREEN_ICON
 import kotlinx.coroutines.delay
 
 
@@ -205,7 +210,7 @@ fun ButtonsRow(
             contentDescription = "play",
             colorFilter = ColorFilter.tint(lightGreen900),
             modifier = Modifier
-                .testTag("SetupTimeScreen icon")
+                .testTag(GAMESCREEN_SETUPTIMESCREEN_ICON)
                 .size(48.dp)
                 .padding(end = 16.dp)
                 .clickable(
@@ -262,7 +267,7 @@ fun Player2Area(
                 fontSize = 16.sp,
                 color = black,
                 modifier = Modifier
-                    .testTag("Player 2 move label")
+                    .testTag(GAMESCREEN_PLAYER2_MOVE_LABEL)
                     .rotate(180f)
                     .align(Alignment.BottomStart)
                     .padding(8.dp)
@@ -274,7 +279,7 @@ fun Player2Area(
             fontSize = 80.sp,
             color = black,
             modifier = Modifier
-                .testTag("Player 2 time label")
+                .testTag(GAMESCREEN_PLAYER2_TIME_LABEL)
                 .rotate(180f)
                 .align(Alignment.Center)
         )
@@ -331,7 +336,7 @@ fun Player1Area(
                 fontSize = 16.sp,
                 color = black,
                 modifier = Modifier
-                    .testTag("Player 1 move label")
+                    .testTag(GAMESCREEN_PLAYER1_MOVE_LABEL)
                     .align(Alignment.TopStart)
                     .padding(8.dp)
             )
@@ -341,7 +346,7 @@ fun Player1Area(
             fontSize = 80.sp,
             color = black,
             modifier = Modifier
-                .testTag("Player 1 time label")
+                .testTag(GAMESCREEN_PLAYER1_TIME_LABEL)
                 .align(Alignment.Center)
         )
     }

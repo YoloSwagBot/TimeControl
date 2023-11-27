@@ -1,4 +1,20 @@
 package com.appstr.timecontrol.composeui
 
-class SetupTimeScreenTests {
-}
+//@RunWith(RobolectricTestRunner::class)
+//class SetupTimeScreenTests {
+//    @get:Rule
+//    val composeTestRule = createComposeRule()
+//
+//
+//    @Before
+//    fun setup(){
+//
+//    }
+//
+//    @Test
+//    fun testB(){
+//        assert(true)
+//    }
+//
+//
+//}

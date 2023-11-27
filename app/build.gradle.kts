@@ -18,8 +18,8 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-//        testInstrumentationRunner = "com.appstr.timecontrol.ApplicationTestRunner"
+//        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.appstr.timecontrol.ApplicationTestRunner"
 
         vectorDrawables {
             useSupportLibrary = true
@@ -91,12 +91,18 @@ dependencies {
 
     // Hilt/Dagger
     implementation("com.google.dagger:hilt-android:2.48.1")
+    testImplementation("com.google.dagger:hilt-android:2.48.1")
+    androidTestImplementation("com.google.dagger:hilt-android:2.48.1")
+
     ksp("com.google.dagger:hilt-android-compiler:2.48.1")
-    testImplementation("com.google.dagger:hilt-android-testing:2.48.1")
-    androidTestImplementation("com.google.dagger:hilt-android-testing:2.48.1") // TestRunner
     kspAndroidTest("com.google.dagger:hilt-android-compiler:2.48.1")
+
+    testImplementation("com.google.dagger:hilt-android-testing:2.48.1")
+    androidTestImplementation("com.google.dagger:hilt-android-testing:2.48.1") // For Robolectric tests.
+
     implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
     androidTestImplementation("androidx.hilt:hilt-navigation-compose:1.1.0") // viewModel injection
+
 
     // JUnit
     testImplementation("junit:junit:4.13.2")
@@ -121,12 +127,13 @@ dependencies {
     androidTestImplementation("org.mockito:mockito-android:5.7.0")
 
     // Robolectric
-    testImplementation("org.robolectric:robolectric:4.11.1")
+//    testImplementation("org.robolectric:robolectric:4.11.1")
+//    androidTestImplementation("org.robolectric:robolectric:4.11.1")
 
     // Espresso
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    androidTestImplementation("androidx.test:runner:1.5.2")
-    androidTestImplementation("androidx.test:rules:1.5.0")
+//    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+//    androidTestImplementation("androidx.test:runner:1.5.2")
+//    androidTestImplementation("androidx.test:rules:1.5.0")
 
 
     // Testing-Compose

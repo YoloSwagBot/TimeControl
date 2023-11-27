@@ -6,7 +6,6 @@ import com.appstr.timecontrol.util.defaultTimeControls
 import com.google.common.truth.Truth.assertThat
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
@@ -26,7 +25,6 @@ class HiltJUnitTest {
     @Before
     fun setup(){
         hiltRule.inject()
-
         runTest {
             gameStateRepo.updateGameState(
                 GameState(timeControl = defaultTimeControls[0])
@@ -34,14 +32,11 @@ class HiltJUnitTest {
         }
     }
 
-
     @Test
     fun canWeReadDataFromDatabase() = runTest {
-        launch {
-            val gameState = gameStateRepo.getGameState()
-            println("canWeReadDataFromDatabase() ---- gameState: $gameState")
-            assertThat(gameState?.player1StartTime == 60000 && gameState.player2StartTime == 60000).isTrue()
-        }
+        val gameState = gameStateRepo.getGameState()
+        println("canWeReadDataFromDatabase() ---- gameState: $gameState")
+        assertThat(gameState?.player1StartTime == 60000 && gameState.player2StartTime == 60000).isTrue()
     }
 
 }

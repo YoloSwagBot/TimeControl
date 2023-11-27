@@ -34,6 +34,9 @@ import com.appstr.timecontrol.domain.models.Player
 import com.appstr.timecontrol.ui.game.viewmodels.GameViewModel
 import com.appstr.timecontrol.ui.theme.red
 import com.appstr.timecontrol.ui.theme.white
+import com.appstr.timecontrol.util.DIALOG_CANCELGAME
+import com.appstr.timecontrol.util.DIALOG_CANCELGAME_CANCEL
+import com.appstr.timecontrol.util.DIALOG_CANCELGAME_CONFIRM
 import com.appstr.timecontrol.util.hoursFrom
 import com.appstr.timecontrol.util.isValidHours
 import com.appstr.timecontrol.util.isValidMinutes
@@ -201,13 +204,13 @@ fun DialogCheckCancelCurrentGame(
     gameVM: GameViewModel = hiltViewModel()
 ){
     AlertDialog(
-        modifier = Modifier
-            .testTag("DialogCheckCancelCurrentGame"),
+        modifier = Modifier.testTag(DIALOG_CANCELGAME),
         title = {
             Text(text = "Cancel current game?")
         },
         dismissButton = {
             TextButton(
+                modifier = Modifier.testTag(DIALOG_CANCELGAME_CANCEL),
                 onClick = {
                     gameVM.onDismissDialogCancelGame()
                 }
@@ -220,7 +223,7 @@ fun DialogCheckCancelCurrentGame(
         },
         confirmButton = {
             TextButton(
-                modifier = Modifier.testTag("CancelGameDialog_Confirm"),
+                modifier = Modifier.testTag(DIALOG_CANCELGAME_CONFIRM),
                 onClick = {
                     gameVM.onConfirmDialogCancelGame()
                 }
