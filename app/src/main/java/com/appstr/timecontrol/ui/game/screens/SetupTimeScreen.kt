@@ -1,5 +1,6 @@
 package com.appstr.timecontrol.ui.game.screens
 
+import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -27,7 +28,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -40,12 +40,9 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.appstr.timecontrol.domain.models.TimeControl
-import com.appstr.timecontrol.domain.models.exists
 import com.appstr.timecontrol.domain.models.toText
-import com.appstr.timecontrol.ui.game.dialogs.DialogCheckCancelCurrentGame
 import com.appstr.timecontrol.ui.game.viewmodels.GameViewModel
 import com.appstr.timecontrol.ui.theme.black
 import com.appstr.timecontrol.ui.theme.green
@@ -61,7 +58,8 @@ import com.appstr.timecontrol.util.defaultTimeControls
 
 @Composable
 fun SetupTimeScreen(
-    gameVM: GameViewModel = hiltViewModel()
+    navController: NavController,
+    gameVM: GameViewModel
 ){
 
     BoxWithConstraints(
@@ -90,7 +88,7 @@ fun SetupTimeScreen(
             }
         }
 
-        Toolbar()
+        Toolbar(navController)
 
         ElevatedButton(
             modifier = Modifier
@@ -104,13 +102,15 @@ fun SetupTimeScreen(
                 pressedElevation = 16.dp
             ),
             onClick = {
-                if (gameVM.gameState.value.exists()) {
-                    gameVM.showDialogCancelGame(
-                        defaultTimeControls[checkedPosition]
-                    )
-                }else{
+                Log.d("CarsonBath", "SetupTimeScreen ---- onClick(set time) ---- 00")
+//                if (currentGameState.exists()) {
+//                    Log.d("CarsonBath", "SetupTimeScreen ---- onClick(set time) ---- 11")
+//                    navController.addDialog_AskCancelCurrentGame(DialogArgsAskCancelCurrentGame(defaultTimeControls[checkedPosition]))
+//                }else{
+//                    Log.d("CarsonBath", "SetupTimeScreen ---- onClick(set time) ---- 22")
+                    navController.popBackStack()
                     gameVM.setNewGame(defaultTimeControls[checkedPosition])
-                }
+//                }
             }
         ){
             Text(
@@ -120,14 +120,9 @@ fun SetupTimeScreen(
                 color = white
             )
         }
-
-        val dialogCancelGameShowing by gameVM.dialogCancelGameShowing.collectAsState()
-        if (dialogCancelGameShowing != null){
-            DialogCheckCancelCurrentGame()
-        }
     }
     BackHandler {
-        gameVM.closeSetupTimeScreen()
+        navController.popBackStack()
     }
 
 }
@@ -135,7 +130,7 @@ fun SetupTimeScreen(
 // Toolbar, (1) back_button, (2) title, (3) +custom button
 @Composable
 private fun Toolbar(
-    gameVM: GameViewModel = viewModel()
+    navController: NavController
 ){
     BoxWithConstraints(
         modifier = Modifier
@@ -156,7 +151,7 @@ private fun Toolbar(
                         radius = 24.dp
                     ),
                     onClick = {
-                        gameVM.closeSetupTimeScreen()
+                        navController.popBackStack()
                     }
                 ),
             imageVector = Icons.Filled.ArrowBack,

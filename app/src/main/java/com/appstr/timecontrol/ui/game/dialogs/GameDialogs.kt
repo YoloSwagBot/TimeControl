@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -28,9 +27,10 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.appstr.timecontrol.domain.models.GameState
 import com.appstr.timecontrol.domain.models.Player
+import com.appstr.timecontrol.domain.models.TimeControl
 import com.appstr.timecontrol.ui.game.viewmodels.GameViewModel
 import com.appstr.timecontrol.ui.theme.red
 import com.appstr.timecontrol.ui.theme.white
@@ -38,24 +38,20 @@ import com.appstr.timecontrol.util.DIALOG_CANCELGAME
 import com.appstr.timecontrol.util.DIALOG_CANCELGAME_CANCEL
 import com.appstr.timecontrol.util.DIALOG_CANCELGAME_CONFIRM
 import com.appstr.timecontrol.util.hoursFrom
-import com.appstr.timecontrol.util.isValidHours
-import com.appstr.timecontrol.util.isValidMinutes
-import com.appstr.timecontrol.util.isValidSeconds
 import com.appstr.timecontrol.util.minutesFrom
 import com.appstr.timecontrol.util.secondsFrom
-import com.appstr.timecontrol.util.timeISValid
 
 
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
 fun DialogSetPlayerTime(
+    navController: NavController,
     gameState: GameState,
-    player: Player,
-    gameVM: GameViewModel = hiltViewModel()
+    player: Player
 ){
 
     Dialog(
-        onDismissRequest = { gameVM.onDialogActionDismissSetPlayersTime() }
+        onDismissRequest = { navController.popBackStack() }
     ) {
         val playerHours = when (player){
             Player.ONE -> gameState.player1CurrentTime.hoursFrom()
@@ -174,22 +170,16 @@ fun DialogSetPlayerTime(
                     .padding(end = 8.dp)
                     .align(alignment = Alignment.End),
             ) {
-                TextButton(onClick = { gameVM.onDialogActionDismissSetPlayersTime() }) {
+                TextButton(onClick = { navController.popBackStack() }) {
                     Text(text = "Cancel")
                 }
                 TextButton(
                     onClick = {
-                        when {
-                            (!hours.isValidHours() || !minutes.isValidMinutes() || !seconds.isValidSeconds())
-                                    || !timeISValid(hours, minutes, seconds)
-                                -> errorMessage = "INVALID FORMAT"
-                            else -> gameVM.onConfirmDialogSetPlayersTime(
-                                player,
-                                hours.toIntOrNull() ?: 0,
-                                minutes.toIntOrNull() ?: 0,
-                                seconds.toIntOrNull() ?: 0
-                            )
-                        }
+//                        if (gameVM.setPlayersTime(player, hours, minutes, seconds)){
+//                            navController.popBackStack()
+//                        }else{
+//                            errorMessage = "INVALID FORMAT"
+//                        }
                     }
                 ) {
                     Text(text = "Confirm")
@@ -200,8 +190,10 @@ fun DialogSetPlayerTime(
 }
 
 @Composable
-fun DialogCheckCancelCurrentGame(
-    gameVM: GameViewModel = hiltViewModel()
+fun DialogAskCancelCurrentGame(
+    navController: NavController,
+    timeControlToSet: TimeControl,
+    gameVM: GameViewModel
 ){
     AlertDialog(
         modifier = Modifier.testTag(DIALOG_CANCELGAME),
@@ -212,20 +204,21 @@ fun DialogCheckCancelCurrentGame(
             TextButton(
                 modifier = Modifier.testTag(DIALOG_CANCELGAME_CANCEL),
                 onClick = {
-                    gameVM.onDismissDialogCancelGame()
+                    navController.popBackStack()
                 }
             ) {
                 Text(text = "Cancel")
             }
         },
         onDismissRequest = {
-            gameVM.onDismissDialogCancelGame()
+            navController.popBackStack()
         },
         confirmButton = {
             TextButton(
                 modifier = Modifier.testTag(DIALOG_CANCELGAME_CONFIRM),
                 onClick = {
-                    gameVM.onConfirmDialogCancelGame()
+                    gameVM.setNewGame(timeControlToSet)
+                    navController.popBackStack()
                 }
             ) {
                 Text("Confirm")
