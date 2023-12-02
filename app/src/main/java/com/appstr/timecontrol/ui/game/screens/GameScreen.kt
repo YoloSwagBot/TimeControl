@@ -1,7 +1,6 @@
 package com.appstr.timecontrol.ui.game.screens
 
-import android.app.Activity
-import android.content.pm.ActivityInfo
+import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -21,15 +20,12 @@ import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
@@ -37,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.appstr.timecontrol.R
 import com.appstr.timecontrol.domain.models.GameState
 import com.appstr.timecontrol.domain.models.Player
@@ -46,7 +43,8 @@ import com.appstr.timecontrol.domain.models.exists
 import com.appstr.timecontrol.domain.models.formatTimeToText
 import com.appstr.timecontrol.domain.models.isNotOver
 import com.appstr.timecontrol.domain.models.isOver
-import com.appstr.timecontrol.ui.game.dialogs.DialogSetPlayerTime
+import com.appstr.timecontrol.domain.models.toText
+import com.appstr.timecontrol.ui.game.dialogs.DialogArgsSetPlayerTime
 import com.appstr.timecontrol.ui.game.viewmodels.GameViewModel
 import com.appstr.timecontrol.ui.theme.black
 import com.appstr.timecontrol.ui.theme.blueGrey
@@ -65,28 +63,30 @@ import com.appstr.timecontrol.util.GAMESCREEN_PLAYER1_TIME_LABEL
 import com.appstr.timecontrol.util.GAMESCREEN_PLAYER2_MOVE_LABEL
 import com.appstr.timecontrol.util.GAMESCREEN_PLAYER2_TIME_LABEL
 import com.appstr.timecontrol.util.GAMESCREEN_SETUPTIMESCREEN_ICON
+import com.appstr.timecontrol.util.Screen
+import com.appstr.timecontrol.util.addDialog_SetPlayerTime
 import kotlinx.coroutines.delay
 
 
 @Composable
 fun GameScreen(
+    navController: NavController,
+    gState: GameState,
     gameVM: GameViewModel = hiltViewModel()
 ){
 
-    // TODO -- fix orientation to support landscape
-    val context = LocalContext.current
-    (context as? Activity)?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+//    val context = LocalContext.current
+//    (context as? Activity)?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
-    val gameState = gameVM.gameState.collectAsState(null)
+//    val gameState = gameVM.gameState.collectAsState(null)
+    Log.d("Carson", "GameScreen ---- 00 ---- gState ---- ${gState.timeControl?.toText()} ---- ${gState.hashCode()}")
 
     // decrement time
-    gameState.value?.let { game ->
-        if (game.isNotOver() && !game.isPaused){
-            LaunchedEffect(Unit){
-                while(true){
-                    delay(1000)
-                    gameVM.decrementTimeByTurn()
-                }
+    if (gState.isNotOver() && !gState.isPaused){
+        LaunchedEffect(Unit){
+            while(true){
+                delay(1000)
+                gameVM.decrementTimeByTurn()
             }
         }
     }
@@ -97,19 +97,21 @@ fun GameScreen(
         val playerAreaHeight = ((maxHeight - centerButtonsHeight) / 2)
 
         Column {
-            Player2Area(gameState = gameState.value, screenWidth = screenWidth, topPlayerAreaHeight = playerAreaHeight)
-            ButtonsRow(gameState = gameState.value, screenWidth = screenWidth, centerButtonsRowHeight = centerButtonsHeight)
-            Player1Area(gameState = gameState.value, screenWidth = screenWidth, botPlayerHeight = playerAreaHeight)
+            Player2Area(gameState = gState, screenWidth = screenWidth, topPlayerAreaHeight = playerAreaHeight)
+            ButtonsRow(navController, gameState = gState, screenWidth = screenWidth, centerButtonsRowHeight = centerButtonsHeight)
+            Player1Area(gameState = gState, screenWidth = screenWidth, botPlayerHeight = playerAreaHeight)
         }
 
         BottomRow(
-            gameState = gameState.value,
+            navController = navController,
+            gameState = gState,
             maxWidth = maxWidth,
             maxHeight = maxHeight,
             player = Player.TWO
         )
         BottomRow(
-            gameState = gameState.value,
+            navController = navController,
+            gameState = gState,
             maxWidth = maxWidth,
             maxHeight = maxHeight,
             player = Player.ONE
@@ -117,33 +119,14 @@ fun GameScreen(
 
     }
 
-
-    val dialogSetPlayerTime by gameVM.dialogSetPlayersTimeShowing.collectAsState()
-    dialogSetPlayerTime?.let { pl ->
-        gameState.value?.let { gs ->
-            DialogSetPlayerTime(gameState = gs, player = pl)
-        }
-    }
-
-//    val dialogEndGame by gameVM.dialogEndGameShowing.collectAsState()
-//    dialogEndGame?.let { pl ->
-//        gameState.value?.let { gs ->
-//            DialogEndGame(gameState = gs, player = pl)
-//        }
-//    }
-
-    val showSetupTimeScreen by gameVM.screenSetupTimeShowing.collectAsState()
-    if (showSetupTimeScreen){
-        SetupTimeScreen()
-    }
-
     BackHandler(false) {
-        gameState.value?.let { gameVM.pauseGame() }
+        gameVM.pauseGame()
     }
 }
 
 @Composable
 fun ButtonsRow(
+    navController: NavController,
     gameState: GameState?,
     screenWidth: Dp,
     centerButtonsRowHeight: Dp,
@@ -221,7 +204,7 @@ fun ButtonsRow(
                         radius = 32.dp
                     ),
                     onClick = {
-                        gameVM.showSetupTimeScreen()
+                        navController.navigate(Screen.SetupTimeScreen.route)
                     }
                 )
         )
@@ -233,7 +216,7 @@ fun Player2Area(
     gameState: GameState?,
     screenWidth: Dp,
     topPlayerAreaHeight: Dp,
-    gameViewModel: GameViewModel = viewModel()
+    gameVM: GameViewModel = hiltViewModel()
 ){
     Box(
         modifier = Modifier
@@ -255,7 +238,7 @@ fun Player2Area(
                 indication = rememberRipple(color = teal),
                 onClick = {
                     if (gameState.isNotOver()) {
-                        gameViewModel.onPlayer2Click()
+                        gameVM.onPlayer2Click()
                     }
                 }
             )
@@ -303,7 +286,7 @@ fun Player1Area(
     gameState: GameState?,
     screenWidth: Dp,
     botPlayerHeight: Dp,
-    gameViewModel: GameViewModel = viewModel()
+    gameVM: GameViewModel = hiltViewModel()
 ){
     Box(
         modifier = Modifier
@@ -325,7 +308,7 @@ fun Player1Area(
                 indication = rememberRipple(color = teal),
                 onClick = {
                     if (gameState.isNotOver()) {
-                        gameViewModel.onPlayer1Click()
+                        gameVM.onPlayer1Click()
                     }
                 }
             )
@@ -354,6 +337,7 @@ fun Player1Area(
 
 @Composable
 fun BottomRow(
+    navController: NavController,
     gameState: GameState?,
     maxWidth: Dp,
     maxHeight: Dp,
@@ -395,7 +379,12 @@ fun BottomRow(
                         radius = 32.dp
                     ),
                     onClick = {
-                        gameState?.let { gameVM.showDialogSetPlayersTime(player) }
+                        navController.addDialog_SetPlayerTime(
+                            DialogArgsSetPlayerTime(
+                                gameState,
+                                player
+                            )
+                        )
                     }
                 ),
             colorFilter = ColorFilter.tint(color = lightGreen900)

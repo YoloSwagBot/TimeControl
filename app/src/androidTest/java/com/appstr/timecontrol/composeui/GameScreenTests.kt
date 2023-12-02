@@ -1,47 +1,59 @@
 package com.appstr.timecontrol.composeui
 
+import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.createComposeRule
-import com.appstr.timecontrol.data.repositories.GameStateRepository
-import dagger.hilt.android.testing.HiltAndroidRule
-import dagger.hilt.android.testing.HiltAndroidTest
+import androidx.compose.ui.test.onNodeWithTag
+import com.appstr.timecontrol.ui.game.screens.GameScreen
+import com.appstr.timecontrol.ui.game.viewmodels.GameViewModel
+import com.appstr.timecontrol.util.GAMESCREEN_PLAYER1_MOVE_LABEL
+import com.appstr.timecontrol.util.GAMESCREEN_PLAYER1_TIME_LABEL
+import com.appstr.timecontrol.util.GAMESCREEN_PLAYER2_MOVE_LABEL
+import com.appstr.timecontrol.util.GAMESCREEN_PLAYER2_TIME_LABEL
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import javax.inject.Inject
+import org.mockito.Mockito
 
 
-@HiltAndroidTest
+//@HiltAndroidTest
 class GameScreenTests {
-    @get:Rule
-    var hiltRule = HiltAndroidRule(this)
+
+//    @get:Rule
+//    var hiltRule = HiltAndroidRule(this)
 
     @get:Rule
     val composeTestRule = createComposeRule()
 
-    @Inject
-    lateinit var gameStateRepo: GameStateRepository
+//    @get:Rule
+//    val rule: RuleChain = RuleChain
+//        .outerRule(hiltRule)
+//        .around(composeTestRule)
+
+//    @Inject
+//    lateinit var gameStateRepo: GameStateRepository
 
     @Before
     fun setup(){
-        hiltRule.inject()
+//        hiltRule.inject()
+//        runTest {
+//            gameStateRepo.deleteAllGames()
+//        }
 
-        runTest {
-            gameStateRepo.deleteAllGames()
+        composeTestRule.setContent {
+            GameScreen(Mockito.mock(GameViewModel::class.java))
         }
-
-//        composeTestRule.setContent { GameScreen() }
 
     }
 
     @Test
-    fun testInitialGameScreenState() = runTest {
+    fun testInitialGameScreenState() {
+        composeTestRule.onNodeWithTag(GAMESCREEN_PLAYER1_TIME_LABEL).assertTextEquals("?")
+        composeTestRule.onNodeWithTag(GAMESCREEN_PLAYER2_TIME_LABEL).assertTextEquals("?")
+        composeTestRule.onNodeWithTag(GAMESCREEN_PLAYER1_MOVE_LABEL).assertTextEquals("0")
+        composeTestRule.onNodeWithTag(GAMESCREEN_PLAYER2_MOVE_LABEL).assertTextEquals("0")
 //        val gameState = gameStateRepo.getGameState()
 //        assertThat(gameState).isNull()
-//        composeTestRule.onNodeWithTag(GAMESCREEN_PLAYER1_TIME_LABEL).assertTextEquals("?")
-//        composeTestRule.onNodeWithTag(GAMESCREEN_PLAYER2_TIME_LABEL).assertTextEquals("?")
-//        composeTestRule.onNodeWithTag(GAMESCREEN_PLAYER1_MOVE_LABEL).assertTextEquals("0")
-//        composeTestRule.onNodeWithTag(GAMESCREEN_PLAYER2_MOVE_LABEL).assertTextEquals("0")
 //        assertThat(gameState?.player1MoveCount == 0 && gameState.player2MoveCount == 0).isTrue()
 //        assertThat(gameState?.player1StartTime.formatTimeToText() == "?" && gameState?.player2StartTime.formatTimeToText() == "?").isTrue()
         assert(true)

@@ -19,7 +19,7 @@ android {
         versionName = "1.0"
 
 //        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        testInstrumentationRunner = "com.appstr.timecontrol.ApplicationTestRunner"
+        testInstrumentationRunner = "com.appstr.timecontrol.HiltTestRunner"
 
         vectorDrawables {
             useSupportLibrary = true
@@ -60,8 +60,13 @@ android {
     }
 }
 dependencies {
+
     // Kotlin core
     implementation("androidx.core:core-ktx:1.12.0")
+    
+    // Navigation
+    implementation("androidx.navigation:navigation-compose:2.7.5")
+
     // Lifecycle
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
     // Lifecycle-ViewModel
@@ -74,10 +79,10 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
     // Room
-    implementation("androidx.room:room-runtime:2.6.0")
-    implementation("androidx.room:room-ktx:2.6.0")
+    implementation("androidx.room:room-runtime:2.6.1")
+    implementation("androidx.room:room-ktx:2.6.1")
     implementation("androidx.test.ext:junit-ktx:1.1.5")
-    ksp("androidx.room:room-compiler:2.6.0")
+    ksp("androidx.room:room-compiler:2.6.1")
 
 
     // Gson
@@ -95,6 +100,7 @@ dependencies {
     androidTestImplementation("com.google.dagger:hilt-android:2.48.1")
 
     ksp("com.google.dagger:hilt-android-compiler:2.48.1")
+    kspTest("com.google.dagger:hilt-android-compiler:2.48.1")
     kspAndroidTest("com.google.dagger:hilt-android-compiler:2.48.1")
 
     testImplementation("com.google.dagger:hilt-android-testing:2.48.1")

@@ -16,7 +16,7 @@ class RetrieveGameStateUseCase @Inject constructor() {
         _gameState: MutableStateFlow<GameState?>
     ){
         scope.launch(Dispatchers.IO) {
-            _gameState.update { repo.getGameState() }
+            _gameState.update { repo.getGameState() ?: GameState() }
         }
     }
 }

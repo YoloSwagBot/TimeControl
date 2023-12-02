@@ -5,15 +5,14 @@ import androidx.room.PrimaryKey
 import com.appstr.timecontrol.util.hour
 import com.appstr.timecontrol.util.minute
 import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 
 
 @Entity(tableName = "table_games")
-data class GameState @Inject constructor (
+data class GameState (
 
     @PrimaryKey val id: Int = 1,
 
-    val timeControl: TimeControl? = null,
+    var timeControl: TimeControl? = null,
 
     var turn: Player = Player.ONE,
     var isPaused: Boolean = true,

@@ -1,9 +1,10 @@
 package com.appstr.timecontrol.domain.usecases
 
+import android.util.Log
 import com.appstr.timecontrol.domain.models.GameState
 import com.appstr.timecontrol.domain.models.TimeControl
+import com.appstr.timecontrol.domain.models.toText
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 class SetNewGameUseCase @Inject constructor() {
@@ -11,6 +12,8 @@ class SetNewGameUseCase @Inject constructor() {
         timeControl: TimeControl,
         _gameState: MutableStateFlow<GameState?>
     ){
-        _gameState.update { GameState(timeControl = timeControl) }
+        Log.d("Carson", "SetNewGameUseCase ---- 00 ---- ${_gameState.value?.timeControl?.toText()}")
+//        _gameState.emit(GameState(timeControl = timeControl))
+        Log.d("Carson", "SetNewGameUseCase ---- 11 ---- ${_gameState.value?.timeControl?.toText()}")
     }
 }
