@@ -31,8 +31,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.appstr.timecontrol.R
 import com.appstr.timecontrol.domain.models.GameState
@@ -71,14 +69,13 @@ import kotlinx.coroutines.delay
 @Composable
 fun GameScreen(
     navController: NavController,
-    gState: GameState,
-    gameVM: GameViewModel = hiltViewModel()
+    gameVM: GameViewModel
 ){
 
 //    val context = LocalContext.current
 //    (context as? Activity)?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
-//    val gameState = gameVM.gameState.collectAsState(null)
+    val gState = gameVM.gState
     Log.d("Carson", "GameScreen ---- 00 ---- gState ---- ${gState.timeControl?.toText()} ---- ${gState.hashCode()}")
 
     // decrement time
@@ -97,9 +94,25 @@ fun GameScreen(
         val playerAreaHeight = ((maxHeight - centerButtonsHeight) / 2)
 
         Column {
-            Player2Area(gameState = gState, screenWidth = screenWidth, topPlayerAreaHeight = playerAreaHeight)
-            ButtonsRow(navController, gameState = gState, screenWidth = screenWidth, centerButtonsRowHeight = centerButtonsHeight)
-            Player1Area(gameState = gState, screenWidth = screenWidth, botPlayerHeight = playerAreaHeight)
+            Player2Area(
+                gameState = gState,
+                screenWidth = screenWidth,
+                topPlayerAreaHeight = playerAreaHeight,
+                gameVM = gameVM
+            )
+            ButtonsRow(
+                navController = navController,
+                gameState = gState,
+                screenWidth = screenWidth,
+                centerButtonsRowHeight = centerButtonsHeight,
+                gameVM = gameVM
+            )
+            Player1Area(
+                gameState = gState,
+                screenWidth = screenWidth,
+                botPlayerHeight = playerAreaHeight,
+                gameVM = gameVM
+            )
         }
 
         BottomRow(
@@ -130,7 +143,7 @@ fun ButtonsRow(
     gameState: GameState?,
     screenWidth: Dp,
     centerButtonsRowHeight: Dp,
-    gameVM: GameViewModel = viewModel()
+    gameVM: GameViewModel
 ){
     val centerIconHeights = 56.dp
 
@@ -216,7 +229,7 @@ fun Player2Area(
     gameState: GameState?,
     screenWidth: Dp,
     topPlayerAreaHeight: Dp,
-    gameVM: GameViewModel = hiltViewModel()
+    gameVM: GameViewModel
 ){
     Box(
         modifier = Modifier
@@ -286,7 +299,7 @@ fun Player1Area(
     gameState: GameState?,
     screenWidth: Dp,
     botPlayerHeight: Dp,
-    gameVM: GameViewModel = hiltViewModel()
+    gameVM: GameViewModel
 ){
     Box(
         modifier = Modifier
@@ -341,8 +354,7 @@ fun BottomRow(
     gameState: GameState?,
     maxWidth: Dp,
     maxHeight: Dp,
-    player: Player,
-    gameVM: GameViewModel = viewModel()
+    player: Player
 ){
 
     val modifier = when (player){

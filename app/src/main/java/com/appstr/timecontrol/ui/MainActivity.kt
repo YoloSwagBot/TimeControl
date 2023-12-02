@@ -31,6 +31,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
             TimeControlTheme {
                 Navigation()
@@ -53,17 +54,14 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Navigation(
-    gameVM: GameViewModel = hiltViewModel()
-){
+fun Navigation(){
     // A surface container using the 'background' color from the theme
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
         val navController = rememberNavController()
-
-
+        val gameVM: GameViewModel = hiltViewModel()
 
         NavHost(
             navController = navController,
@@ -73,11 +71,14 @@ fun Navigation(
             composable(route = Screen.GameScreen.route){
                 GameScreen(
                     navController = navController,
-                    gState = gameVM.gState
+                    gameVM = gameVM
                 )
             }
             composable(route = Screen.SetupTimeScreen.route){
-                SetupTimeScreen(navController = navController)
+                SetupTimeScreen(
+                    navController = navController,
+                    gameVM = gameVM
+                )
             }
 
             /* Dialogs */
@@ -96,7 +97,8 @@ fun Navigation(
                 entry.getArgs_AskCancelCurrentGame()?.let { args->
                     DialogAskCancelCurrentGame(
                         navController = navController,
-                        timeControlToSet = args.timeControlToSet
+                        timeControlToSet = args.timeControlToSet,
+                        gameVM = gameVM
                     )
                 }
             }

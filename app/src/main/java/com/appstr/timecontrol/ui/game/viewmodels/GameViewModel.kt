@@ -2,13 +2,12 @@ package com.appstr.timecontrol.ui.game.viewmodels
 
 import android.app.Application
 import android.util.Log
-import androidx.compose.foundation.gestures.ModifierLocalScrollableContainerProvider.value
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ViewModel
 import com.appstr.timecontrol.data.repositories.GameStateRepository
 import com.appstr.timecontrol.domain.models.GameState
 import com.appstr.timecontrol.domain.models.Player
@@ -24,10 +23,6 @@ import com.appstr.timecontrol.domain.usecases.gamescreen.OnClickPlayer1AreaUseCa
 import com.appstr.timecontrol.domain.usecases.gamescreen.OnClickPlayer2AreaUseCase
 import com.appstr.timecontrol.domain.usecases.gamescreen.PauseGameUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
@@ -49,18 +44,10 @@ class GameViewModel @Inject constructor(
     val retrieveGameStateUseCase: RetrieveGameStateUseCase,
     val saveGameStateUseCase: SaveGameStateUseCase
 
-) : AndroidViewModel(appli), DefaultLifecycleObserver {
+) : ViewModel(), DefaultLifecycleObserver {
 
     // Game State object
-    var gState = mutableStateOf<GameState>(GameState())
-        get() = {
-
-            return value
-        }
-        private set(value){
-
-            field = value
-        }
+    var gState by mutableStateOf<GameState>(GameState())
 
 //    private val _gameState: MutableStateFlow<GameState?> = MutableStateFlow(null)
 //    val gameState = _gameState.asStateFlow()
@@ -81,16 +68,11 @@ class GameViewModel @Inject constructor(
     // ====================================================================================
 
     fun setNewGame(timeControl: TimeControl){
-        CoroutineScope(Dispatchers.Main).launch{
-            Log.d("Carson", "GameViewModel ---- setNewGame(tc) ---- 00 ---- ${gState.timeControl?.toText()} ---- ${gState.hashCode()}")
-            gState = gState.copy(timeControl = timeControl.copy())
-            Log.d("Carson", "GameViewModel ---- setNewGame(tc) ---- 11 ---- ${gState.timeControl?.toText()} ---- ${gState.hashCode()}")
-            Log.d("Carson", "GameViewModel ---- setNewGame(tc) ---- 22 ---- ${gState.timeControl?.toText()} ---- ${gState.hashCode()}")
-            delay(2000)
-            Log.d("Carson", "GameViewModel ---- setNewGame(tc) ---- 33 ---- ${gState.timeControl?.toText()} ---- ${gState.hashCode()}")
-        }
-
-//        Log.d("Carson", "GameViewModel ---- setNewGame(tc) ---- 12 ---- ${gameState.value?.timeControl?.toText() ?: -2}")
+        Log.d("Carson", "GameViewModel ---- setNewGame(tc) ---- 00 ---- ${gState.timeControl?.toText()} ---- ${gState.hashCode()}")
+        gState = GameState(timeControl = timeControl)
+        Log.d("Carson", "GameViewModel ---- setNewGame(tc) ---- 11 ---- ${gState.timeControl?.toText()} ---- ${gState.hashCode()}")
+//        Log.d("Carson", "GameViewModel ---- setNewGame(tc) ---- 22 ---- ${gState.timeControl?.toText()} ---- ${gState.hashCode()}")
+//        Log.d("Carson", "GameViewModel ---- setNewGame(tc) ---- 33 ---- ${gState.timeControl?.toText()} ---- ${gState.hashCode()}")
     }
 
     // ====================================================================================

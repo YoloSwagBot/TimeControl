@@ -40,7 +40,6 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.appstr.timecontrol.domain.models.TimeControl
 import com.appstr.timecontrol.domain.models.toText
@@ -60,7 +59,7 @@ import com.appstr.timecontrol.util.defaultTimeControls
 @Composable
 fun SetupTimeScreen(
     navController: NavController,
-    gameVM: GameViewModel = hiltViewModel()
+    gameVM: GameViewModel
 ){
 
     BoxWithConstraints(
@@ -131,8 +130,7 @@ fun SetupTimeScreen(
 // Toolbar, (1) back_button, (2) title, (3) +custom button
 @Composable
 private fun Toolbar(
-    navController: NavController,
-    gameVM: GameViewModel = hiltViewModel()
+    navController: NavController
 ){
     BoxWithConstraints(
         modifier = Modifier
