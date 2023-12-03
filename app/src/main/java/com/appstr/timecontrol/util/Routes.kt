@@ -1,11 +1,9 @@
 package com.appstr.timecontrol.util
 
-import android.os.Build
-import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
-import com.appstr.timecontrol.domain.models.doesntExist
-import com.appstr.timecontrol.ui.game.dialogs.DialogArgsAskCancelCurrentGame
-import com.appstr.timecontrol.ui.game.dialogs.DialogArgsSetPlayerTime
+import com.appstr.timecontrol.domain.models.Player
+import com.appstr.timecontrol.domain.models.TimeControl
+import com.appstr.timecontrol.domain.models.toInt
 
 
 sealed class Screen(val route: String) {
@@ -14,9 +12,21 @@ sealed class Screen(val route: String) {
 
 }
 
-sealed class Dialog(val route: String){
-    data object AskCancelCurrentGame: Dialog("DialogCheckCancelCurrentGame")
-    data object SetPlayerTime: Dialog("DialogSetPlayerTime")
+sealed class Dialog(){
+    sealed class AskCancelCurrentGame: Dialog(){
+        companion object {
+            val args = "/{startValue}/{increment}"
+            val route = "DialogAskCancelCurrentGame$args"
+            fun createRoute(tc: TimeControl): String = "DialogAskCancelCurrentGame/${tc.startValue}/${tc.increment}"
+        }
+    }
+    sealed class SetPlayerTime: Dialog(){
+        companion object {
+            val args = "/{player}/{playerTime}"
+            val route = "DialogSetPlayerTime$args"
+            fun createRoute(player: Player, playerTime: Int): String = "DialogSetPlayerTime/${player.toInt()}/$playerTime"
+        }
+    }
 }
 
 
@@ -31,34 +41,13 @@ fun NavController.navigateToSetupTimeScreen(){
  * Dialog_AskCancelCurrentGame
  */
 
-fun NavController.addDialog_AskCancelCurrentGame(args: DialogArgsAskCancelCurrentGame){
-    currentBackStackEntry?.arguments?.putSerializable(DialogArgsAskCancelCurrentGame.key, args)
-    navigate(Dialog.AskCancelCurrentGame.route)
-}
-fun NavBackStackEntry.getArgs_AskCancelCurrentGame(): DialogArgsAskCancelCurrentGame? {
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
-        arguments?.getSerializable(DialogArgsAskCancelCurrentGame.key, DialogArgsAskCancelCurrentGame::class.java)
-    }else{
-        arguments?.getSerializable(DialogArgsAskCancelCurrentGame.key) as DialogArgsAskCancelCurrentGame
-    }
+fun NavController.addDialog_AskCancelCurrentGame(tc: TimeControl){
+    navigate(Dialog.AskCancelCurrentGame.createRoute(tc))
 }
 
 /**
  * Dialog_SetPlayerTime
  */
-fun NavController.addDialog_SetPlayerTime(args: DialogArgsSetPlayerTime){
-    if (args.gameState.doesntExist()) return
-
-    currentBackStackEntry?.arguments?.putSerializable(DialogArgsSetPlayerTime.key, args)
-    navigate(Dialog.SetPlayerTime.route)
+fun NavController.addDialog_SetPlayerTime(player: Player, playerTime: Int){
+    navigate(Dialog.SetPlayerTime.createRoute(player, playerTime))
 }
-fun NavBackStackEntry.getArgs_SetPlayerTime(): DialogArgsSetPlayerTime? {
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
-        arguments?.getSerializable(DialogArgsSetPlayerTime.key, DialogArgsSetPlayerTime::class.java)
-    }else{
-        arguments?.getSerializable(DialogArgsSetPlayerTime.key) as DialogArgsSetPlayerTime
-    }
-}
-
-
-

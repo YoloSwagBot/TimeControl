@@ -42,7 +42,6 @@ import com.appstr.timecontrol.domain.models.formatTimeToText
 import com.appstr.timecontrol.domain.models.isNotOver
 import com.appstr.timecontrol.domain.models.isOver
 import com.appstr.timecontrol.domain.models.toText
-import com.appstr.timecontrol.ui.game.dialogs.DialogArgsSetPlayerTime
 import com.appstr.timecontrol.ui.game.viewmodels.GameViewModel
 import com.appstr.timecontrol.ui.theme.black
 import com.appstr.timecontrol.ui.theme.blueGrey
@@ -83,7 +82,7 @@ fun GameScreen(
         LaunchedEffect(Unit){
             while(true){
                 delay(1000)
-                gameVM.decrementTimeByTurn()
+                gameVM.decrementTimeUseCase(gameVM)
             }
         }
     }
@@ -133,7 +132,7 @@ fun GameScreen(
     }
 
     BackHandler(false) {
-        gameVM.pauseGame()
+        gameVM.pauseGameUseCase(gameVM)
     }
 }
 
@@ -195,7 +194,7 @@ fun ButtonsRow(
                         ),
                         onClick = {
                             if (gameState.isNotOver()) {
-                                gameVM.pausePlayClicked()
+                                gameVM.onClickPausePlayUseCase(gameVM)
                             }
                         }
                     )
@@ -251,7 +250,7 @@ fun Player2Area(
                 indication = rememberRipple(color = teal),
                 onClick = {
                     if (gameState.isNotOver()) {
-                        gameVM.onPlayer2Click()
+                        gameVM.onClickPlayer2AreaUseCase(gameVM)
                     }
                 }
             )
@@ -279,18 +278,6 @@ fun Player2Area(
                 .rotate(180f)
                 .align(Alignment.Center)
         )
-        // game is over - label
-//        if (gameState.isOver()){
-//            Text(
-//                text = gameState?.gameEndReason?.toExplanation() ?: "Game Over: null",
-//                fontSize = 16.sp,
-//                color = black,
-//                modifier = Modifier
-//                    .rotate(180f)
-//                    .align(Alignment.BottomCenter)
-//                    .padding(start = 64.dp, top = 8.dp, end = 64.dp)
-//            )
-//        }
     }
 }
 
@@ -321,7 +308,7 @@ fun Player1Area(
                 indication = rememberRipple(color = teal),
                 onClick = {
                     if (gameState.isNotOver()) {
-                        gameVM.onPlayer1Click()
+                        gameVM.onClickPlayer1AreaUseCase(gameVM)
                     }
                 }
             )
@@ -391,12 +378,17 @@ fun BottomRow(
                         radius = 32.dp
                     ),
                     onClick = {
-                        navController.addDialog_SetPlayerTime(
-                            DialogArgsSetPlayerTime(
-                                gameState,
-                                player
+                        Log.d("Carson", "GameScreen ---- setPlayerTime ---- 00")
+                        gameState?.run {
+                            Log.d("Carson", "GameScreen ---- setPlayerTime ---- 11")
+                            navController.addDialog_SetPlayerTime(
+                                player = player,
+                                playerTime = when (player){
+                                    Player.ONE -> { player1CurrentTime }
+                                    Player.TWO -> { player2CurrentTime }
+                                }
                             )
-                        )
+                        }
                     }
                 ),
             colorFilter = ColorFilter.tint(color = lightGreen900)

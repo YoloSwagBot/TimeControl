@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.appstr.timecontrol.domain.models.TimeControl
+import com.appstr.timecontrol.domain.models.exists
 import com.appstr.timecontrol.domain.models.toText
 import com.appstr.timecontrol.ui.game.viewmodels.GameViewModel
 import com.appstr.timecontrol.ui.theme.black
@@ -52,6 +53,7 @@ import com.appstr.timecontrol.ui.theme.white
 import com.appstr.timecontrol.util.SETUPTIMESCREEN_CONTAINER
 import com.appstr.timecontrol.util.SETUPTIMESCREEN_LIST
 import com.appstr.timecontrol.util.SETUPTIMESCREEN_LISTITEM
+import com.appstr.timecontrol.util.addDialog_AskCancelCurrentGame
 import com.appstr.timecontrol.util.defaultSelectedItem
 import com.appstr.timecontrol.util.defaultTimeControls
 
@@ -103,14 +105,14 @@ fun SetupTimeScreen(
             ),
             onClick = {
                 Log.d("CarsonBath", "SetupTimeScreen ---- onClick(set time) ---- 00")
-//                if (currentGameState.exists()) {
-//                    Log.d("CarsonBath", "SetupTimeScreen ---- onClick(set time) ---- 11")
-//                    navController.addDialog_AskCancelCurrentGame(DialogArgsAskCancelCurrentGame(defaultTimeControls[checkedPosition]))
-//                }else{
-//                    Log.d("CarsonBath", "SetupTimeScreen ---- onClick(set time) ---- 22")
+                if (gameVM.gState.exists()) {
+                    Log.d("CarsonBath", "SetupTimeScreen ---- onClick(set time) ---- 11")
+                    navController.addDialog_AskCancelCurrentGame(defaultTimeControls[checkedPosition])
+                }else{
+                    Log.d("CarsonBath", "SetupTimeScreen ---- onClick(set time) ---- 22")
                     navController.popBackStack()
-                    gameVM.setNewGame(defaultTimeControls[checkedPosition])
-//                }
+                    gameVM.setNewGameUseCase(defaultTimeControls[checkedPosition], gameVM)
+                }
             }
         ){
             Text(
