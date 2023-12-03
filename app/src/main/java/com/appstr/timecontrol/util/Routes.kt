@@ -30,9 +30,9 @@ sealed class Dialog(){
 }
 
 
-fun NavController.navigateToGameScreen(){
-    navigate(Screen.GameScreen.route)
-}
+//fun NavController.navigateToGameScreen(){
+//    navigate(Screen.GameScreen.route)
+//}
 fun NavController.navigateToSetupTimeScreen(){
     navigate(Screen.SetupTimeScreen.route)
 }

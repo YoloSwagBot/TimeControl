@@ -41,7 +41,6 @@ import com.appstr.timecontrol.domain.models.exists
 import com.appstr.timecontrol.domain.models.formatTimeToText
 import com.appstr.timecontrol.domain.models.isNotOver
 import com.appstr.timecontrol.domain.models.isOver
-import com.appstr.timecontrol.domain.models.toText
 import com.appstr.timecontrol.ui.game.viewmodels.GameViewModel
 import com.appstr.timecontrol.ui.theme.black
 import com.appstr.timecontrol.ui.theme.blueGrey
@@ -60,8 +59,8 @@ import com.appstr.timecontrol.util.GAMESCREEN_PLAYER1_TIME_LABEL
 import com.appstr.timecontrol.util.GAMESCREEN_PLAYER2_MOVE_LABEL
 import com.appstr.timecontrol.util.GAMESCREEN_PLAYER2_TIME_LABEL
 import com.appstr.timecontrol.util.GAMESCREEN_SETUPTIMESCREEN_ICON
-import com.appstr.timecontrol.util.Screen
 import com.appstr.timecontrol.util.addDialog_SetPlayerTime
+import com.appstr.timecontrol.util.navigateToSetupTimeScreen
 import kotlinx.coroutines.delay
 
 
@@ -71,11 +70,8 @@ fun GameScreen(
     gameVM: GameViewModel
 ){
 
-//    val context = LocalContext.current
-//    (context as? Activity)?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-
     val gState = gameVM.gState
-    Log.d("Carson", "GameScreen ---- 00 ---- gState ---- ${gState.timeControl?.toText()} ---- ${gState.hashCode()}")
+//    Log.d("Carson", "GameScreen ---- 00 ---- gState ---- ${gState.timeControl?.toText()} ---- ${gState.hashCode()}")
 
     // decrement time
     if (gState.isNotOver() && !gState.isPaused){
@@ -216,7 +212,7 @@ fun ButtonsRow(
                         radius = 32.dp
                     ),
                     onClick = {
-                        navController.navigate(Screen.SetupTimeScreen.route)
+                        navController.navigateToSetupTimeScreen()
                     }
                 )
         )
