@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.appstr.timecontrol.data.repositories.GameStateRepository
 import com.appstr.timecontrol.domain.models.GameState
 import com.appstr.timecontrol.domain.usecases.RetrieveGameStateUseCase
@@ -48,13 +49,13 @@ class GameViewModel @Inject constructor(
     override fun onResume(owner: LifecycleOwner) {
         super.onResume(owner)
 
-//        retrieveGameStateUseCase(repo, viewModelScope, _gameState)
+        retrieveGameStateUseCase(repo, viewModelScope, this)
     }
 
     override fun onPause(owner: LifecycleOwner) {
         super.onPause(owner)
 
-//        saveGameStateUseCase(repo, viewModelScope, gameState.value)
+        saveGameStateUseCase(repo, viewModelScope, gState)
     }
 
 }
