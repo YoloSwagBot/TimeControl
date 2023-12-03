@@ -11,12 +11,10 @@ class SaveGameStateUseCase @Inject constructor() {
     operator fun invoke(
         repo: GameStateRepository,
         scope: CoroutineScope,
-        gameState: GameState?
+        gameState: GameState
     ){
-        gameState?.let{
-            scope.launch(Dispatchers.IO) {
-                repo.updateGameState(it)
-            }
+        scope.launch(Dispatchers.IO) {
+            repo.updateGameState(gameState)
         }
     }
 }
