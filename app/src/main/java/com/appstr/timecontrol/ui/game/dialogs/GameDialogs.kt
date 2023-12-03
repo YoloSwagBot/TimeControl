@@ -28,7 +28,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
-import com.appstr.timecontrol.domain.models.GameState
 import com.appstr.timecontrol.domain.models.Player
 import com.appstr.timecontrol.domain.models.TimeControl
 import com.appstr.timecontrol.ui.game.viewmodels.GameViewModel
@@ -37,6 +36,7 @@ import com.appstr.timecontrol.ui.theme.white
 import com.appstr.timecontrol.util.DIALOG_CANCELGAME
 import com.appstr.timecontrol.util.DIALOG_CANCELGAME_CANCEL
 import com.appstr.timecontrol.util.DIALOG_CANCELGAME_CONFIRM
+import com.appstr.timecontrol.util.Screen
 import com.appstr.timecontrol.util.hoursFrom
 import com.appstr.timecontrol.util.minutesFrom
 import com.appstr.timecontrol.util.secondsFrom
@@ -46,28 +46,17 @@ import com.appstr.timecontrol.util.secondsFrom
 @Composable
 fun DialogSetPlayerTime(
     navController: NavController,
-    gameState: GameState,
-    player: Player
+    player: Player,
+    playerTime: Int,
+    gameVM: GameViewModel
 ){
 
     Dialog(
         onDismissRequest = { navController.popBackStack() }
     ) {
-        val playerHours = when (player){
-            Player.ONE -> gameState.player1CurrentTime.hoursFrom()
-            Player.TWO -> gameState.player2CurrentTime.hoursFrom()
-        }
-        val playerMinutes = when (player){
-            Player.ONE -> gameState.player1CurrentTime.minutesFrom()
-            Player.TWO -> gameState.player2CurrentTime.minutesFrom()
-        }
-        val playerSeconds = when (player){
-            Player.ONE -> gameState.player1CurrentTime.secondsFrom()
-            Player.TWO -> gameState.player2CurrentTime.secondsFrom()
-        }
-        var hours by rememberSaveable { mutableStateOf(playerHours) }
-        var minutes by rememberSaveable { mutableStateOf(playerMinutes) }
-        var seconds by rememberSaveable { mutableStateOf(playerSeconds) }
+        var hours by rememberSaveable { mutableStateOf(playerTime.hoursFrom()) }
+        var minutes by rememberSaveable { mutableStateOf(playerTime.minutesFrom()) }
+        var seconds by rememberSaveable { mutableStateOf(playerTime.secondsFrom()) }
 
         var errorMessage by rememberSaveable { mutableStateOf("") }
 
@@ -175,11 +164,11 @@ fun DialogSetPlayerTime(
                 }
                 TextButton(
                     onClick = {
-//                        if (gameVM.setPlayersTime(player, hours, minutes, seconds)){
-//                            navController.popBackStack()
-//                        }else{
-//                            errorMessage = "INVALID FORMAT"
-//                        }
+                        if (gameVM.setPlayersTimeUseCase(player, hours, minutes, seconds, gameVM)){
+                            navController.popBackStack()
+                        }else{
+                            errorMessage = "INVALID FORMAT"
+                        }
                     }
                 ) {
                     Text(text = "Confirm")
@@ -217,8 +206,8 @@ fun DialogAskCancelCurrentGame(
             TextButton(
                 modifier = Modifier.testTag(DIALOG_CANCELGAME_CONFIRM),
                 onClick = {
-                    gameVM.setNewGame(timeControlToSet)
-                    navController.popBackStack()
+                    gameVM.setNewGameUseCase(timeControlToSet, gameVM)
+                    navController.popBackStack(route = Screen.GameScreen.route, inclusive = false)
                 }
             ) {
                 Text("Confirm")

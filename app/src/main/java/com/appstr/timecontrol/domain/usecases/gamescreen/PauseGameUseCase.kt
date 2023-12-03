@@ -1,14 +1,12 @@
 package com.appstr.timecontrol.domain.usecases.gamescreen
 
-import com.appstr.timecontrol.domain.models.GameState
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.update
+import com.appstr.timecontrol.ui.game.viewmodels.GameViewModel
 import javax.inject.Inject
 
 class PauseGameUseCase @Inject constructor() {
     operator fun invoke(
-        _gameState: MutableStateFlow<GameState?>
+        gameVM: GameViewModel
     ){
-        _gameState.update { it?.copy(isPaused = true) }
+        gameVM.gState = gameVM.gState.copy(isPaused = true)
     }
 }

@@ -33,6 +33,15 @@ sealed class Player {
     data object ONE: Player()
     data object TWO: Player()
 }
+fun Int?.toPlayer(): Player = when(this){
+    2 -> Player.TWO
+    else -> Player.ONE
+}
+fun Player.toInt(): Int = when(this){
+    Player.ONE -> 1
+    Player.TWO -> 2
+}
+
 
 fun GameState?.doesntExist(): Boolean = this == null || this.timeControl == null
 fun GameState?.exists(): Boolean = this != null && this.timeControl != null

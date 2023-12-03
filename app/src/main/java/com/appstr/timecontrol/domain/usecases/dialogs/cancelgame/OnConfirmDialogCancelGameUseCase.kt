@@ -4,7 +4,6 @@ import com.appstr.timecontrol.domain.models.GameState
 import com.appstr.timecontrol.domain.models.TimeControl
 import com.appstr.timecontrol.domain.usecases.SetNewGameUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 class OnConfirmDialogCancelGameUseCase @Inject constructor() {
@@ -15,11 +14,11 @@ class OnConfirmDialogCancelGameUseCase @Inject constructor() {
         _dialogCancelGameShowing: MutableStateFlow<TimeControl?>,
         _screenSetupTimeShowing: MutableStateFlow<Boolean>
     ){
-        dialogCancelGameTimeControl?.let { tc ->
-            setNewGameUseCase(tc, _gameState)
-        }
-
-        _dialogCancelGameShowing.update { null }
-        _screenSetupTimeShowing.update { false }
+//        dialogCancelGameTimeControl?.let { tc ->
+//            setNewGameUseCase(tc, _gameState)
+//        }
+//
+//        _dialogCancelGameShowing.update { null }
+//        _screenSetupTimeShowing.update { false }
     }
 }
