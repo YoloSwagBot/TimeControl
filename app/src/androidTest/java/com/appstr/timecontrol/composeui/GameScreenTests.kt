@@ -3,20 +3,18 @@ package com.appstr.timecontrol.composeui
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
-import com.appstr.timecontrol.ui.game.screens.GameScreen
-import com.appstr.timecontrol.ui.game.viewmodels.GameViewModel
 import com.appstr.timecontrol.util.GAMESCREEN_PLAYER1_MOVE_LABEL
 import com.appstr.timecontrol.util.GAMESCREEN_PLAYER1_TIME_LABEL
 import com.appstr.timecontrol.util.GAMESCREEN_PLAYER2_MOVE_LABEL
 import com.appstr.timecontrol.util.GAMESCREEN_PLAYER2_TIME_LABEL
+import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.Mockito
 
 
-//@HiltAndroidTest
+@HiltAndroidTest
 class GameScreenTests {
 
 //    @get:Rule
@@ -41,7 +39,7 @@ class GameScreenTests {
 //        }
 
         composeTestRule.setContent {
-            GameScreen(Mockito.mock(GameViewModel::class.java))
+//            GameScreen(Mockito.mock(GameViewModel::class.java))
         }
 
     }

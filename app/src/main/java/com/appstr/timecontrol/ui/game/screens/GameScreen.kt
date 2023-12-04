@@ -54,8 +54,10 @@ import com.appstr.timecontrol.ui.theme.red200
 import com.appstr.timecontrol.ui.theme.red500
 import com.appstr.timecontrol.ui.theme.teal
 import com.appstr.timecontrol.ui.theme.white
+import com.appstr.timecontrol.util.GAMESCREEN_PLAYER1_BACKGROUND
 import com.appstr.timecontrol.util.GAMESCREEN_PLAYER1_MOVE_LABEL
 import com.appstr.timecontrol.util.GAMESCREEN_PLAYER1_TIME_LABEL
+import com.appstr.timecontrol.util.GAMESCREEN_PLAYER2_BACKGROUND
 import com.appstr.timecontrol.util.GAMESCREEN_PLAYER2_MOVE_LABEL
 import com.appstr.timecontrol.util.GAMESCREEN_PLAYER2_TIME_LABEL
 import com.appstr.timecontrol.util.GAMESCREEN_SETUPTIMESCREEN_ICON
@@ -228,6 +230,7 @@ fun Player2Area(
 ){
     Box(
         modifier = Modifier
+            .testTag(GAMESCREEN_PLAYER1_BACKGROUND)
             .width(screenWidth)
             .height(topPlayerAreaHeight)
             .background(
@@ -286,6 +289,7 @@ fun Player1Area(
 ){
     Box(
         modifier = Modifier
+            .testTag(GAMESCREEN_PLAYER2_BACKGROUND)
             .width(screenWidth)
             .height(botPlayerHeight)
             .background(

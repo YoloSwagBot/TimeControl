@@ -21,7 +21,7 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-//         used to save/recreate game_state during app destruction/creation
+        // used to save/recreate game_state during app destruction/creation
         val gameVM: GameViewModel by viewModels()
         lifecycle.addObserver(gameVM)
     }
