@@ -15,7 +15,7 @@ class RetrieveGameStateUseCase @Inject constructor() {
         gameVM: GameViewModel
     ){
         scope.launch(Dispatchers.IO) {
-            gameVM.gState = repo.getGameState() ?: GameState()
+            gameVM.gState.value = repo.getGameState() ?: GameState()
         }
     }
 }

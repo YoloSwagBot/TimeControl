@@ -7,6 +7,6 @@ class PauseGameUseCase @Inject constructor() {
     operator fun invoke(
         gameVM: GameViewModel
     ){
-        gameVM.gState = gameVM.gState.copy(isPaused = true)
+        gameVM.gState.value = gameVM.gState.value.copy(isPaused = true)
     }
 }

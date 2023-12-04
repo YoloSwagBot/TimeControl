@@ -105,13 +105,13 @@ fun SetupTimeScreen(
             ),
             onClick = {
                 Log.d("CarsonBath", "SetupTimeScreen ---- onClick(set time) ---- 00")
-                if (gameVM.gState.exists()) {
+                if (gameVM.gState.value.exists()) {
                     Log.d("CarsonBath", "SetupTimeScreen ---- onClick(set time) ---- 11")
                     navController.addDialog_AskCancelCurrentGame(defaultTimeControls[checkedPosition])
                 }else{
                     Log.d("CarsonBath", "SetupTimeScreen ---- onClick(set time) ---- 22")
-                    navController.popBackStack()
                     gameVM.setNewGameUseCase(defaultTimeControls[checkedPosition], gameVM)
+                    navController.popBackStack()
                 }
             }
         ){

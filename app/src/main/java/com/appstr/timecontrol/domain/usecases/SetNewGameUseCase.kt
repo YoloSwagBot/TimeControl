@@ -11,7 +11,7 @@ class SetNewGameUseCase @Inject constructor() {
         gameVM: GameViewModel
     ){
 //        Log.d("Carson", "SetNewGameUseCase ---- 00 ---- ${_gameState.value?.timeControl?.toText()}")
-        gameVM.gState = GameState(timeControl = timeControl)
+        gameVM.gState.value = GameState(timeControl = timeControl)
 //        Log.d("Carson", "SetNewGameUseCase ---- 11 ---- ${_gameState.value?.timeControl?.toText()}")
     }
 }

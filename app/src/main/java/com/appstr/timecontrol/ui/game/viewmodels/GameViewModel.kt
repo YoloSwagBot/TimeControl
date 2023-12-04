@@ -1,8 +1,6 @@
 package com.appstr.timecontrol.ui.game.viewmodels
 
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
@@ -41,7 +39,7 @@ class GameViewModel @Inject constructor(
 
 ) : ViewModel(), DefaultLifecycleObserver {
 
-    var gState by mutableStateOf<GameState>(GameState())
+    var gState = mutableStateOf(GameState())
 
     // ====================================================================================
     // Holds state through lifecycle changes, ie: app destruction and creation
@@ -55,7 +53,7 @@ class GameViewModel @Inject constructor(
     override fun onPause(owner: LifecycleOwner) {
         super.onPause(owner)
 
-        saveGameStateUseCase(repo, viewModelScope, gState)
+        saveGameStateUseCase(repo, viewModelScope, gState.value)
     }
 
 }

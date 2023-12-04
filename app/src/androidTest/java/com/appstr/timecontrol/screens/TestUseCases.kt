@@ -163,6 +163,22 @@ class TestUseCases {
     }
 
     @Test
+    fun test_UseCase_OnPlayer1AreaClicked_withIncrement(){
+        // test turn changes AND color of backgrounds change
+        gameViewModel.gState = GameState(
+            timeControl = defaultTimeControls[defaultSelectedItem+1], // should be 10 mins + 5
+            isPaused = false
+        )
+        val initialGameState = gameViewModel.gState.copy()
+
+        gameViewModel.onClickPlayer1AreaUseCase(gameViewModel)
+
+        assertThat(gameViewModel.gState.turn == Player.TWO).isTrue()
+        assertThat(gameViewModel.gState.player1MoveCount == initialGameState.player1MoveCount+1).isTrue()
+        assertThat(gameViewModel.gState.player1CurrentTime == initialGameState.player1CurrentTime+(1000*(gameViewModel.gState.timeControl?.increment?:0))).isTrue()
+    }
+
+    @Test
     fun test_UseCase_OnPlayer2AreaClicked_gamePaused(){
         // test turn changes AND color of backgrounds change
         gameViewModel.gState = GameState(
@@ -199,6 +215,25 @@ class TestUseCases {
     }
 
     @Test
+    fun test_UseCase_OnPlayer2AreaClicked_withIncrement(){
+        // test turn changes AND color of backgrounds change
+        gameViewModel.gState = GameState(
+            timeControl = defaultTimeControls[defaultSelectedItem+1], // should be 10 mins + 5
+            turn = Player.TWO,
+            isPaused = false
+        )
+        val initialGameState = gameViewModel.gState.copy()
+
+        gameViewModel.onClickPlayer2AreaUseCase(gameViewModel)
+
+
+        assertThat(gameViewModel.gState.turn == Player.ONE).isTrue()
+        assertThat(gameViewModel.gState.player2MoveCount == initialGameState.player2MoveCount+1).isTrue()
+        assertThat(gameViewModel.gState.player2CurrentTime == initialGameState.player2CurrentTime+(1000*(gameViewModel.gState.timeControl?.increment?:0))).isTrue()
+
+    }
+
+    @Test
     fun test_UseCase_PauseGame(){
         gameViewModel.gState = GameState(timeControl = defaultTimeControls[defaultSelectedItem], isPaused = false)
 
@@ -207,13 +242,6 @@ class TestUseCases {
         assertThat(gameViewModel.gState.isPaused).isTrue()
     }
 
-//    @Test
-//    fun test_UseCase_PauseGame_onActivityPaused(){
-//        gameViewModel.gState = GameState(timeControl = defaultTimeControls[defaultSelectedItem], isPaused = false)
-//
-//
-//        assertThat(gameViewModel.gState.isPaused).isTrue()
-//    }
 
 }
 

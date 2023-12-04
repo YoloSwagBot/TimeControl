@@ -7,7 +7,7 @@ const val second = 1000
 const val minute = 60 * second
 const val hour = 60 * minute
 
-val defaultSelectedItem: Int = 7 // 10 mins + 5
+val defaultSelectedItem: Int = 6 // 10 mins + 5
 val defaultTimeControls = listOf<TimeControl>(
     TimeControl(minute, 0), // bullet 1+0
     TimeControl(2* minute, 1), // bullet 2+1

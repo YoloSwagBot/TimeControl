@@ -9,10 +9,13 @@ class OnClickPlayer2AreaUseCase @Inject constructor() {
     operator fun invoke(
         gameVM: GameViewModel
     ){
-        gameVM.gState.apply {
-            if (!isPaused && isNotOver() && turn == Player.TWO){
-                turn = Player.ONE
-                player2MoveCount += 1
+        gameVM.gState.value.let {
+            if (!it.isPaused && it.isNotOver() && it.turn == Player.TWO){
+                it.turn = Player.ONE
+                it.player2MoveCount += 1
+                if ((it.timeControl?.increment ?: 0) > 0){
+                    it.player2CurrentTime += (1000*(it.timeControl?.increment ?: 0))
+                }
             }
         }
     }

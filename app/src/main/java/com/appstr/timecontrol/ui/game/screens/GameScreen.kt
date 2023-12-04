@@ -41,6 +41,7 @@ import com.appstr.timecontrol.domain.models.exists
 import com.appstr.timecontrol.domain.models.formatTimeToText
 import com.appstr.timecontrol.domain.models.isNotOver
 import com.appstr.timecontrol.domain.models.isOver
+import com.appstr.timecontrol.domain.models.toText
 import com.appstr.timecontrol.ui.game.viewmodels.GameViewModel
 import com.appstr.timecontrol.ui.theme.black
 import com.appstr.timecontrol.ui.theme.blueGrey
@@ -69,11 +70,11 @@ import kotlinx.coroutines.delay
 @Composable
 fun GameScreen(
     navController: NavController,
+    gState: GameState,
     gameVM: GameViewModel
 ){
 
-    val gState = gameVM.gState
-//    Log.d("Carson", "GameScreen ---- 00 ---- gState ---- ${gState.timeControl?.toText()} ---- ${gState.hashCode()}")
+    Log.d("Carson", "GameScreen ---- 00 ---- gState ---- ${gState.timeControl?.toText()} ---- ${gState.hashCode()}")
 
     // decrement time
     if (gState.isNotOver() && !gState.isPaused){
@@ -191,9 +192,7 @@ fun ButtonsRow(
                             radius = 32.dp
                         ),
                         onClick = {
-                            if (gameState.isNotOver()) {
-                                gameVM.onClickPausePlayUseCase(gameVM)
-                            }
+                            gameVM.onClickPausePlayUseCase(gameVM)
                         }
                     )
             )
@@ -383,9 +382,14 @@ fun BottomRow(
                             Log.d("Carson", "GameScreen ---- setPlayerTime ---- 11")
                             navController.addDialog_SetPlayerTime(
                                 player = player,
-                                playerTime = when (player){
-                                    Player.ONE -> { player1CurrentTime }
-                                    Player.TWO -> { player2CurrentTime }
+                                playerTime = when (player) {
+                                    Player.ONE -> {
+                                        player1CurrentTime
+                                    }
+
+                                    Player.TWO -> {
+                                        player2CurrentTime
+                                    }
                                 }
                             )
                         }

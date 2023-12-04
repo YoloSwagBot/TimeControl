@@ -30,7 +30,7 @@ class SetPlayersTimeUseCase @Inject constructor() {
 
         val newTime = (hrs * hour) + (mins * minute) + (secs * second)
 
-        val currentGameState = gameVM.gState
+        val currentGameState = gameVM.gState.value
         Log.d("Carson", "SetPlayersTimeUseCase --PRE-- original_GameState: ${currentGameState.player1CurrentTime}")
         Log.d("Carson", "SetPlayersTimeUseCase --PRE-- original_GameState: ${currentGameState.player2CurrentTime}")
         val newGameState = currentGameState.copy()
@@ -46,7 +46,7 @@ class SetPlayersTimeUseCase @Inject constructor() {
         }
         Log.d("Carson", "SetPlayersTimeUseCase --POST-- p1_Time: ${newGameState.player1CurrentTime}")
         Log.d("Carson", "SetPlayersTimeUseCase --POST-- p2_Time: ${newGameState.player2CurrentTime}")
-        gameVM.gState = newGameState
+        gameVM.gState.value = newGameState
         return true
     }
 }
