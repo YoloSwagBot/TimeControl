@@ -1,6 +1,7 @@
 package com.appstr.timecontrol.domain.usecases.gamescreen
 
 import com.appstr.timecontrol.domain.models.Player
+import com.appstr.timecontrol.domain.models.isOver
 import com.appstr.timecontrol.ui.game.viewmodels.GameViewModel
 import com.appstr.timecontrol.util.second
 import javax.inject.Inject
@@ -10,6 +11,7 @@ class DecrementTimeUseCase @Inject constructor() {
         gameVM: GameViewModel
     ){
         gameVM.gState.let { game ->
+            if (game.isOver()) return
             when (game.turn){
                 Player.ONE -> {
                     gameVM.gState = game.copy(

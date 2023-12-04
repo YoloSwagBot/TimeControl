@@ -7,6 +7,6 @@ class OnClickPausePlayUseCase @Inject constructor(){
     operator fun invoke(
         gameVM: GameViewModel
     ){
-        gameVM.gState = gameVM.gState.copy(isPaused = !gameVM.gState.isPaused)
+        gameVM.gState.isPaused = !gameVM.gState.isPaused
     }
 }
