@@ -20,6 +20,8 @@ import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,6 +43,7 @@ import com.appstr.timecontrol.domain.models.exists
 import com.appstr.timecontrol.domain.models.formatTimeToText
 import com.appstr.timecontrol.domain.models.isNotOver
 import com.appstr.timecontrol.domain.models.isOver
+import com.appstr.timecontrol.domain.models.toText
 import com.appstr.timecontrol.ui.game.viewmodels.GameViewModel
 import com.appstr.timecontrol.ui.theme.black
 import com.appstr.timecontrol.ui.theme.blueGrey
@@ -72,15 +75,15 @@ fun GameScreen(
     gameVM: GameViewModel
 ){
 
-    val gState = gameVM.gState
-//    Log.d("Carson", "GameScreen ---- 00 ---- gState ---- ${gState.timeControl?.toText()} ---- ${gState.hashCode()}")
+    val gState by gameVM.gameState.collectAsState()
+    Log.d("Carson", "GameScreen ---- 00 ---- gState ---- ${gState.timeControl?.toText()} ---- ${gState.hashCode()}")
 
     // decrement time
     if (gState.isNotOver() && !gState.isPaused){
         LaunchedEffect(Unit){
             while(true){
                 delay(1000)
-                gameVM.decrementTimeUseCase(gameVM)
+                gameVM.decrementTimeUseCase()
             }
         }
     }
@@ -130,7 +133,7 @@ fun GameScreen(
     }
 
     BackHandler(false) {
-        gameVM.pauseGameUseCase(gameVM)
+        gameVM.pauseGameUseCase()
     }
 }
 
@@ -191,9 +194,7 @@ fun ButtonsRow(
                             radius = 32.dp
                         ),
                         onClick = {
-                            if (gameState.isNotOver()) {
-                                gameVM.onClickPausePlayUseCase(gameVM)
-                            }
+                            gameVM.onClickPausePlayUseCase()
                         }
                     )
             )
@@ -249,7 +250,7 @@ fun Player2Area(
                 indication = rememberRipple(color = teal),
                 onClick = {
                     if (gameState.isNotOver()) {
-                        gameVM.onClickPlayer2AreaUseCase(gameVM)
+                        gameVM.onClickPlayer2AreaUseCase()
                     }
                 }
             )
@@ -308,7 +309,7 @@ fun Player1Area(
                 indication = rememberRipple(color = teal),
                 onClick = {
                     if (gameState.isNotOver()) {
-                        gameVM.onClickPlayer1AreaUseCase(gameVM)
+                        gameVM.onClickPlayer1AreaUseCase()
                     }
                 }
             )
@@ -383,9 +384,14 @@ fun BottomRow(
                             Log.d("Carson", "GameScreen ---- setPlayerTime ---- 11")
                             navController.addDialog_SetPlayerTime(
                                 player = player,
-                                playerTime = when (player){
-                                    Player.ONE -> { player1CurrentTime }
-                                    Player.TWO -> { player2CurrentTime }
+                                playerTime = when (player) {
+                                    Player.ONE -> {
+                                        player1CurrentTime
+                                    }
+
+                                    Player.TWO -> {
+                                        player2CurrentTime
+                                    }
                                 }
                             )
                         }

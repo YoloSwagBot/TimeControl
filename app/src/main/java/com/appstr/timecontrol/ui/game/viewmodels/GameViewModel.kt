@@ -1,8 +1,5 @@
 package com.appstr.timecontrol.ui.game.viewmodels
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
@@ -19,6 +16,8 @@ import com.appstr.timecontrol.domain.usecases.gamescreen.OnClickPlayer1AreaUseCa
 import com.appstr.timecontrol.domain.usecases.gamescreen.OnClickPlayer2AreaUseCase
 import com.appstr.timecontrol.domain.usecases.gamescreen.PauseGameUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
 
@@ -26,22 +25,24 @@ import javax.inject.Inject
 class GameViewModel @Inject constructor(
     val repo: GameStateRepository,
 
-    val decrementTimeUseCase: DecrementTimeUseCase,
-    val onClickPausePlayUseCase: OnClickPausePlayUseCase,
-    val onClickPlayer1AreaUseCase: OnClickPlayer1AreaUseCase,
-    val onClickPlayer2AreaUseCase: OnClickPlayer2AreaUseCase,
-    val pauseGameUseCase: PauseGameUseCase,
-
-    val setNewGameUseCase: SetNewGameUseCase,
-
-    val setPlayersTimeUseCase: SetPlayersTimeUseCase,
-
-    val retrieveGameStateUseCase: RetrieveGameStateUseCase,
-    val saveGameStateUseCase: SaveGameStateUseCase
 
 ) : ViewModel(), DefaultLifecycleObserver {
 
-    var gState by mutableStateOf<GameState>(GameState())
+    private val _gameState = MutableStateFlow(GameState())
+    val gameState = _gameState.asStateFlow()
+
+    val decrementTimeUseCase = DecrementTimeUseCase(_gameState)
+    val onClickPausePlayUseCase = OnClickPausePlayUseCase(_gameState)
+    val onClickPlayer1AreaUseCase = OnClickPlayer1AreaUseCase(_gameState)
+    val onClickPlayer2AreaUseCase = OnClickPlayer2AreaUseCase(_gameState)
+    val pauseGameUseCase = PauseGameUseCase(_gameState)
+
+    val setNewGameUseCase = SetNewGameUseCase(_gameState)
+
+    val setPlayersTimeUseCase = SetPlayersTimeUseCase(_gameState)
+
+    val retrieveGameStateUseCase = RetrieveGameStateUseCase(_gameState)
+    val saveGameStateUseCase = SaveGameStateUseCase(_gameState)
 
     // ====================================================================================
     // Holds state through lifecycle changes, ie: app destruction and creation
@@ -49,13 +50,13 @@ class GameViewModel @Inject constructor(
     override fun onResume(owner: LifecycleOwner) {
         super.onResume(owner)
 
-        retrieveGameStateUseCase(repo, viewModelScope, this)
+        retrieveGameStateUseCase(repo, viewModelScope)
     }
 
     override fun onPause(owner: LifecycleOwner) {
         super.onPause(owner)
 
-        saveGameStateUseCase(repo, viewModelScope, gState)
+        saveGameStateUseCase(repo, viewModelScope)
     }
 
 }
