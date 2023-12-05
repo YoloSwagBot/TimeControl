@@ -164,7 +164,7 @@ fun DialogSetPlayerTime(
                 }
                 TextButton(
                     onClick = {
-                        if (gameVM.setPlayersTimeUseCase(player, hours, minutes, seconds, gameVM)){
+                        if (gameVM.setPlayersTimeUseCase(player, hours, minutes, seconds)){
                             navController.popBackStack()
                         }else{
                             errorMessage = "INVALID FORMAT"
@@ -206,7 +206,7 @@ fun DialogAskCancelCurrentGame(
             TextButton(
                 modifier = Modifier.testTag(DIALOG_CANCELGAME_CONFIRM),
                 onClick = {
-                    gameVM.setNewGameUseCase(timeControlToSet, gameVM)
+                    gameVM.setNewGameUseCase(timeControlToSet)
                     navController.popBackStack(route = Screen.GameScreen.route, inclusive = false)
                 }
             ) {

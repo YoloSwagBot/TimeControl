@@ -42,7 +42,6 @@ fun Navigation(){
             composable(route = Screen.GameScreen.route){
                 GameScreen(
                     navController = navController,
-                    gState = gameVM.gState.value,
                     gameVM = gameVM
                 )
             }

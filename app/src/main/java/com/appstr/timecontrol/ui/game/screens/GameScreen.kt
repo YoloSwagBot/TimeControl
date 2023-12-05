@@ -20,6 +20,8 @@ import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -70,10 +72,10 @@ import kotlinx.coroutines.delay
 @Composable
 fun GameScreen(
     navController: NavController,
-    gState: GameState,
     gameVM: GameViewModel
 ){
 
+    val gState by gameVM.gameState.collectAsState()
     Log.d("Carson", "GameScreen ---- 00 ---- gState ---- ${gState.timeControl?.toText()} ---- ${gState.hashCode()}")
 
     // decrement time
@@ -81,7 +83,7 @@ fun GameScreen(
         LaunchedEffect(Unit){
             while(true){
                 delay(1000)
-                gameVM.decrementTimeUseCase(gameVM)
+                gameVM.decrementTimeUseCase()
             }
         }
     }
@@ -131,7 +133,7 @@ fun GameScreen(
     }
 
     BackHandler(false) {
-        gameVM.pauseGameUseCase(gameVM)
+        gameVM.pauseGameUseCase()
     }
 }
 
@@ -192,7 +194,7 @@ fun ButtonsRow(
                             radius = 32.dp
                         ),
                         onClick = {
-                            gameVM.onClickPausePlayUseCase(gameVM)
+                            gameVM.onClickPausePlayUseCase()
                         }
                     )
             )
@@ -248,7 +250,7 @@ fun Player2Area(
                 indication = rememberRipple(color = teal),
                 onClick = {
                     if (gameState.isNotOver()) {
-                        gameVM.onClickPlayer2AreaUseCase(gameVM)
+                        gameVM.onClickPlayer2AreaUseCase()
                     }
                 }
             )
@@ -307,7 +309,7 @@ fun Player1Area(
                 indication = rememberRipple(color = teal),
                 onClick = {
                     if (gameState.isNotOver()) {
-                        gameVM.onClickPlayer1AreaUseCase(gameVM)
+                        gameVM.onClickPlayer1AreaUseCase()
                     }
                 }
             )

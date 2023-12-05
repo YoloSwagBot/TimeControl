@@ -1,15 +1,18 @@
 package com.appstr.timecontrol.domain.usecases.gamescreen
 
+import com.appstr.timecontrol.domain.models.GameState
 import com.appstr.timecontrol.domain.models.isOver
-import com.appstr.timecontrol.ui.game.viewmodels.GameViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
-class OnClickPausePlayUseCase @Inject constructor(){
-    operator fun invoke(
-        gameVM: GameViewModel
-    ){
-        if (gameVM.gState.value.isOver()) return
-//        Log.d("Carson", "OnClickPausePlayUseCase ---- ")
-        gameVM.gState.value = gameVM.gState.value.copy(isPaused = !gameVM.gState.value.isPaused)
+class OnClickPausePlayUseCase @Inject constructor(
+    val _gameState: MutableStateFlow<GameState>
+) {
+    operator fun invoke(){
+        _gameState.update { game ->
+            if (game.isOver()) return
+            game.copy(isPaused = !game.isPaused)
+        }
     }
 }
