@@ -5,15 +5,6 @@ import androidx.navigation.testing.TestNavHostController
 import androidx.test.core.app.ApplicationProvider
 import com.appstr.timecontrol.data.daos.GameStateDao
 import com.appstr.timecontrol.data.repositories.GameStateRepository
-import com.appstr.timecontrol.domain.usecases.RetrieveGameStateUseCase
-import com.appstr.timecontrol.domain.usecases.SaveGameStateUseCase
-import com.appstr.timecontrol.domain.usecases.SetNewGameUseCase
-import com.appstr.timecontrol.domain.usecases.dialogs.setplayerstime.SetPlayersTimeUseCase
-import com.appstr.timecontrol.domain.usecases.gamescreen.DecrementTimeUseCase
-import com.appstr.timecontrol.domain.usecases.gamescreen.OnClickPausePlayUseCase
-import com.appstr.timecontrol.domain.usecases.gamescreen.OnClickPlayer1AreaUseCase
-import com.appstr.timecontrol.domain.usecases.gamescreen.OnClickPlayer2AreaUseCase
-import com.appstr.timecontrol.domain.usecases.gamescreen.PauseGameUseCase
 import com.appstr.timecontrol.ui.game.screens.SetupTimeScreen
 import com.appstr.timecontrol.ui.game.viewmodels.GameViewModel
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -44,16 +35,7 @@ class TestSetupTimeScreen {
 
         repoDao = Mockito.mock(GameStateDao::class.java)
         gameViewModel = GameViewModel(
-            repo = GameStateRepository(repoDao),
-            decrementTimeUseCase = DecrementTimeUseCase(),
-            onClickPausePlayUseCase = OnClickPausePlayUseCase(),
-            onClickPlayer1AreaUseCase = OnClickPlayer1AreaUseCase(),
-            onClickPlayer2AreaUseCase = OnClickPlayer2AreaUseCase(),
-            pauseGameUseCase = PauseGameUseCase(),
-            setNewGameUseCase = SetNewGameUseCase(),
-            setPlayersTimeUseCase = SetPlayersTimeUseCase(),
-            retrieveGameStateUseCase = RetrieveGameStateUseCase(),
-            saveGameStateUseCase = SaveGameStateUseCase()
+            repo = GameStateRepository(repoDao)
         )
 
         navController = TestNavHostController(ApplicationProvider.getApplicationContext())

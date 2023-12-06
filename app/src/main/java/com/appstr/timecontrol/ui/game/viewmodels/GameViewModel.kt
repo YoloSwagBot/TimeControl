@@ -24,8 +24,6 @@ import javax.inject.Inject
 @HiltViewModel
 class GameViewModel @Inject constructor(
     val repo: GameStateRepository,
-
-
 ) : ViewModel(), DefaultLifecycleObserver {
 
     private val _gameState = MutableStateFlow(GameState())

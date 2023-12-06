@@ -10,10 +10,14 @@ class SetNewGameUseCase @Inject constructor(
     val _gameState: MutableStateFlow<GameState>
 ) {
     operator fun invoke(
-        timeControl: TimeControl,
+        timeControl: TimeControl?,
     ){
-//        Log.d("Carson", "SetNewGameUseCase ---- 00 ---- ${_gameState.value?.timeControl?.toText()}")
         _gameState.update { GameState(timeControl = timeControl) }
-//        Log.d("Carson", "SetNewGameUseCase ---- 11 ---- ${_gameState.value?.timeControl?.toText()}")
+    }
+
+    operator fun invoke(
+        gameState: GameState
+    ){
+        _gameState.update { gameState }
     }
 }
