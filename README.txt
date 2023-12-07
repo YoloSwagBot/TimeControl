@@ -1,4 +1,4 @@
-![alt text](http://github.com/YoloSwagBot/TimeControl/blob/master/ss_viewmodel.png)
+![Alt text](relative%20path/ss_viewmodel.png?raw=true "Title")
 
 
 This project was created to showcase the following:
