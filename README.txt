@@ -1,3 +1,6 @@
+![alt text](https://github.com/YoloSwagBot/TimeControl/blob/master/ss_viewmodel.png?raw=true)
+
+
 This project was created to showcase the following:
 
 (1) CLEAN Architecture
