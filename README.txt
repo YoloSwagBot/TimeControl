@@ -1,4 +1,4 @@
-![plot](./ss_viewmodel.png)
+![Screenshot](ss_viewmodel.png)
 
 
 This project was created to showcase the following:
