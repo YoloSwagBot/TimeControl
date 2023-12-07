@@ -1,4 +1,4 @@
-![Alt text](relative%20path/ss_viewmodel.png?raw=true "Title")
+![plot](./ss_viewmodel.png)
 
 
 This project was created to showcase the following:
