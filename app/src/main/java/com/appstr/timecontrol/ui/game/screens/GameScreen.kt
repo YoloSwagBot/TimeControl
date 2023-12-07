@@ -2,6 +2,7 @@ package com.appstr.timecontrol.ui.game.screens
 
 import android.util.Log
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.ReportDrawn
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -400,4 +401,6 @@ fun BottomRow(
             colorFilter = ColorFilter.tint(color = lightGreen900)
         )
     }
+
+    ReportDrawn()
 }

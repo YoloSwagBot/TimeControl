@@ -44,17 +44,14 @@ class GameViewModel @Inject constructor(
 
     // ====================================================================================
     // Holds state through lifecycle changes, ie: app destruction and creation
-
+    // -- In this app, we can't really save a new GameState every 1 second(the clocks update),
+    //      so we only save during destruction/creation and let the user setTime(...) if needed.
     override fun onResume(owner: LifecycleOwner) {
         super.onResume(owner)
-
         retrieveGameStateUseCase(repo, viewModelScope)
     }
-
     override fun onPause(owner: LifecycleOwner) {
         super.onPause(owner)
-
         saveGameStateUseCase(repo, viewModelScope)
     }
-
 }
