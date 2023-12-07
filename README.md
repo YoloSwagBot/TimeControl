@@ -18,7 +18,7 @@ This project was created to showcase the following:
 	- Compose UI testing(NEW)
 
 
-
+![Screenshot](ss_game_0.png)
 
 
 The purpose of this app is to help me find a job.
