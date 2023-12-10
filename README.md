@@ -13,18 +13,12 @@ This project was created to showcase the following:
 (3) Test libraries
 	- JUnit
 	- Mockito
-	- Robolectric
-	- Espresso
 	- Compose UI testing(NEW)
 
 
 ![Screenshot](ss_game_0.png)
 
 
-The purpose of this app is to help me find a job.
-Oh yeah you can use it as a chess clock app, too.
 
 
-I accept payment in the form of money,
-Cheers
-
+uwotm8
